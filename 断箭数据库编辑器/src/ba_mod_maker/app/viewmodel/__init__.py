@@ -1,0 +1,101 @@
+"""视图模型层：把领域数据整形成界面直接可用的**纯数据结构**。
+
+为什么单独一层：
+
+- 主屏最核心的规则（卡片集合怎么算、按什么类别分组、行内怎么排）
+  必须**可直接断言**，而不是埋在控件里只能靠肉眼看；
+- 它零 Qt，所以能在没有显示环境的 CI 里跑。
+
+❗ 本包不得 import 任何 Qt 符号，由 tests/test_core_layering.py 一并扫描。
+"""
+
+from ba_mod_maker.app.viewmodel.armory import (
+    CATEGORY_LABELS,
+    KIND_LABELS,
+    UNASSIGNED_TITLE,
+    UNCLASSIFIED_COUNTRY_ID,
+    UNCLASSIFIED_NAME,
+    AmmoEntry,
+    ArmoryCard,
+    ArmoryCounts,
+    ArmoryRow,
+    ArmorySheet,
+    CountryInfo,
+    OptionChoice,
+    OptionGroup,
+    SpecializationInfo,
+    TransportEntry,
+    UnitDetail,
+    WeaponEntry,
+    build_armory_sheet,
+    build_counts,
+    build_unit_detail,
+    count_units,
+    list_countries,
+    list_specializations,
+    unclassified_country,
+    unclassified_country_ids,
+    unit_row_index,
+)
+from ba_mod_maker.app.viewmodel.unit_card import (
+    MAX_STATS_PER_LINE,
+    STAT_SPACING_TIGHT,
+    STAT_SPACING_WIDE,
+    AbilityChip,
+    AmmoRow,
+    ArmorZone,
+    CardData,
+    CardStat,
+    CellRef,
+    OptionChoiceRow,
+    OptionGroupRow,
+    UnitCard,
+    WeaponGroupRow,
+    armor_zones,
+    build_unit_card,
+)
+
+__all__ = [
+    "CATEGORY_LABELS",
+    "KIND_LABELS",
+    "UNASSIGNED_TITLE",
+    "UNCLASSIFIED_COUNTRY_ID",
+    "UNCLASSIFIED_NAME",
+    "AmmoEntry",
+    "ArmoryCard",
+    "ArmoryCounts",
+    "ArmoryRow",
+    "ArmorySheet",
+    "CountryInfo",
+    "OptionChoice",
+    "OptionGroup",
+    "SpecializationInfo",
+    "TransportEntry",
+    "UnitDetail",
+    "WeaponEntry",
+    "build_armory_sheet",
+    "build_counts",
+    "build_unit_detail",
+    "count_units",
+    "list_countries",
+    "list_specializations",
+    "unclassified_country",
+    "unclassified_country_ids",
+    "unit_row_index",
+    # 单位卡片（设计-单位卡片复刻.md §10.1 ②）
+    "MAX_STATS_PER_LINE",
+    "STAT_SPACING_TIGHT",
+    "STAT_SPACING_WIDE",
+    "AbilityChip",
+    "AmmoRow",
+    "ArmorZone",
+    "CardData",
+    "CardStat",
+    "CellRef",
+    "OptionChoiceRow",
+    "OptionGroupRow",
+    "UnitCard",
+    "WeaponGroupRow",
+    "armor_zones",
+    "build_unit_card",
+]

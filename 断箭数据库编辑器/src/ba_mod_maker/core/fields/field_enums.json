@@ -1,0 +1,1681 @@
+{
+  "Ammunitions.TrajectoryType": {
+    "cn": "弹道类型",
+    "kind": "enum",
+    "doc": "卡片弹种行上「类型」那一格（本地化 ui_infocard_ammo_trajectory）。也决定展开态里走哪一支射程公式。库内 630 行只出现下面这 10 档。",
+    "values": {
+      "0": "未设置",
+      "10": "直射弹药",
+      "20": "火炮",
+      "30": "迫击炮",
+      "40": "多管火箭炮系统",
+      "110": "导弹",
+      "200": "巡航导弹",
+      "300": "弹道导弹",
+      "400": "炸弹",
+      "410": "高阻炸弹"
+    },
+    "evidence": "已确认",
+    "source": "枚举：_work/il2cppdump/dump.cs:56214 TrajectoryType{None=0,DirectShot=10,Artillery=20,Mortar=30,MLRS=40,PursuitMissile=100,LeadPursuitMissile=110,LeadMissile=120,CruiseMissile=200,BallisticMissile=300,LowDragBomb=400,HighDragBomb=410,LaserMissile=600,LaserGuidedFreeFaling=610,DeadMissile=666}；中文：chi.json 的 ui_enum_trajectory_*（direct=直射弹药 / artillery=火炮 / mortar=迫击炮 / mlrs=多管火箭炮系统 / missile=导弹 / cruise=巡航导弹 / ballistic=弹道导弹 / bomb=炸弹 / bomb_highdrag=高阻炸弹）。取值集合：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Ammunitions.TrajectoryType。注：100/110/120 三个成员共用 ui_enum_trajectory_missile（库里只出现 110）；600/610/666 库里没有也没有本地化键，未列入；0=None 无键，中文按惯例写「未设置」。"
+  },
+  "Ammunitions.TargetType": {
+    "cn": "可瞄准目标",
+    "kind": "mask",
+    "doc": "位掩码（[Flags]）。决定卡片弹种行上那排目标图标 —— 每位一张图（families.TARGET_ICON_KEYS），Ground(1) 与 Ship(32) 游戏里没有图标，所以只出现在 tooltip 里。四类导弹位（128|256|512|1024）若全中，游戏只画一个「目标 - 导弹」。",
+    "values": {
+      "1": "地面",
+      "2": "步兵",
+      "4": "载具",
+      "8": "直升机",
+      "16": "飞机",
+      "32": "舰船",
+      "128": "投射物",
+      "256": "防空压制",
+      "512": "巡航导弹",
+      "1024": "弹道导弹"
+    },
+    "evidence": "已确认",
+    "source": "枚举：_work/il2cppdump/dump.cs:56196 TargetType [Flags]{None=0,Ground=1,Infantry=2,Vehicle=4,Helicopter=8,Aircraft=16,Ship=32,Projectile=128,SEADMissile=256,CruiseMissile=512,BallisticMissile=1024}（注意 64 位在枚举里根本不存在）。中文：chi.json 的 ui_infocard_ammo_target_*（infantry=目标 - 步兵 / vehicles=载具 / helicopters=直升机 / air=飞机 / missiles=导弹 / projectiles=投射物 / sead=防空压制 / cruise_missiles=巡航导弹 / ballistic_missiles=弹道导弹）；Ground/Ship 无本地化键，取产品既有口径（armory.py KIND_LABELS 32=舰船）。实例：TargetType=36 -> 载具+舰船（M829A4 穿甲弹）。取值集合：_work\\probe_enum_scan.py --col Ammunitions.TargetType（OR 全部行 = 0x7BF，确认没有用到 64 位）。"
+  },
+  "Ammunitions.Seeker": {
+    "cn": "制导方式",
+    "kind": "enum",
+    "doc": "卡片弹种行上的「制导方式」（本地化 ui_infocard_ammo_seeker_type）。",
+    "values": {
+      "0": "无制导",
+      "10": "射后不理",
+      "50": "末端制导",
+      "100": "半主动",
+      "200": "反辐射"
+    },
+    "evidence": "已确认",
+    "source": "枚举：_work/il2cppdump/dump.cs:56166 SeekerType{None=0,FireAndForget=10,TerminalGuidance=50,SemiActive=100,SEAD=200,Laser=300}；跳转表（值->本地化键）：_work/isil/IsilDump/BrokenArrow/BrokenArrow/Client/Ecs/UI/Menu/Arsenal/InfoCard/InfoCardLocalization.txt:14264-14280（rbx==10 -> ui_enum_seeker_ff, ==50 -> ui_enum_seeker_terminal, ==100 -> ui_enum_seeker_sa, ==200 -> ui_enum_seeker_sead）；中文来自 chi.json 那 4 个键。Laser=300 库里没有、跳转表里也没有分支，未列入。取值集合：--col Ammunitions.Seeker。"
+  },
+  "Ammunitions.UiOptions": {
+    "cn": "弹药界面选项",
+    "kind": "mask",
+    "doc": "位掩码（[Flags]）。库里只用到 1 位：IsSmallArmsAmmo —— 标成轻武器弹药。产品目前没有显示它的行。",
+    "values": {
+      "0": "无",
+      "1": "轻武器弹药"
+    },
+    "evidence": "强假设",
+    "source": "枚举：_work/il2cppdump/dump.cs:56237 UiOptions [Flags]{None=0,IsSmallArmsAmmo=1}；字段绑定：dump.cs:50970 Ammunitions.UiOptions 类型就是 UiOptions。**中文没有官方出处**（chi.json 里没有 ui_enum_uioptions_* 一类的键），是照 IsSmallArmsAmmo 直译的。取值集合：--col Ammunitions.UiOptions（630 行只有 0/1，且 OR=0x1）。"
+  },
+  "Ammunitions.ArmorTargeted": {
+    "cn": "反装甲类型",
+    "kind": "enum",
+    "doc": "这发弹打的是动能还是爆炸。卡片上它不是单独一行，而是【穿深】那一格的类型后缀（ArmorTargeted==Kinetic(1) ? 动能伤害 : 爆炸伤害）。",
+    "values": {
+      "0": "忽略",
+      "1": "动能伤害",
+      "2": "爆炸伤害"
+    },
+    "evidence": "已确认",
+    "source": "枚举：_work/il2cppdump/dump.cs:56120 ArmorType{Ignore=0,Kinetic=1,HEAT=2}；字段绑定：dump.cs:50984 Ammunitions.ArmorTargeted 类型 ArmorType。中文：chi.json ui_infocard_ammo_kinetic=动能伤害 / ui_infocard_ammo_heat=爆炸伤害（枚举成员叫 HEAT，但卡片文案是「爆炸伤害」，别写「破甲」——「破甲」是 Armors.HeatArmor* 那一路）。取值集合：--col Ammunitions.ArmorTargeted（0 x4 / 1 x145 / 2 x481）。"
+  },
+  "Weapons.Type": {
+    "cn": "武器类型",
+    "kind": "enum",
+    "doc": "决定武器图标与卡片上的武器名分类；也是好几条公式的开关（每秒伤害这一支只对 DPS_WEAPON_TYPES 生效、齐射时长只对榴弹炮/迫击炮/多管火箭炮生效）。库内 804 行共 41 档（含 0）。",
+    "values": {
+      "0": "未指定",
+      "1": "步枪",
+      "2": "精确射手步枪",
+      "3": "狙击步枪",
+      "4": "反器材步枪",
+      "5": "突击步枪",
+      "6": "战斗步枪",
+      "25": "冲锋枪",
+      "26": "轻机枪",
+      "27": "机枪",
+      "28": "重机枪",
+      "29": "转轮机枪",
+      "30": "自动步枪",
+      "40": "霰弹枪",
+      "60": "榴弹发射器",
+      "61": "榴弹发射器",
+      "62": "火箭弹发射器",
+      "63": "火箭弹发射器",
+      "64": "手榴弹",
+      "80": "反坦克导弹",
+      "81": "反坦克导弹",
+      "82": "巡航导弹",
+      "83": "弹道导弹",
+      "84": "反辐射导弹",
+      "85": "防空导弹",
+      "86": "地空导弹",
+      "87": "空空导弹",
+      "88": "空空导弹",
+      "89": "空地导弹",
+      "110": "主炮",
+      "111": "榴弹炮",
+      "112": "迫击炮",
+      "113": "多管火箭炮系统",
+      "114": "机关炮",
+      "115": "高炮",
+      "116": "航炮",
+      "140": "火箭吊舱",
+      "141": "机炮吊舱",
+      "160": "炸弹",
+      "161": "高阻炸弹",
+      "162": "智能炸弹"
+    },
+    "evidence": "已确认",
+    "source": "枚举：_work/il2cppdump/dump.cs:56278 WeaponType（NotAssigned=0 ... BombSmart=162）；字段绑定 dump.cs:55761 Weapons.Type。中文：chi.json 的 ui_enum_weapontype_*（37 个键）。产品侧同一份映射见 src/ba_mod_maker/app/viewmodel/unit_card.py:114 WEAPON_TYPE_KEYS，两处逐项一致。注意键名不等于成员名的小写：LightMachineGun->machinegun_light、GrenadeLauncher->gl、RPGReloadable->rpg、MainGun->main_tankgun、BombDumb->bomb。取值集合：--col Weapons.Type。"
+  },
+  "Units.Type": {
+    "cn": "单位大类",
+    "kind": "mask",
+    "doc": "位掩码（[Flags] UnitType）。库内 540 行**只出现单比特**（2/4/8/16/32），所以可以直接当单值查表 —— 卡片副标题那个「步兵/载具/直升机/战机/舰船」就是它（armory.KIND_LABELS）。",
+    "values": {
+      "2": "步兵",
+      "4": "载具",
+      "8": "直升机",
+      "16": "战机",
+      "32": "舰船"
+    },
+    "evidence": "已确认",
+    "source": "枚举：_work/il2cppdump/dump.cs:1409950 UnitType [Flags]{None=0,Infantry=2,Vehicle=4,Helicopter=8,Aircraft=16,Ship=32,Projectile=128,SEADMissile=256,CruiseMissile=512,BallisticMissile=1024}；字段绑定 dump.cs:55137 Units.Type。中文：产品既有常量 src/ba_mod_maker/app/viewmodel/armory.py:52 KIND_LABELS + unit_card.py:88 TYPE_*。取值集合：--col Units.Type（2 x194 / 4 x234 / 8 x45 / 16 x62 / 32 x5，OR=0x3E）。枚举里另外那几个位（128/256/512/1024）Units 表从未出现，未列入。"
+  },
+  "Units.CategoryType": {
+    "cn": "军械库分类",
+    "kind": "enum",
+    "doc": "军械库首页那 6 个分类标签。0..6；注意 4=Logistic 在实机军械库里**没有这一类**（该类的单位 DisplayInArmory 全 false），产品按用户口径把它叫「未分类」。",
+    "values": {
+      "0": "侦察",
+      "1": "步兵",
+      "2": "载具",
+      "3": "支援",
+      "4": "未分类",
+      "5": "直升机",
+      "6": "战机"
+    },
+    "evidence": "已确认",
+    "source": "枚举：_work/il2cppdump/dump.cs:1409895 UnitCategoryType{None=-1,Recon=0,Infantry=1,Vehicles=2,Support=3,Logistic=4,Helicopters=5,Aircrafts=6}（另有同序的 UnitCategoryTypeUI，dump.cs:56262）；字段绑定 dump.cs:55138 Units.CategoryType。中文：chi.json 的 ui_arsenal_category_{rec,inf,veh,sup,hel,air}（侦察/步兵/载具/支援/直升机/飞机）+ 产品 src/ba_mod_maker/app/viewmodel/armory.py:48 CATEGORY_LABELS（4 用「未分类」，用户 2026-09-30 口径；6 产品写「战机」，本地化写「飞机」）。取值集合：--col Units.CategoryType（0..6 全覆盖）。"
+  },
+  "Units.Role": {
+    "cn": "单位定位",
+    "kind": "enum",
+    "doc": "单位的战术定位（IFV/坦克/一线步兵/武装直升机/多管火箭炮…）。库内 540 行共 30 档，全部落在下面这些值上。",
+    "values": {
+      "0": "无",
+      "10": "步兵战车",
+      "11": "坦克",
+      "12": "装甲运兵车",
+      "13": "轻型突击车",
+      "14": "运输卡车",
+      "15": "远程防空导弹",
+      "16": "近程防空导弹",
+      "30": "一线步兵",
+      "31": "突击步兵",
+      "32": "侦察步兵",
+      "33": "狙击手",
+      "34": "防空步兵",
+      "35": "反坦克导弹步兵",
+      "36": "特种部队",
+      "70": "侦察直升机",
+      "71": "多用途直升机",
+      "72": "重型运输直升机",
+      "73": "武装直升机",
+      "100": "无人机",
+      "130": "多管火箭炮",
+      "131": "迫击炮",
+      "132": "巡飞弹",
+      "133": "火炮",
+      "160": "攻击机",
+      "161": "轰炸机",
+      "162": "战略轰炸机",
+      "163": "运输机",
+      "164": "多用途战机",
+      "201": "气垫船"
+    },
+    "evidence": "强假设",
+    "source": "枚举：_work/il2cppdump/dump.cs:1409911 UnitRole{None=0,IFV=10,Tank=11,APC=12,LSV=13,CargoTruck=14,LRSAM=15,SRSAM=16,LineInfantry=30,AssaultInfantry=31,ReconInfantry=32,Snipers=33,AAInfantry=34,ATGMInfantry=35,SpecialForces=36,ReconHelicopter=70,MultiRoleHelicopter=71,HeavyTransportHelicopter=72,AttackHelicopter=73,Drone=100,MLRS=130,Mortar=131,LAM=132,Artillery=133,AssaultPlane=160,Bomber=161,StrategicBomber=162,TransportPlane=163,MultiRolePlane=164,Ship=200,Hovercraft=201}；字段绑定 dump.cs:55139 Units.Role。**中文没有官方出处** —— chi.json 里没有 ui_role_* / ui_enum_unitrole_* 一类的键，值名是照成员名直译的（所以标强假设）。取值集合：--col Units.Role（Ship=200 库里没有；201 只有 1 行）。"
+  },
+  "Modifications.Type": {
+    "cn": "改装槽类型",
+    "kind": "enum",
+    "doc": "单位编辑器底部「自定义选项」每一组挂在哪个槽上。实测它对得上 Modifications.UIName 的那批 Custom_Slot_* 键。",
+    "values": {
+      "1": "通用（现代化改装）",
+      "2": "机动（发动机/燃料）",
+      "3": "武器（挂架/武器包）",
+      "4": "传感器（光学）",
+      "5": "装甲",
+      "6": "能力（防护系统/电子对抗）",
+      "7": "换装（替换成另一个单位）"
+    },
+    "evidence": "强假设",
+    "source": "枚举：_work/il2cppdump/dump.cs:56140 ModificationType{None=0,General=1,Mobility=2,Turret=3,Sensor=4,Armor=5,Ability=6,UnitReplace=7}；字段绑定 dump.cs:52275 Modifications.Type。语义佐证（机械分组）：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --group Modifications.Type --show UIName,Name —— Type=1 全 Custom_Slot_Modernization、2 是 Engine/Fuel、3 是 Weapon_package、4 是 Sensors、5 是 Armor、6 是 Protection_system/ECM、7 是 Squad_loadout；这批键的官方中文在 chi.json 里（custom_slot_modernization=现代化改装 / engine=发动机组件 / fuel=燃料 / weapon_package=武器系统 / sensors=传感器 / armor=装甲组件 / protection_system=防护系统 / ecm=电子对抗 / squad_loadout=小队装备配置）。**但一个 Type 对应多个槽位名**，所以 values 里给的是枚举名口径的中文（没有官方单一名），标强假设。取值集合：--group 上面那条命令（1 x11 / 2 x18 / 3 x370 / 4 x11 / 5 x111 / 6 x30 / 7 x64）。"
+  },
+  "Units.CountryId": {
+    "cn": "所属国家",
+    "kind": "enum",
+    "doc": "外键，指向 Countries.Id。军械库按它分国家标签页。",
+    "values": {
+      "1": "俄罗斯",
+      "2": "美国",
+      "3": "编辑器"
+    },
+    "evidence": "已确认",
+    "source": "绑定：_work/il2cppdump/dump.cs:55127 Units.CountryId 是 int（Specializations.CountryId 同，dump.cs:53981），目标表 = DataBaseCompiled\\52085\\Countries.json 的 3 行 {1:Russia, 2:USA, 3:Editor(Hidden=true, MaxPoints=800000)}。中文：chi.json nation_russia=俄罗斯 / nation_usa=美国；3 号在本地化表里没有键（表里 Name=Editor），「编辑器」是直译，且它 Hidden=true。取值集合：--col Units.CountryId（1 x254 / 2 x278 / 3 x8）。"
+  },
+  "Units.ContentMembership": {
+    "cn": "内容归属（DLC）",
+    "kind": "enum",
+    "doc": "这个单位属于哪一档内容：-1 = 本体，>=2 = 对应 DLC。军械库用它做「需要 DLC」的过滤。",
+    "values": {
+      "-1": "本体（Vanilla）",
+      "0": "内部（Internal）",
+      "1": "DLC1 先锋版",
+      "2": "DLC2《Baltic Battalion》",
+      "3": "DLC3《Russian Guard》",
+      "4": "DLC4",
+      "5": "DLC5"
+    },
+    "evidence": "强假设",
+    "source": "枚举：_work/il2cppdump/dump.cs:1409278 ContentMembership{Vanilla=-1,Internal=0,DLC1VanguardEdition=1,DLC2=2,DLC3=3,DLC4=4,DLC5=5}；字段绑定 dump.cs:55148 Units.ContentMembership（Specializations 同，dump.cs:53988）。中文出处：chi.json 的 dlc_2_baltic_battalion_title=Baltic Battalion / dlc_3_russian_guard_title=《Russian Guard》—— **连中文表里都是英文标题**，其余档位没有键，所以标强假设。取值集合：--col Units.ContentMembership（-1 x438 / 2 x48 / 3 x54；0/1/4/5 库里没有）。"
+  },
+  "Abilities.SupplyTargetsMask": {
+    "cn": "补给目标掩码",
+    "kind": "mask",
+    "doc": "位掩码，**类型就是 UnitType** —— 这条能力能给哪几类单位补给。库内只出现 0 与 2。",
+    "values": {
+      "0": "无",
+      "2": "步兵"
+    },
+    "evidence": "已确认",
+    "source": "字段绑定：_work/il2cppdump/dump.cs:50376 Abilities.SupplyTargetsMask 的类型是 UnitType（不是 bool、也不是自成一体的枚举）；位含义 = Units.Type 那一套（dump.cs:1409950）。取值集合：--col Abilities.SupplyTargetsMask（78 行：0 x68 / 2 x10，OR=0x2）。列名「补给目标掩码」是直译，值名「步兵」来自 Units.Type 的已确认中文。"
+  },
+  "Abilities.ResupplyIconType": {
+    "cn": "补给图标类型",
+    "kind": "enum",
+    "doc": "补给能力在界面上画哪个图标。【实测】全库 78 行**全是 0**，所以除 0 以外都没有样本。",
+    "values": {
+      "0": "默认补给箱",
+      "1": "治疗",
+      "2": "维修",
+      "3": "补充弹药"
+    },
+    "evidence": "强假设",
+    "source": "枚举：_work/il2cppdump/dump.cs:56155 ResupplyIconType{DefaultCrate=0,Healing=1,Repair=2,Rearm=3}；字段绑定 dump.cs:50367 Abilities.ResupplyIconType。**中文没有官方出处**（chi.json 里没有 ui_enum_resupplyicon* / ui_resupply_icon_* 一类的键），按成员名直译。取值集合：--col Abilities.ResupplyIconType（78 行 = 全 0，只确认了 0 这一档）。"
+  },
+  "Abilities.IsDefault": {
+    "cn": "是否默认",
+    "kind": "bool",
+    "doc": "布尔列。dump.cs 里 Abilities.IsDefault 的类型是 bool。JSON 里存 true/false，本表按契约用 0/1 表示。",
+    "values": {
+      "0": "否",
+      "1": "是"
+    },
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Abilities 属性 IsDefault（bool）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Abilities.IsDefault（78 行 / 2 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Abilities.IsRadar": {
+    "cn": "雷达",
+    "kind": "bool",
+    "doc": "布尔列。dump.cs 里 Abilities.IsRadar 的类型是 bool。JSON 里存 true/false，本表按契约用 0/1 表示。",
+    "values": {
+      "0": "否",
+      "1": "是"
+    },
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Abilities 属性 IsRadar（bool）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Abilities.IsRadar（78 行 / 2 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Abilities.IsRadarStatic": {
+    "cn": "固定雷达",
+    "kind": "bool",
+    "doc": "布尔列。dump.cs 里 Abilities.IsRadarStatic 的类型是 bool。JSON 里存 true/false，本表按契约用 0/1 表示。",
+    "values": {
+      "0": "否",
+      "1": "是"
+    },
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Abilities 属性 IsRadarStatic（bool）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Abilities.IsRadarStatic（78 行 / 2 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Abilities.IsLaserDesignator": {
+    "cn": "激光指示",
+    "kind": "bool",
+    "doc": "布尔列。dump.cs 里 Abilities.IsLaserDesignator 的类型是 bool。JSON 里存 true/false，本表按契约用 0/1 表示。",
+    "values": {
+      "0": "否",
+      "1": "是"
+    },
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Abilities 属性 IsLaserDesignator（bool）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Abilities.IsLaserDesignator（78 行 / 2 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Abilities.LaserUsableInMove": {
+    "cn": "可移动中指示",
+    "kind": "bool",
+    "doc": "布尔列。dump.cs 里 Abilities.LaserUsableInMove 的类型是 bool。JSON 里存 true/false，本表按契约用 0/1 表示。",
+    "values": {
+      "0": "否",
+      "1": "是"
+    },
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Abilities 属性 LaserUsableInMove（bool）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Abilities.LaserUsableInMove（78 行 / 2 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Abilities.IsInfantrySprint": {
+    "cn": "步兵冲刺",
+    "kind": "bool",
+    "doc": "布尔列。dump.cs 里 Abilities.IsInfantrySprint 的类型是 bool。JSON 里存 true/false，本表按契约用 0/1 表示。",
+    "values": {
+      "0": "否",
+      "1": "是"
+    },
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Abilities 属性 IsInfantrySprint（bool）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Abilities.IsInfantrySprint（78 行 / 2 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Abilities.IsSmoke": {
+    "cn": "烟幕",
+    "kind": "bool",
+    "doc": "布尔列。dump.cs 里 Abilities.IsSmoke 的类型是 bool。JSON 里存 true/false，本表按契约用 0/1 表示。",
+    "values": {
+      "0": "否",
+      "1": "是"
+    },
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Abilities 属性 IsSmoke（bool）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Abilities.IsSmoke（78 行 / 2 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Abilities.SmokeAmmunitionId": {
+    "cn": "烟幕弹种 ID",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 Abilities.SmokeAmmunitionId 的类型是 int；外键 -> Ammunitions。观测量：4 档 / 0 .. 585。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Abilities 属性 SmokeAmmunitionId（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Abilities.SmokeAmmunitionId（78 行 / 4 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Abilities.SmokeAmmunitionQuantity": {
+    "cn": "烟幕弹发数",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 Abilities.SmokeAmmunitionQuantity 的类型是 int；数量。观测量：5 档 / 0 .. 99。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Abilities 属性 SmokeAmmunitionQuantity（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Abilities.SmokeAmmunitionQuantity（78 行 / 5 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Abilities.IsAPS": {
+    "cn": "主动防护系统",
+    "kind": "bool",
+    "doc": "布尔列。dump.cs 里 Abilities.IsAPS 的类型是 bool。JSON 里存 true/false，本表按契约用 0/1 表示。",
+    "values": {
+      "0": "否",
+      "1": "是"
+    },
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Abilities 属性 IsAPS（bool）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Abilities.IsAPS（78 行 / 2 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Abilities.APSQuantity": {
+    "cn": "APS 弹药数",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 Abilities.APSQuantity 的类型是 int；数量。观测量：3 档 / 0 .. 4。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Abilities 属性 APSQuantity（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Abilities.APSQuantity（78 行 / 3 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Abilities.IsDecoy": {
+    "cn": "诱饵干扰弹",
+    "kind": "bool",
+    "doc": "布尔列。dump.cs 里 Abilities.IsDecoy 的类型是 bool。JSON 里存 true/false，本表按契约用 0/1 表示。",
+    "values": {
+      "0": "否",
+      "1": "是"
+    },
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Abilities 属性 IsDecoy（bool）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Abilities.IsDecoy（78 行 / 2 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Abilities.DecoyQuantity": {
+    "cn": "诱饵数量",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 Abilities.DecoyQuantity 的类型是 int；数量。观测量：4 档 / 0 .. 50。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Abilities 属性 DecoyQuantity（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Abilities.DecoyQuantity（78 行 / 4 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Abilities.IsResupplyAbility": {
+    "cn": "重新补给",
+    "kind": "bool",
+    "doc": "布尔列。dump.cs 里 Abilities.IsResupplyAbility 的类型是 bool。JSON 里存 true/false，本表按契约用 0/1 表示。",
+    "values": {
+      "0": "否",
+      "1": "是"
+    },
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Abilities 属性 IsResupplyAbility（bool）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Abilities.IsResupplyAbility（78 行 / 2 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Abilities.CanHeal": {
+    "cn": "能治疗",
+    "kind": "bool",
+    "doc": "布尔列。dump.cs 里 Abilities.CanHeal 的类型是 bool。JSON 里存 true/false，本表按契约用 0/1 表示。",
+    "values": {
+      "0": "否",
+      "1": "是"
+    },
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Abilities 属性 CanHeal（bool）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Abilities.CanHeal（78 行 / 2 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Abilities.CanRepair": {
+    "cn": "能维修（占位）",
+    "kind": "bool",
+    "doc": "布尔列。dump.cs 里 Abilities.CanRepair 的类型是 bool。JSON 里存 true/false，本表按契约用 0/1 表示。",
+    "values": {
+      "0": "否",
+      "1": "是"
+    },
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Abilities 属性 CanRepair（bool）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Abilities.CanRepair（78 行 / 1 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Abilities.CanResupply": {
+    "cn": "能补给弹药",
+    "kind": "bool",
+    "doc": "布尔列。dump.cs 里 Abilities.CanResupply 的类型是 bool。JSON 里存 true/false，本表按契约用 0/1 表示。",
+    "values": {
+      "0": "否",
+      "1": "是"
+    },
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Abilities 属性 CanResupply（bool）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Abilities.CanResupply（78 行 / 2 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Abilities.ResupplyPoints": {
+    "cn": "补给点数容量",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 Abilities.ResupplyPoints 的类型是 int；数量。观测量：4 档 / 0 .. 800。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Abilities 属性 ResupplyPoints（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Abilities.ResupplyPoints（78 行 / 4 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Abilities.CanSelfSupply": {
+    "cn": "能自我补给（占位）",
+    "kind": "bool",
+    "doc": "布尔列。dump.cs 里 Abilities.CanSelfSupply 的类型是 bool。JSON 里存 true/false，本表按契约用 0/1 表示。",
+    "values": {
+      "0": "否",
+      "1": "是"
+    },
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Abilities 属性 CanSelfSupply（bool）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Abilities.CanSelfSupply（78 行 / 1 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Abilities.CanWorkOnMove": {
+    "cn": "可移动中作业",
+    "kind": "bool",
+    "doc": "布尔列。dump.cs 里 Abilities.CanWorkOnMove 的类型是 bool。JSON 里存 true/false，本表按契约用 0/1 表示。",
+    "values": {
+      "0": "否",
+      "1": "是"
+    },
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Abilities 属性 CanWorkOnMove（bool）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Abilities.CanWorkOnMove（78 行 / 2 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Abilities.IsSneakAbility": {
+    "cn": "潜行（占位）",
+    "kind": "bool",
+    "doc": "布尔列。dump.cs 里 Abilities.IsSneakAbility 的类型是 bool。JSON 里存 true/false，本表按契约用 0/1 表示。",
+    "values": {
+      "0": "否",
+      "1": "是"
+    },
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Abilities 属性 IsSneakAbility（bool）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Abilities.IsSneakAbility（78 行 / 1 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Abilities.IsArtilleryAutoFire": {
+    "cn": "自动开火（占位）",
+    "kind": "bool",
+    "doc": "布尔列。dump.cs 里 Abilities.IsArtilleryAutoFire 的类型是 bool。JSON 里存 true/false，本表按契约用 0/1 表示。",
+    "values": {
+      "0": "否",
+      "1": "是"
+    },
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Abilities 属性 IsArtilleryAutoFire（bool）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Abilities.IsArtilleryAutoFire（78 行 / 1 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Ammunitions.HUDMultiplier": {
+    "cn": "显示倍数",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 Ammunitions.HUDMultiplier 的类型是 int；度量值（角度/高度/速度/时间/系数一类）。观测量：10 档 / 1 .. 20。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Ammunitions 属性 HUDMultiplier（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Ammunitions.HUDMultiplier（630 行 / 10 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Ammunitions.VfxCountPerShot": {
+    "cn": "每发特效数量（下限）",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 Ammunitions.VfxCountPerShot 的类型是 int；含义待列名词典补。观测量：5 档 / 1 .. 30。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Ammunitions 属性 VfxCountPerShot（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Ammunitions.VfxCountPerShot（630 行 / 5 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Ammunitions.VfxCountPerShotMax": {
+    "cn": "每发特效数量（上限）",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 Ammunitions.VfxCountPerShotMax 的类型是 int；含义待列名词典补。观测量：6 档 / 0 .. 20。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Ammunitions 属性 VfxCountPerShotMax（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Ammunitions.VfxCountPerShotMax（630 行 / 6 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Ammunitions.Airburst": {
+    "cn": "空爆",
+    "kind": "bool",
+    "doc": "布尔列。dump.cs 里 Ammunitions.Airburst 的类型是 bool。JSON 里存 true/false，本表按契约用 0/1 表示。",
+    "values": {
+      "0": "否",
+      "1": "是"
+    },
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Ammunitions 属性 Airburst（bool）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Ammunitions.Airburst（630 行 / 2 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Ammunitions.NoDamageFalloff": {
+    "cn": "伤害不衰减",
+    "kind": "bool",
+    "doc": "布尔列。dump.cs 里 Ammunitions.NoDamageFalloff 的类型是 bool。JSON 里存 true/false，本表按契约用 0/1 表示。",
+    "values": {
+      "0": "否",
+      "1": "是"
+    },
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Ammunitions 属性 NoDamageFalloff（bool）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Ammunitions.NoDamageFalloff（630 行 / 2 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Ammunitions.TopArmorAttack": {
+    "cn": "攻顶",
+    "kind": "bool",
+    "doc": "布尔列。dump.cs 里 Ammunitions.TopArmorAttack 的类型是 bool。JSON 里存 true/false，本表按契约用 0/1 表示。",
+    "values": {
+      "0": "否",
+      "1": "是"
+    },
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Ammunitions 属性 TopArmorAttack（bool）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Ammunitions.TopArmorAttack（630 行 / 2 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Ammunitions.CanBeIntercepted": {
+    "cn": "可被主动防御系统拦截",
+    "kind": "bool",
+    "doc": "布尔列。dump.cs 里 Ammunitions.CanBeIntercepted 的类型是 bool。JSON 里存 true/false，本表按契约用 0/1 表示。",
+    "values": {
+      "0": "否",
+      "1": "是"
+    },
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Ammunitions 属性 CanBeIntercepted（bool）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Ammunitions.CanBeIntercepted（630 行 / 2 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Ammunitions.CanBeTargeted": {
+    "cn": "可被瞄准拦截",
+    "kind": "bool",
+    "doc": "布尔列。dump.cs 里 Ammunitions.CanBeTargeted 的类型是 bool。JSON 里存 true/false，本表按契约用 0/1 表示。",
+    "values": {
+      "0": "否",
+      "1": "是"
+    },
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Ammunitions 属性 CanBeTargeted（bool）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Ammunitions.CanBeTargeted（630 行 / 2 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Ammunitions.OverflyHeight": {
+    "cn": "掠过高度",
+    "kind": "other",
+    "doc": "**不是枚举**（但样本太少，判不实）：掠过高度。dump.cs 里 Ammunitions.OverflyHeight 的类型是 int。库内 630 行只有 0(628) 与 2(2) 两个值 —— 就算当枚举看也只见到 0/2 两档、证不出含义，所以按数量处理、原样显示数字。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Ammunitions 属性 OverflyHeight（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Ammunitions.OverflyHeight（630 行 / 2 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Ammunitions.LoftAngle": {
+    "cn": "抛射角（度）",
+    "kind": "other",
+    "doc": "**不是枚举**：抛射角，单位就是度。dump.cs 里 Ammunitions.LoftAngle 的类型是 int。库内 630 行只有 6 档：0(602) / 5(9) / 15(1) / 25(4) / 36(11) / 85(3) —— 看着像枚举其实不是，值本身就是角度。要显示「弹道类型」请读 Ammunitions.TrajectoryType。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Ammunitions 属性 LoftAngle（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Ammunitions.LoftAngle（630 行 / 6 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Ammunitions.LoftHeight": {
+    "cn": "抛射高度",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 Ammunitions.LoftHeight 的类型是 int；度量值（角度/高度/速度/时间/系数一类）。观测量：5 档 / 0 .. 2506。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Ammunitions 属性 LoftHeight（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Ammunitions.LoftHeight（630 行 / 5 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Ammunitions.GenerateSmoke": {
+    "cn": "产生烟幕",
+    "kind": "bool",
+    "doc": "布尔列。dump.cs 里 Ammunitions.GenerateSmoke 的类型是 bool。JSON 里存 true/false，本表按契约用 0/1 表示。",
+    "values": {
+      "0": "否",
+      "1": "是"
+    },
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Ammunitions 属性 GenerateSmoke（bool）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Ammunitions.GenerateSmoke（630 行 / 2 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Ammunitions.LaserGuided": {
+    "cn": "激光制导",
+    "kind": "bool",
+    "doc": "布尔列。dump.cs 里 Ammunitions.LaserGuided 的类型是 bool。JSON 里存 true/false，本表按契约用 0/1 表示。",
+    "values": {
+      "0": "否",
+      "1": "是"
+    },
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Ammunitions 属性 LaserGuided（bool）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Ammunitions.LaserGuided（630 行 / 2 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Ammunitions.CanReaquire": {
+    "cn": "可重新捕获",
+    "kind": "bool",
+    "doc": "布尔列。dump.cs 里 Ammunitions.CanReaquire 的类型是 bool。JSON 里存 true/false，本表按契约用 0/1 表示。",
+    "values": {
+      "0": "否",
+      "1": "是"
+    },
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Ammunitions 属性 CanReaquire（bool）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Ammunitions.CanReaquire（630 行 / 2 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Ammunitions.PreventReloadWhileTracked": {
+    "cn": "被跟踪时不能装填",
+    "kind": "bool",
+    "doc": "布尔列。dump.cs 里 Ammunitions.PreventReloadWhileTracked 的类型是 bool。JSON 里存 true/false，本表按契约用 0/1 表示。",
+    "values": {
+      "0": "否",
+      "1": "是"
+    },
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Ammunitions 属性 PreventReloadWhileTracked（bool）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Ammunitions.PreventReloadWhileTracked（630 行 / 2 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Ammunitions.StripingIgnore": {
+    "cn": "忽略曳光条纹",
+    "kind": "bool",
+    "doc": "布尔列。dump.cs 里 Ammunitions.StripingIgnore 的类型是 bool。JSON 里存 true/false，本表按契约用 0/1 表示。",
+    "values": {
+      "0": "否",
+      "1": "是"
+    },
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Ammunitions 属性 StripingIgnore（bool）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Ammunitions.StripingIgnore（630 行 / 2 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Armors.IsDefault": {
+    "cn": "是否默认",
+    "kind": "bool",
+    "doc": "布尔列。dump.cs 里 Armors.IsDefault 的类型是 bool。JSON 里存 true/false，本表按契约用 0/1 表示。",
+    "values": {
+      "0": "否",
+      "1": "是"
+    },
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Armors 属性 IsDefault（bool）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Armors.IsDefault（319 行 / 2 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Armors.ArmorValue": {
+    "cn": "装甲值",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 Armors.ArmorValue 的类型是 int；含义待列名词典补。观测量：8 档 / 0 .. 100。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Armors 属性 ArmorValue（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Armors.ArmorValue（319 行 / 8 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Armors.MaxHealthPoints": {
+    "cn": "生命值",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 Armors.MaxHealthPoints 的类型是 int；数量。观测量：25 档 / 2 .. 1000000。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Armors 属性 MaxHealthPoints（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Armors.MaxHealthPoints（319 行 / 25 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Armors.HeatArmorFront": {
+    "cn": "正面抗破",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 Armors.HeatArmorFront 的类型是 int；含义待列名词典补。观测量：27 档 / 0 .. 1400。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Armors 属性 HeatArmorFront（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Armors.HeatArmorFront（319 行 / 27 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Armors.HeatArmorRear": {
+    "cn": "背面抗破",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 Armors.HeatArmorRear 的类型是 int；含义待列名词典补。观测量：13 档 / 0 .. 200。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Armors 属性 HeatArmorRear（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Armors.HeatArmorRear（319 行 / 13 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Armors.HeatArmorSides": {
+    "cn": "侧面抗破",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 Armors.HeatArmorSides 的类型是 int；含义待列名词典补。观测量：21 档 / 0 .. 600。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Armors 属性 HeatArmorSides（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Armors.HeatArmorSides（319 行 / 21 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Armors.HeatArmorTop": {
+    "cn": "顶部抗破",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 Armors.HeatArmorTop 的类型是 int；含义待列名词典补。观测量：10 档 / 0 .. 120。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Armors 属性 HeatArmorTop（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Armors.HeatArmorTop（319 行 / 10 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Armors.KinArmorFront": {
+    "cn": "正面抗穿",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 Armors.KinArmorFront 的类型是 int；含义待列名词典补。观测量：21 档 / 0 .. 850。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Armors 属性 KinArmorFront（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Armors.KinArmorFront（319 行 / 21 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Armors.KinArmorRear": {
+    "cn": "背面抗穿",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 Armors.KinArmorRear 的类型是 int；含义待列名词典补。观测量：8 档 / 0 .. 100。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Armors 属性 KinArmorRear（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Armors.KinArmorRear（319 行 / 8 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Armors.KinArmorSides": {
+    "cn": "侧面抗穿",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 Armors.KinArmorSides 的类型是 int；含义待列名词典补。观测量：12 档 / 0 .. 180。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Armors 属性 KinArmorSides（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Armors.KinArmorSides（319 行 / 12 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Armors.KinArmorTop": {
+    "cn": "顶部抗穿",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 Armors.KinArmorTop 的类型是 int；含义待列名词典补。观测量：8 档 / 0 .. 80。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Armors 属性 KinArmorTop（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Armors.KinArmorTop（319 行 / 8 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Countries.Id": {
+    "cn": "阵营 ID（主键）",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 Countries.Id 的类型是 int；外键 -> 本表主键。观测量：3 档 / 1 .. 3。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Countries 属性 Id（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Countries.Id（3 行 / 3 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Countries.MaxPoints": {
+    "cn": "阵营点数上限",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 Countries.MaxPoints 的类型是 int；数量。观测量：2 档 / 10000 .. 800000。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Countries 属性 MaxPoints（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Countries.MaxPoints（3 行 / 2 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Countries.Hidden": {
+    "cn": "隐藏",
+    "kind": "bool",
+    "doc": "布尔列。dump.cs 里 Countries.Hidden 的类型是 bool。JSON 里存 true/false，本表按契约用 0/1 表示。",
+    "values": {
+      "0": "否",
+      "1": "是"
+    },
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Countries 属性 Hidden（bool）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Countries.Hidden（3 行 / 2 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Mobility.IsDefault": {
+    "cn": "是否默认",
+    "kind": "bool",
+    "doc": "布尔列。dump.cs 里 Mobility.IsDefault 的类型是 bool。JSON 里存 true/false，本表按契约用 0/1 表示。",
+    "values": {
+      "0": "否",
+      "1": "是"
+    },
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Mobility 属性 IsDefault（bool）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Mobility.IsDefault（266 行 / 2 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Mobility.IsAmphibious": {
+    "cn": "两栖",
+    "kind": "bool",
+    "doc": "布尔列。dump.cs 里 Mobility.IsAmphibious 的类型是 bool。JSON 里存 true/false，本表按契约用 0/1 表示。",
+    "values": {
+      "0": "否",
+      "1": "是"
+    },
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Mobility 属性 IsAmphibious（bool）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Mobility.IsAmphibious（266 行 / 2 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Mobility.IsAirDroppable": {
+    "cn": "可空投",
+    "kind": "bool",
+    "doc": "布尔列。dump.cs 里 Mobility.IsAirDroppable 的类型是 bool。JSON 里存 true/false，本表按契约用 0/1 表示。",
+    "values": {
+      "0": "否",
+      "1": "是"
+    },
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Mobility 属性 IsAirDroppable（bool）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Mobility.IsAirDroppable（266 行 / 2 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Mobility.Weight": {
+    "cn": "机动自带重量",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 Mobility.Weight 的类型是 int；度量值（角度/高度/速度/时间/系数一类）。观测量：4 档 / 0 .. 4000。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Mobility 属性 Weight（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Mobility.Weight（266 行 / 4 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Mobility.HeavyLiftWeight": {
+    "cn": "载重量",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 Mobility.HeavyLiftWeight 的类型是 int；度量值（角度/高度/速度/时间/系数一类）。观测量：28 档 / 0 .. 150000。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Mobility 属性 HeavyLiftWeight（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Mobility.HeavyLiftWeight（266 行 / 28 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Mobility.IsChangeAltitude": {
+    "cn": "可改变高度",
+    "kind": "bool",
+    "doc": "布尔列。dump.cs 里 Mobility.IsChangeAltitude 的类型是 bool。JSON 里存 true/false，本表按契约用 0/1 表示。",
+    "values": {
+      "0": "否",
+      "1": "是"
+    },
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Mobility 属性 IsChangeAltitude（bool）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Mobility.IsChangeAltitude（266 行 / 2 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Mobility.IsAfterburner": {
+    "cn": "有加力燃烧",
+    "kind": "bool",
+    "doc": "布尔列。dump.cs 里 Mobility.IsAfterburner 的类型是 bool。JSON 里存 true/false，本表按契约用 0/1 表示。",
+    "values": {
+      "0": "否",
+      "1": "是"
+    },
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Mobility 属性 IsAfterburner（bool）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Mobility.IsAfterburner（266 行 / 2 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Mobility.FlyPresetId": {
+    "cn": "飞行包线 ID",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 Mobility.FlyPresetId 的类型是 int；外键 -> PlaneFlyPresets。观测量：24 档 / 0 .. 23。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Mobility 属性 FlyPresetId（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Mobility.FlyPresetId（266 行 / 24 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Modifications.Order": {
+    "cn": "改装槽顺序",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 Modifications.Order 的类型是 int；排序序号。观测量：5 档 / 0 .. 4。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Modifications 属性 Order（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Modifications.Order（615 行 / 5 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Options.IsDefault": {
+    "cn": "是否默认",
+    "kind": "bool",
+    "doc": "布尔列。dump.cs 里 Options.IsDefault 的类型是 bool。JSON 里存 true/false，本表按契约用 0/1 表示。",
+    "values": {
+      "0": "否",
+      "1": "是"
+    },
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Options 属性 IsDefault（bool）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Options.IsDefault（2046 行 / 2 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Options.Order": {
+    "cn": "选项在槽内的顺序",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 Options.Order 的类型是 int；排序序号。观测量：11 档 / 0 .. 10。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Options 属性 Order（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Options.Order（2046 行 / 11 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Options.MainSensorId": {
+    "cn": "换成这套观瞄（主）",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 Options.MainSensorId 的类型是 int；外键 -> Sensors。观测量：26 档 / 0 .. 36。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Options 属性 MainSensorId（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Options.MainSensorId（2046 行 / 26 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Options.ExtraSensorId": {
+    "cn": "再追加一套观瞄",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 Options.ExtraSensorId 的类型是 int；外键 -> Sensors。观测量：2 档 / 0 .. 12。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Options 属性 ExtraSensorId（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Options.ExtraSensorId（2046 行 / 2 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Options.IsDynamicTurretOption": {
+    "cn": "动态炮塔选项",
+    "kind": "bool",
+    "doc": "布尔列。dump.cs 里 Options.IsDynamicTurretOption 的类型是 bool。JSON 里存 true/false，本表按契约用 0/1 表示。",
+    "values": {
+      "0": "否",
+      "1": "是"
+    },
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Options 属性 IsDynamicTurretOption（bool）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Options.IsDynamicTurretOption（2046 行 / 2 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Options.Ability2Id": {
+    "cn": "能力 2",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 Options.Ability2Id 的类型是 int；含义待列名词典补。观测量：18 档 / 0 .. 109。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Options 属性 Ability2Id（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Options.Ability2Id（2046 行 / 18 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Options.Ability3Id": {
+    "cn": "能力 3",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 Options.Ability3Id 的类型是 int；含义待列名词典补。观测量：6 档 / 0 .. 109。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Options 属性 Ability3Id（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Options.Ability3Id（2046 行 / 6 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Options.Turret11Id": {
+    "cn": "炮塔挂载槽 11",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 Options.Turret11Id 的类型是 int；含义待列名词典补。观测量：29 档 / 0 .. 948。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Options 属性 Turret11Id（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Options.Turret11Id（2046 行 / 29 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Options.Turret12Id": {
+    "cn": "炮塔挂载槽 12",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 Options.Turret12Id 的类型是 int；含义待列名词典补。观测量：22 档 / 0 .. 650。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Options 属性 Turret12Id（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Options.Turret12Id（2046 行 / 22 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Options.Turret13Id": {
+    "cn": "炮塔挂载槽 13",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 Options.Turret13Id 的类型是 int；含义待列名词典补。观测量：11 档 / 0 .. 573。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Options 属性 Turret13Id（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Options.Turret13Id（2046 行 / 11 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Options.Turret14Id": {
+    "cn": "炮塔挂载槽 14",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 Options.Turret14Id 的类型是 int；含义待列名词典补。观测量：11 档 / 0 .. 573。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Options 属性 Turret14Id（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Options.Turret14Id（2046 行 / 11 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Options.Turret15Id": {
+    "cn": "炮塔挂载槽 15",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 Options.Turret15Id 的类型是 int；含义待列名词典补。观测量：6 档 / 0 .. 557。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Options 属性 Turret15Id（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Options.Turret15Id（2046 行 / 6 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Options.Turret16Id": {
+    "cn": "炮塔挂载槽 16",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 Options.Turret16Id 的类型是 int；含义待列名词典补。观测量：6 档 / 0 .. 557。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Options 属性 Turret16Id（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Options.Turret16Id（2046 行 / 6 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Options.Turret17Id": {
+    "cn": "炮塔挂载槽 17",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 Options.Turret17Id 的类型是 int；含义待列名词典补。观测量：8 档 / 0 .. 557。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Options 属性 Turret17Id（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Options.Turret17Id（2046 行 / 8 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Options.Turret18Id": {
+    "cn": "炮塔挂载槽 18",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 Options.Turret18Id 的类型是 int；含义待列名词典补。观测量：8 档 / 0 .. 557。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Options 属性 Turret18Id（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Options.Turret18Id（2046 行 / 8 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Options.Turret19Id": {
+    "cn": "炮塔挂载槽 19",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 Options.Turret19Id 的类型是 int；含义待列名词典补。观测量：11 档 / 0 .. 808。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Options 属性 Turret19Id（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Options.Turret19Id（2046 行 / 11 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Options.Turret20Id": {
+    "cn": "炮塔挂载槽 20（占位）",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 Options.Turret20Id 的类型是 int；含义待列名词典补。观测量：1 档 / 0 .. 0。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Options 属性 Turret20Id（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Options.Turret20Id（2046 行 / 1 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "PlaneFlyPresets.Id": {
+    "cn": "飞行包线 ID（主键）",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 PlaneFlyPreset.Id 的类型是 int；外键 -> 本表主键。观测量：23 档 / 1 .. 23。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class PlaneFlyPreset 属性 Id（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col PlaneFlyPresets.Id（23 行 / 23 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "PlaneFlyPresets.LowAltitudeIsDefault": {
+    "cn": "默认低空",
+    "kind": "bool",
+    "doc": "布尔列。dump.cs 里 PlaneFlyPreset.LowAltitudeIsDefault 的类型是 bool。JSON 里存 true/false，本表按契约用 0/1 表示。",
+    "values": {
+      "0": "否",
+      "1": "是"
+    },
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class PlaneFlyPreset 属性 LowAltitudeIsDefault（bool）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col PlaneFlyPresets.LowAltitudeIsDefault（23 行 / 2 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "PlaneFlyPresets.OverrideAltitude": {
+    "cn": "强制高度",
+    "kind": "bool",
+    "doc": "布尔列。dump.cs 里 PlaneFlyPreset.OverrideAltitude 的类型是 bool。JSON 里存 true/false，本表按契约用 0/1 表示。",
+    "values": {
+      "0": "否",
+      "1": "是"
+    },
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class PlaneFlyPreset 属性 OverrideAltitude（bool）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col PlaneFlyPresets.OverrideAltitude（23 行 / 2 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "PlaneFlyPresets.ForceCounterClockwise": {
+    "cn": "强制逆时针盘旋",
+    "kind": "bool",
+    "doc": "布尔列。dump.cs 里 PlaneFlyPreset.ForceCounterClockwise 的类型是 bool。JSON 里存 true/false，本表按契约用 0/1 表示。",
+    "values": {
+      "0": "否",
+      "1": "是"
+    },
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class PlaneFlyPreset 属性 ForceCounterClockwise（bool）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col PlaneFlyPresets.ForceCounterClockwise（23 行 / 2 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Sensors.IsDefault": {
+    "cn": "是否默认",
+    "kind": "bool",
+    "doc": "布尔列。dump.cs 里 Sensors.IsDefault 的类型是 bool。JSON 里存 true/false，本表按契约用 0/1 表示。",
+    "values": {
+      "0": "否",
+      "1": "是"
+    },
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Sensors 属性 IsDefault（bool）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Sensors.IsDefault（36 行 / 2 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "SpecializationAvailabilities.SpecializationId": {
+    "cn": "专精 ID",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 SpecializationAvailabilities.SpecializationId 的类型是 int；外键 -> Specializations。观测量：12 档 / 3 .. 16。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class SpecializationAvailabilities 属性 SpecializationId（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col SpecializationAvailabilities.SpecializationId（338 行 / 12 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "SpecializationAvailabilities.MaxAvailabilityXp0": {
+    "cn": "可用数上限（XP0 档）",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 SpecializationAvailabilities.MaxAvailabilityXp0 的类型是 int；度量值（角度/高度/速度/时间/系数一类）。观测量：6 档 / 1 .. 8。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class SpecializationAvailabilities 属性 MaxAvailabilityXp0（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col SpecializationAvailabilities.MaxAvailabilityXp0（338 行 / 6 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "SpecializationAvailabilities.MaxAvailabilityXp1": {
+    "cn": "可用数上限（XP1 档，占位）",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 SpecializationAvailabilities.MaxAvailabilityXp1 的类型是 int；含义待列名词典补。观测量：1 档 / 0 .. 0。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class SpecializationAvailabilities 属性 MaxAvailabilityXp1（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col SpecializationAvailabilities.MaxAvailabilityXp1（338 行 / 1 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "SpecializationAvailabilities.MaxAvailabilityXp2": {
+    "cn": "可用数上限（XP2 档，占位）",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 SpecializationAvailabilities.MaxAvailabilityXp2 的类型是 int；含义待列名词典补。观测量：1 档 / 0 .. 0。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class SpecializationAvailabilities 属性 MaxAvailabilityXp2（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col SpecializationAvailabilities.MaxAvailabilityXp2（338 行 / 1 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "SpecializationAvailabilities.MaxAvailabilityXp3": {
+    "cn": "可用数上限（XP3 档，占位）",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 SpecializationAvailabilities.MaxAvailabilityXp3 的类型是 int；含义待列名词典补。观测量：1 档 / 0 .. 0。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class SpecializationAvailabilities 属性 MaxAvailabilityXp3（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col SpecializationAvailabilities.MaxAvailabilityXp3（338 行 / 1 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Specializations.Id": {
+    "cn": "专精 ID（主键）",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 Specializations.Id 的类型是 int；外键 -> 本表主键。观测量：13 档 / 3 .. 16。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Specializations 属性 Id（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Specializations.Id（13 行 / 13 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Specializations.CountryId": {
+    "cn": "阵营 ID",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 Specializations.CountryId 的类型是 int；外键 -> Countries。观测量：3 档 / 1 .. 3。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Specializations 属性 CountryId（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Specializations.CountryId（13 行 / 3 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Specializations.ShowInHangar": {
+    "cn": "在机库里显示",
+    "kind": "bool",
+    "doc": "布尔列。dump.cs 里 Specializations.ShowInHangar 的类型是 bool。JSON 里存 true/false，本表按契约用 0/1 表示。",
+    "values": {
+      "0": "否",
+      "1": "是"
+    },
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Specializations 属性 ShowInHangar（bool）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Specializations.ShowInHangar（13 行 / 2 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Specializations.ReconSlots": {
+    "cn": "侦察槽位数",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 Specializations.ReconSlots 的类型是 int；数量。观测量：7 档 / 2 .. 64。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Specializations 属性 ReconSlots（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Specializations.ReconSlots（13 行 / 7 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Specializations.InfantrySlots": {
+    "cn": "步兵槽位数",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 Specializations.InfantrySlots 的类型是 int；数量。观测量：5 档 / 3 .. 64。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Specializations 属性 InfantrySlots（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Specializations.InfantrySlots（13 行 / 5 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Specializations.CombatSlots": {
+    "cn": "载具槽位数",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 Specializations.CombatSlots 的类型是 int；数量。观测量：6 档 / 0 .. 64。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Specializations 属性 CombatSlots（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Specializations.CombatSlots（13 行 / 6 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Specializations.SupportSlots": {
+    "cn": "支援槽位数",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 Specializations.SupportSlots 的类型是 int；数量。观测量：5 档 / 0 .. 64。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Specializations 属性 SupportSlots（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Specializations.SupportSlots（13 行 / 5 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Specializations.LogisticsSlots": {
+    "cn": "后勤槽位数",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 Specializations.LogisticsSlots 的类型是 int；数量。观测量：2 档 / 0 .. 64。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Specializations 属性 LogisticsSlots（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Specializations.LogisticsSlots（13 行 / 2 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Specializations.HelicoptersSlots": {
+    "cn": "直升机槽位数",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 Specializations.HelicoptersSlots 的类型是 int；数量。观测量：8 档 / 0 .. 64。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Specializations 属性 HelicoptersSlots（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Specializations.HelicoptersSlots（13 行 / 8 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Specializations.AirSlots": {
+    "cn": "战机槽位数",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 Specializations.AirSlots 的类型是 int；数量。观测量：6 档 / 0 .. 64。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Specializations 属性 AirSlots（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Specializations.AirSlots（13 行 / 6 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Specializations.ReconPoints": {
+    "cn": "侦察点数预算",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 Specializations.ReconPoints 的类型是 int；数量。观测量：6 档 / 250 .. 100000。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Specializations 属性 ReconPoints（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Specializations.ReconPoints（13 行 / 6 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Specializations.InfantryPoints": {
+    "cn": "步兵点数预算",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 Specializations.InfantryPoints 的类型是 int；数量。观测量：5 档 / 750 .. 100000。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Specializations 属性 InfantryPoints（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Specializations.InfantryPoints（13 行 / 5 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Specializations.CombatPoints": {
+    "cn": "载具点数预算",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 Specializations.CombatPoints 的类型是 int；数量。观测量：7 档 / 0 .. 100000。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Specializations 属性 CombatPoints（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Specializations.CombatPoints（13 行 / 7 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Specializations.SupportPoints": {
+    "cn": "支援点数预算",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 Specializations.SupportPoints 的类型是 int；数量。观测量：6 档 / 250 .. 100000。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Specializations 属性 SupportPoints（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Specializations.SupportPoints（13 行 / 6 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Specializations.LogisticsPoints": {
+    "cn": "后勤点数预算",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 Specializations.LogisticsPoints 的类型是 int；数量。观测量：2 档 / 0 .. 100000。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Specializations 属性 LogisticsPoints（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Specializations.LogisticsPoints（13 行 / 2 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Specializations.HelicoptersPoints": {
+    "cn": "直升机点数预算",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 Specializations.HelicoptersPoints 的类型是 int；数量。观测量：6 档 / 0 .. 100000。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Specializations 属性 HelicoptersPoints（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Specializations.HelicoptersPoints（13 行 / 6 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Specializations.AirPoints": {
+    "cn": "战机点数预算",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 Specializations.AirPoints 的类型是 int；数量。观测量：8 档 / 0 .. 100000。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Specializations 属性 AirPoints（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Specializations.AirPoints（13 行 / 8 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "SquadMembers.DeathPriority": {
+    "cn": "阵亡波次",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 SquadMembers.DeathPriority 的类型是 int；度量值（角度/高度/速度/时间/系数一类）。观测量：6 档 / 0 .. 5。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class SquadMembers 属性 DeathPriority（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col SquadMembers.DeathPriority（1134 行 / 6 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "SquadWeapons.Order": {
+    "cn": "清单顺序",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 SquadWeapons.Order 的类型是 int；排序序号。观测量：6 档 / 0 .. 5。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class SquadWeapons 属性 Order（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col SquadWeapons.Order（706 行 / 6 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Turrets.IsDefault": {
+    "cn": "是否默认",
+    "kind": "bool",
+    "doc": "布尔列。dump.cs 里 Turrets.IsDefault 的类型是 bool。JSON 里存 true/false，本表按契约用 0/1 表示。",
+    "values": {
+      "0": "否",
+      "1": "是"
+    },
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Turrets 属性 IsDefault（bool）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Turrets.IsDefault（1055 行 / 2 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Turrets.IsDynamicTurret": {
+    "cn": "动态炮塔",
+    "kind": "bool",
+    "doc": "布尔列。dump.cs 里 Turrets.IsDynamicTurret 的类型是 bool。JSON 里存 true/false，本表按契约用 0/1 表示。",
+    "values": {
+      "0": "否",
+      "1": "是"
+    },
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Turrets 属性 IsDynamicTurret（bool）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Turrets.IsDynamicTurret（1055 行 / 2 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Turrets.FullRotation": {
+    "cn": "全向旋转",
+    "kind": "bool",
+    "doc": "布尔列。dump.cs 里 Turrets.FullRotation 的类型是 bool。JSON 里存 true/false，本表按契约用 0/1 表示。",
+    "values": {
+      "0": "否",
+      "1": "是"
+    },
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Turrets 属性 FullRotation（bool）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Turrets.FullRotation（1055 行 / 2 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "TurretUnits.Order": {
+    "cn": "装填顺序",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 TurretUnits.Order 的类型是 int；排序序号。观测量：8 档 / 0 .. 10。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class TurretUnits 属性 Order（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col TurretUnits.Order（1597 行 / 8 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "TurretWeapons.Order": {
+    "cn": "武器顺序",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 TurretWeapons.Order 的类型是 int；排序序号。观测量：4 档 / 0 .. 3。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class TurretWeapons 属性 Order（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col TurretWeapons.Order（1279 行 / 4 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "TurretWeapons.WeaponChannel": {
+    "cn": "武器通道（按挂载点覆盖）",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 TurretWeapons.WeaponChannel 的类型是 int；度量值（角度/高度/速度/时间/系数一类）。观测量：10 档 / 0 .. 12。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class TurretWeapons 属性 WeaponChannel（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col TurretWeapons.WeaponChannel（1279 行 / 10 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "TurretWeapons.WeaponPriority": {
+    "cn": "武器优先级（按挂载点覆盖）",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 TurretWeapons.WeaponPriority 的类型是 int；度量值（角度/高度/速度/时间/系数一类）。观测量：4 档 / 0 .. 3。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class TurretWeapons 属性 WeaponPriority（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col TurretWeapons.WeaponPriority（1279 行 / 4 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Units.OwnerInfantryID": {
+    "cn": "所属步兵班 ID（占位）",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 Units.OwnerInfantryID 的类型是 int；含义待列名词典补。观测量：1 档 / 0 .. 0。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Units 属性 OwnerInfantryID（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Units.OwnerInfantryID（540 行 / 1 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Units.OriginalCost": {
+    "cn": "原始成本（占位）",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 Units.OriginalCost 的类型是 int；度量值（角度/高度/速度/时间/系数一类）。观测量：1 档 / 0 .. 0。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Units 属性 OriginalCost（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Units.OriginalCost（540 行 / 1 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Units.DisplayInArmory": {
+    "cn": "在军械库里显示",
+    "kind": "bool",
+    "doc": "布尔列。dump.cs 里 Units.DisplayInArmory 的类型是 bool。JSON 里存 true/false，本表按契约用 0/1 表示。",
+    "values": {
+      "0": "否",
+      "1": "是"
+    },
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Units 属性 DisplayInArmory（bool）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Units.DisplayInArmory（540 行 / 2 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Units.IsUnitModification": {
+    "cn": "是改装变体",
+    "kind": "bool",
+    "doc": "布尔列。dump.cs 里 Units.IsUnitModification 的类型是 bool。JSON 里存 true/false，本表按契约用 0/1 表示。",
+    "values": {
+      "0": "否",
+      "1": "是"
+    },
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Units 属性 IsUnitModification（bool）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Units.IsUnitModification（540 行 / 2 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Units.InfantrySlots": {
+    "cn": "座位数",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 Units.InfantrySlots 的类型是 int；数量。观测量：32 档 / 0 .. 500。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Units 属性 InfantrySlots（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Units.InfantrySlots（540 行 / 32 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "WeaponAmmunitions.Order": {
+    "cn": "弹种顺序",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 WeaponAmmunitions.Order 的类型是 int；排序序号。观测量：5 档 / 0 .. 4。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class WeaponAmmunitions 属性 Order（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col WeaponAmmunitions.Order（2357 行 / 5 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Weapons.WeaponChannel": {
+    "cn": "武器通道（占位）",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 Weapons.WeaponChannel 的类型是 int；度量值（角度/高度/速度/时间/系数一类）。观测量：1 档 / 0 .. 0。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Weapons 属性 WeaponChannel（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Weapons.WeaponChannel（804 行 / 1 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Weapons.WeaponPriority": {
+    "cn": "武器优先级（占位）",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 Weapons.WeaponPriority 的类型是 int；度量值（角度/高度/速度/时间/系数一类）。观测量：1 档 / 0 .. 0。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Weapons 属性 WeaponPriority（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Weapons.WeaponPriority（804 行 / 1 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Weapons.AutoLoaded": {
+    "cn": "自动装填",
+    "kind": "bool",
+    "doc": "布尔列。dump.cs 里 Weapons.AutoLoaded 的类型是 bool。JSON 里存 true/false，本表按契约用 0/1 表示。",
+    "values": {
+      "0": "否",
+      "1": "是"
+    },
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Weapons 属性 AutoLoaded（bool）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Weapons.AutoLoaded（804 行 / 2 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Weapons.Silent": {
+    "cn": "已消音",
+    "kind": "bool",
+    "doc": "布尔列。dump.cs 里 Weapons.Silent 的类型是 bool。JSON 里存 true/false，本表按契约用 0/1 表示。",
+    "values": {
+      "0": "否",
+      "1": "是"
+    },
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Weapons 属性 Silent（bool）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Weapons.Silent（804 行 / 2 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Weapons.HasPriorityOnChassis": {
+    "cn": "车体优先",
+    "kind": "bool",
+    "doc": "布尔列。dump.cs 里 Weapons.HasPriorityOnChassis 的类型是 bool。JSON 里存 true/false，本表按契约用 0/1 表示。",
+    "values": {
+      "0": "否",
+      "1": "是"
+    },
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Weapons 属性 HasPriorityOnChassis（bool）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Weapons.HasPriorityOnChassis（804 行 / 2 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Weapons.CQC": {
+    "cn": "近距离作战",
+    "kind": "bool",
+    "doc": "布尔列。dump.cs 里 Weapons.CQC 的类型是 bool。JSON 里存 true/false，本表按契约用 0/1 表示。",
+    "values": {
+      "0": "否",
+      "1": "是"
+    },
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Weapons 属性 CQC（bool）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Weapons.CQC（804 行 / 2 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Weapons.IsRadarDependent": {
+    "cn": "需要雷达（占位）",
+    "kind": "bool",
+    "doc": "布尔列。dump.cs 里 Weapons.IsRadarDependent 的类型是 bool。JSON 里存 true/false，本表按契约用 0/1 表示。",
+    "values": {
+      "0": "否",
+      "1": "是"
+    },
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Weapons 属性 IsRadarDependent（bool）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Weapons.IsRadarDependent（804 行 / 1 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Weapons.IsVerticalLauncher": {
+    "cn": "垂直发射",
+    "kind": "bool",
+    "doc": "布尔列。dump.cs 里 Weapons.IsVerticalLauncher 的类型是 bool。JSON 里存 true/false，本表按契约用 0/1 表示。",
+    "values": {
+      "0": "否",
+      "1": "是"
+    },
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Weapons 属性 IsVerticalLauncher（bool）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Weapons.IsVerticalLauncher（804 行 / 2 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Weapons.IsLowAltDirectWeapon": {
+    "cn": "低空直瞄武器",
+    "kind": "bool",
+    "doc": "布尔列。dump.cs 里 Weapons.IsLowAltDirectWeapon 的类型是 bool。JSON 里存 true/false，本表按契约用 0/1 表示。",
+    "values": {
+      "0": "否",
+      "1": "是"
+    },
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Weapons 属性 IsLowAltDirectWeapon（bool）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Weapons.IsLowAltDirectWeapon（804 行 / 2 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Weapons.IsHighAltDirectWeapon": {
+    "cn": "高空直瞄武器",
+    "kind": "bool",
+    "doc": "布尔列。dump.cs 里 Weapons.IsHighAltDirectWeapon 的类型是 bool。JSON 里存 true/false，本表按契约用 0/1 表示。",
+    "values": {
+      "0": "否",
+      "1": "是"
+    },
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Weapons 属性 IsHighAltDirectWeapon（bool）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Weapons.IsHighAltDirectWeapon（804 行 / 2 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Weapons.IsUnderbarrel": {
+    "cn": "下挂武器",
+    "kind": "bool",
+    "doc": "布尔列。dump.cs 里 Weapons.IsUnderbarrel 的类型是 bool。JSON 里存 true/false，本表按契约用 0/1 表示。",
+    "values": {
+      "0": "否",
+      "1": "是"
+    },
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Weapons 属性 IsUnderbarrel（bool）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Weapons.IsUnderbarrel（804 行 / 2 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Weapons.MultiTargetTracking": {
+    "cn": "多目标跟踪",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 Weapons.MultiTargetTracking 的类型是 int；含义待列名词典补。观测量：7 档 / 0 .. 20。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Weapons 属性 MultiTargetTracking（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Weapons.MultiTargetTracking（804 行 / 7 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Weapons.SimultaneousTracking": {
+    "cn": "每目标导弹数量",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 Weapons.SimultaneousTracking 的类型是 int；含义待列名词典补。观测量：5 档 / 0 .. 20。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Weapons 属性 SimultaneousTracking（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Weapons.SimultaneousTracking（804 行 / 5 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Weapons.CanShootOnTheMove": {
+    "cn": "可移动中射击",
+    "kind": "bool",
+    "doc": "布尔列。dump.cs 里 Weapons.CanShootOnTheMove 的类型是 bool。JSON 里存 true/false，本表按契约用 0/1 表示。",
+    "values": {
+      "0": "否",
+      "1": "是"
+    },
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Weapons 属性 CanShootOnTheMove（bool）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Weapons.CanShootOnTheMove（804 行 / 2 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Weapons.CanBeMerged": {
+    "cn": "可合并显示",
+    "kind": "bool",
+    "doc": "布尔列。dump.cs 里 Weapons.CanBeMerged 的类型是 bool。JSON 里存 true/false，本表按契约用 0/1 表示。",
+    "values": {
+      "0": "否",
+      "1": "是"
+    },
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Weapons 属性 CanBeMerged（bool）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Weapons.CanBeMerged（804 行 / 2 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Weapons.LowerVerticalAngle": {
+    "cn": "俯角",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 Weapons.LowerVerticalAngle 的类型是 int；度量值（角度/高度/速度/时间/系数一类）。观测量：22 档 / -90 .. 4。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Weapons 属性 LowerVerticalAngle（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Weapons.LowerVerticalAngle（804 行 / 22 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Weapons.UpperVerticalAngles": {
+    "cn": "仰角",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 Weapons.UpperVerticalAngles 的类型是 int；度量值（角度/高度/速度/时间/系数一类）。观测量：22 档 / 0 .. 90。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Weapons 属性 UpperVerticalAngles（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Weapons.UpperVerticalAngles（804 行 / 22 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Weapons.VerticalRotationSpeed": {
+    "cn": "俯仰速度",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 Weapons.VerticalRotationSpeed 的类型是 int；度量值（角度/高度/速度/时间/系数一类）。观测量：17 档 / 0 .. 360。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Weapons 属性 VerticalRotationSpeed（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Weapons.VerticalRotationSpeed（804 行 / 17 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Weapons.ShotsPerBurstMin": {
+    "cn": "点射发数下限",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 Weapons.ShotsPerBurstMin 的类型是 int；含义待列名词典补。观测量：18 档 / 0 .. 47。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Weapons 属性 ShotsPerBurstMin（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Weapons.ShotsPerBurstMin（804 行 / 18 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Weapons.ShotsPerBurstMax": {
+    "cn": "点射发数上限",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 Weapons.ShotsPerBurstMax 的类型是 int；含义待列名词典补。观测量：21 档 / 0 .. 47。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Weapons 属性 ShotsPerBurstMax（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Weapons.ShotsPerBurstMax（804 行 / 21 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Weapons.ShortGroundAttackBurst": {
+    "cn": "短齐射发数",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 Weapons.ShortGroundAttackBurst 的类型是 int；含义待列名词典补。观测量：12 档 / 0 .. 14。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Weapons 属性 ShortGroundAttackBurst（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Weapons.ShortGroundAttackBurst（804 行 / 12 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Weapons.NormalGroundAttackBurst": {
+    "cn": "常规齐射发数",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 Weapons.NormalGroundAttackBurst 的类型是 int；含义待列名词典补。观测量：19 档 / 0 .. 28。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Weapons 属性 NormalGroundAttackBurst（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Weapons.NormalGroundAttackBurst（804 行 / 19 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Weapons.LongGroundAttackBurst": {
+    "cn": "长齐射发数",
+    "kind": "other",
+    "doc": "**不是枚举**（按数字原样显示）。dump.cs 里 Weapons.LongGroundAttackBurst 的类型是 int；含义待列名词典补。观测量：16 档 / 0 .. 56。",
+    "values": {},
+    "evidence": "已确认",
+    "source": "类型：_work/il2cppdump/dump.cs 的 class Weapons 属性 LongGroundAttackBurst（int）；取值：.venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col Weapons.LongGroundAttackBurst（804 行 / 16 档）。本条目由 _work/probe_enum_build.py 机械生成（中文名待列名词典补）。"
+  },
+  "Countries.ContentMembership": {
+    "cn": "内容归属（DLC）",
+    "kind": "enum",
+    "doc": "这张国家行属于哪一档内容。库内 3 行**全是 -1（本体）**。取值语义与 Units.ContentMembership 完全同一套。",
+    "values": {
+      "-1": "本体（Vanilla）",
+      "0": "内部（Internal）",
+      "1": "DLC1 先锋版",
+      "2": "DLC2《Baltic Battalion》",
+      "3": "DLC3《Russian Guard》",
+      "4": "DLC4",
+      "5": "DLC5"
+    },
+    "evidence": "强假设",
+    "source": "枚举：_work/il2cppdump/dump.cs:1409278 ContentMembership{Vanilla=-1,Internal=0,DLC1VanguardEdition=1,DLC2=2,DLC3=3,DLC4=4,DLC5=5}；字段绑定 dump.cs:51806 Countries.ContentMembership。取值集合：--col Countries.ContentMembership（3 行全是 -1，只确认了 -1 这一档）。中文同 Units.ContentMembership 那条（中文表里 DLC 标题也是英文，故标强假设）。"
+  },
+  "Specializations.ContentMembership": {
+    "cn": "内容归属（DLC）",
+    "kind": "enum",
+    "doc": "这个专精属于哪一档内容。库内 13 行只有 -1（11 行）/ 2（1 行）/ 3（1 行）。",
+    "values": {
+      "-1": "本体（Vanilla）",
+      "0": "内部（Internal）",
+      "1": "DLC1 先锋版",
+      "2": "DLC2《Baltic Battalion》",
+      "3": "DLC3《Russian Guard》",
+      "4": "DLC4",
+      "5": "DLC5"
+    },
+    "evidence": "强假设",
+    "source": "枚举：_work/il2cppdump/dump.cs:1409278 ContentMembership；字段绑定 dump.cs:53988 Specializations.ContentMembership。取值集合：--col Specializations.ContentMembership（-1 x11 / 2 x1 / 3 x1）。中文同 Units.ContentMembership 那条。"
+  },
+  "_meta": {
+    "task": "task-1 · 字段词典 · 枚举与掩码解码",
+    "batch": "第 1 批（Lead 设计图优先的 10 列 + 4 列顺手带上的）+ 第 2 批（全库机械扫尾：bool 列与『看着像枚举其实不是』的 int 列）",
+    "data_source": "D:\\断箭模组制作\\DataBaseCompiled\\52085\\*.json（24 张表，只读；战役库 52082 作对照）",
+    "columns_in_scope": "24 张表里**整数 / bool 型**且取值档数 <= 32 的列（字符串 / 浮点 / 引用列不算「数字型枚举」候选）。候选由 _work\\probe_enum_scan.py --candidates 机械扫出来，类型由 _work\\probe_enum_types.py 从 dump.cs 的模型类属性读出来，逐个判 —— 不靠猜。",
+    "bool_encoding": "bool 列的 values 按契约写成 {\"0\": \"否\", \"1\": \"是\"}；但数据库 JSON 里存的是 true/false（不是 0/1），读值要用 Rows.b() 那一套，别用整数比较（AGENTS.md §0.5 判据 4）。",
+    "generated_entries": "kind=other / bool 的条目由 _work/probe_enum_build.py 机械生成；cn 已由 _work/probe_enum_merge_labels.py 从 _work/field_labels.json（task-2 列名词典）并入，另外 2 条是 labeler 跳过、由本词典自给的。kind=enum / mask 的条目一直是手写的，中文名有出处。",
+    "notes": [
+      "全库只有 15 个「属性类型真是枚举」的列（_work/probe_enum_types.py --enums 一次列全）：Abilities.ResupplyIconType / SupplyTargetsMask、Ammunitions.UiOptions / TargetType / ArmorTargeted / TrajectoryType / Seeker、Countries.ContentMembership、Modifications.Type、Specializations.ContentMembership、Units.Type / CategoryType / Role / ContentMembership、Weapons.Type。其余候选列全是 int / bool。",
+      "Specializations 的 7 个 *Slots 与 7 个 *Points 都是**纯 int 数量**（dump.cs:53989-53999），不是枚举；MaxSlots 是只读计算属性（7 个 Slots 之和，库内 20..448，所以它从不出现在 JSON 里）。",
+      "Ammunitions.LoftAngle / LoftHeight 也是 int：LoftAngle 就是角度（0/5/15/25/36/85），别当档位编号。",
+      "Ammunitions.OverflyHeight 库里只有 0(628) 与 2(2) —— 样本太少，判不出是不是枚举，按数量处理。",
+      "Abilities.SupplyTargetsMask 的类型**就是 UnitType**（dump.cs:50376），所以它的位含义跟 Units.Type 完全同一套（库里只用到 2 = 步兵）。",
+      "TargetType 的 64 位在枚举定义里根本不存在；全库 OR 起来是 0x7BF，确认没有一行用过 64。",
+      "24 张表里有 5 张在词典里没有任何条目 —— SensorUnits / TransportAvailabilities / UnitAbilities / UnitArmors / UnitPropulsions。它们是纯链接表，列只有 Id 与几个 *Id，取值档数都 > 32（超出本轮的候选阈值），**没有任何枚举列**。",
+      "完整性由 _work/probe_enum_verify.py 机械守着：它把 dump.cs 里 15 个真枚举列与词典对齐（缺一个就报错），再把每列在库里的实测取值回灌进 values 校验一遍。当前 159 列 / 0 问题。"
+    ],
+    "scan_commands": [
+      ".venv\\Scripts\\python.exe _work\\probe_enum_scan.py --candidates",
+      ".venv\\Scripts\\python.exe _work\\probe_enum_scan.py --col <表>.<列>",
+      ".venv\\Scripts\\python.exe _work\\probe_enum_scan.py --group Modifications.Type --show UIName,Name",
+      ".venv\\Scripts\\python.exe _work\\probe_enum_loc.py --grep <正则>",
+      ".venv\\Scripts\\python.exe _work\\probe_enum_types.py --enums",
+      ".venv\\Scripts\\python.exe _work\\probe_enum_build.py --dry-run",
+      ".venv\\Scripts\\python.exe _work\\probe_enum_verify.py",
+      ".venv\\Scripts\\python.exe _work\\probe_enum_render.py --check"
+    ],
+    "evidence_rule": {
+      "已确认": "数值<->含义 有反编译枚举定义 / 产品既有常量 / 本地化键直接佐证，按 source 能当场复现",
+      "强假设": "数值集合有反编译枚举定义佐证，但**中文名整条是翻译的**（游戏没有给出官方中文）",
+      "推断": "连枚举定义都没有，只靠数据分布或旧知识包线索推出来"
+    },
+    "encoding": "values 的键一律是字符串形式的十进制整数（含负数，例 \"-1\"）；kind 只能是 enum / mask / bool / other",
+    "entries": 159,
+    "values_total": 264,
+    "kind_counts": {
+      "bool": 57,
+      "enum": 12,
+      "mask": 4,
+      "other": 86
+    },
+    "evidence_counts": {
+      "已确认": 152,
+      "强假设": 7,
+      "推断": 0
+    },
+    "unconfirmed_columns": [
+      "Abilities.ResupplyIconType",
+      "Ammunitions.UiOptions",
+      "Countries.ContentMembership",
+      "Modifications.Type",
+      "Specializations.ContentMembership",
+      "Units.ContentMembership",
+      "Units.Role"
+    ],
+    "label_merge": {
+      "source": "_work/field_labels.json（task-2 / field-labeler 产物，只读，本脚本不改它）",
+      "targets": 143,
+      "filled_from_labels": 141,
+      "filled_by_enum_decoder": 2,
+      "hand_filled_columns": [
+        "Ammunitions.LoftAngle",
+        "Ammunitions.OverflyHeight"
+      ],
+      "changed_this_run": 0,
+      "still_placeholder": [],
+      "rule": "只改 cn；kind / values / evidence / source 一字未动（脚本每次运行都会逐字节自证，另可用 git diff 复核）。",
+      "non_cn_fields_unchanged": true
+    }
+  }
+}

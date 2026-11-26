@@ -1,0 +1,12 @@
+{
+  "name": "dsh-ba-mode",
+  "version": "4.0.0",
+  "private": true,
+  "description": "断箭 Mod 开发模式 v4（2026-11-22，用户当场定）：只做一条 —— 严禁猜。v1→v3.2 的所有闸已按用户要求全部删除（ba_boot 开工闸 / ba_gate 证据账本 / tools.guard 硬门 / 真机门 / 收尾闸 / 团队拆队门），bundle 只剩预设声明（cordis.patch.yml）。旧版留档：D:\\断箭模组制作\\_work_db\\retired\\ba-mode-v3.2-20261122\\",
+  "type": "module",
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "schema": 1,
+  "name": "w11-default",
+  "engine": "BLENDER_EEVEE",
+  "resolution": [960, 540],
+  "samples": 16,
+  "seed": 0,
+  "adaptive_sampling": false,
+  "film_transparent": false,
+  "view_transform": "Standard",
+  "look": "None",
+  "exposure": 0.0,
+  "gamma": 1.0,
+  "world": {
+    "mode": "color",
+    "color": [0.05, 0.05, 0.05, 1.0],
+    "strength": 1.0
+  },
+  "sun": {
+    "enabled": true,
+    "azimuth_deg": 135.0,
+    "elevation_deg": 45.0,
+    "energy": 3.0,
+    "angle_deg": 0.526,
+    "color": [1.0, 1.0, 1.0]
+  },
+  "camera": {
+    "target": [0, 0, 0],
+    "distance": 8.0,
+    "azimuth_deg": 45.0,
+    "elevation_deg": 20.0,
+    "focal_length_mm": 50.0,
+    "ortho": false
+  },
+  "png": {
+    "color_mode": "RGBA",
+    "color_depth": "8",
+    "compression": 15
+  },
+  "units": {
+    "RU_T72B": {
+      "camera": {
+        "distance": 14.0
+      }
+    }
+  }
+}

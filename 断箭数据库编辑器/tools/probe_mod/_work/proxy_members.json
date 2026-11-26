@@ -1,0 +1,2162 @@
+{
+    "assembly":  "Il2CppBrokenArrow, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null",
+    "proxy_dir":  "D:\\Steam\\steamapps\\common\\broken_arrow\\MelonLoader\\Il2CppAssemblies",
+    "source_data":  "Il2CppBrokenArrow.DataBase.DataBaseSourceData",
+    "tables":  {
+                   "Abilities":  {
+                                     "modelType":  "Il2CppBrokenArrow.DataBase.Models.Abilities",
+                                     "columns":  {
+                                                     "Id":  {
+                                                                "kind":  "prop",
+                                                                "writable":  true,
+                                                                "type":  "System.Int32"
+                                                            },
+                                                     "Name":  {
+                                                                  "kind":  "prop",
+                                                                  "writable":  true,
+                                                                  "type":  "System.String"
+                                                              },
+                                                     "IsDefault":  {
+                                                                       "kind":  "prop",
+                                                                       "writable":  true,
+                                                                       "type":  "System.Boolean"
+                                                                   },
+                                                     "ModelFileName":  {
+                                                                           "kind":  "prop",
+                                                                           "writable":  true,
+                                                                           "type":  "System.String"
+                                                                       },
+                                                     "ECMAccuracyMultiplier":  {
+                                                                                   "kind":  "prop",
+                                                                                   "writable":  true,
+                                                                                   "type":  "System.Single"
+                                                                               },
+                                                     "IsRadar":  {
+                                                                     "kind":  "prop",
+                                                                     "writable":  true,
+                                                                     "type":  "System.Boolean"
+                                                                 },
+                                                     "RadarLowAltOpticsModifier":  {
+                                                                                       "kind":  "prop",
+                                                                                       "writable":  true,
+                                                                                       "type":  "System.Single"
+                                                                                   },
+                                                     "RadarHighAltOpticsModifier":  {
+                                                                                        "kind":  "prop",
+                                                                                        "writable":  true,
+                                                                                        "type":  "System.Single"
+                                                                                    },
+                                                     "RadarLowAltWeaponRangeModifier":  {
+                                                                                            "kind":  "prop",
+                                                                                            "writable":  true,
+                                                                                            "type":  "System.Single"
+                                                                                        },
+                                                     "RadarHighAltWeaponRangeModifier":  {
+                                                                                             "kind":  "prop",
+                                                                                             "writable":  true,
+                                                                                             "type":  "System.Single"
+                                                                                         },
+                                                     "RadarSwitchCooldown":  {
+                                                                                 "kind":  "prop",
+                                                                                 "writable":  true,
+                                                                                 "type":  "System.Single"
+                                                                             },
+                                                     "IsRadarStatic":  {
+                                                                           "kind":  "prop",
+                                                                           "writable":  true,
+                                                                           "type":  "System.Boolean"
+                                                                       },
+                                                     "IsLaserDesignator":  {
+                                                                               "kind":  "prop",
+                                                                               "writable":  true,
+                                                                               "type":  "System.Boolean"
+                                                                           },
+                                                     "LaserMaxRange":  {
+                                                                           "kind":  "prop",
+                                                                           "writable":  true,
+                                                                           "type":  "System.Single"
+                                                                       },
+                                                     "LaserUsableInMove":  {
+                                                                               "kind":  "prop",
+                                                                               "writable":  true,
+                                                                               "type":  "System.Boolean"
+                                                                           },
+                                                     "IsInfantrySprint":  {
+                                                                              "kind":  "prop",
+                                                                              "writable":  true,
+                                                                              "type":  "System.Boolean"
+                                                                          },
+                                                     "SprintDuration":  {
+                                                                            "kind":  "prop",
+                                                                            "writable":  true,
+                                                                            "type":  "System.Single"
+                                                                        },
+                                                     "SprintCooldown":  {
+                                                                            "kind":  "prop",
+                                                                            "writable":  true,
+                                                                            "type":  "System.Single"
+                                                                        },
+                                                     "IsSmoke":  {
+                                                                     "kind":  "prop",
+                                                                     "writable":  true,
+                                                                     "type":  "System.Boolean"
+                                                                 },
+                                                     "SmokeAmmunitionId":  {
+                                                                               "kind":  "prop",
+                                                                               "writable":  true,
+                                                                               "type":  "System.Int32"
+                                                                           },
+                                                     "SmokeAmmunitionQuantity":  {
+                                                                                     "kind":  "prop",
+                                                                                     "writable":  true,
+                                                                                     "type":  "System.Int32"
+                                                                                 },
+                                                     "SmokeCooldown":  {
+                                                                           "kind":  "prop",
+                                                                           "writable":  true,
+                                                                           "type":  "System.Single"
+                                                                       },
+                                                     "IsAPS":  {
+                                                                   "kind":  "prop",
+                                                                   "writable":  true,
+                                                                   "type":  "System.Boolean"
+                                                               },
+                                                     "APSHitboxProportion":  {
+                                                                                 "kind":  "prop",
+                                                                                 "writable":  true,
+                                                                                 "type":  "System.Single"
+                                                                             },
+                                                     "APSQuantity":  {
+                                                                         "kind":  "prop",
+                                                                         "writable":  true,
+                                                                         "type":  "System.Int32"
+                                                                     },
+                                                     "APSCooldown":  {
+                                                                         "kind":  "prop",
+                                                                         "writable":  true,
+                                                                         "type":  "System.Single"
+                                                                     },
+                                                     "APSSupplyCost":  {
+                                                                           "kind":  "prop",
+                                                                           "writable":  true,
+                                                                           "type":  "System.Single"
+                                                                       },
+                                                     "APSResupplyTime":  {
+                                                                             "kind":  "prop",
+                                                                             "writable":  true,
+                                                                             "type":  "System.Single"
+                                                                         },
+                                                     "IsDecoy":  {
+                                                                     "kind":  "prop",
+                                                                     "writable":  true,
+                                                                     "type":  "System.Boolean"
+                                                                 },
+                                                     "DecoyFXPreset":  {
+                                                                           "kind":  "prop",
+                                                                           "writable":  true,
+                                                                           "type":  "System.String"
+                                                                       },
+                                                     "DecoyQuantity":  {
+                                                                           "kind":  "prop",
+                                                                           "writable":  true,
+                                                                           "type":  "System.Int32"
+                                                                       },
+                                                     "DecoyAccuracyMultiplier":  {
+                                                                                     "kind":  "prop",
+                                                                                     "writable":  true,
+                                                                                     "type":  "System.Single"
+                                                                                 },
+                                                     "DecoyDuration":  {
+                                                                           "kind":  "prop",
+                                                                           "writable":  true,
+                                                                           "type":  "System.Single"
+                                                                       },
+                                                     "DecoyCooldown":  {
+                                                                           "kind":  "prop",
+                                                                           "writable":  true,
+                                                                           "type":  "System.Single"
+                                                                       },
+                                                     "DecoySupplyCost":  {
+                                                                             "kind":  "prop",
+                                                                             "writable":  true,
+                                                                             "type":  "System.Single"
+                                                                         },
+                                                     "DecoyResupplyTime":  {
+                                                                               "kind":  "prop",
+                                                                               "writable":  true,
+                                                                               "type":  "System.Single"
+                                                                           },
+                                                     "IsResupplyAbility":  {
+                                                                               "kind":  "prop",
+                                                                               "writable":  true,
+                                                                               "type":  "System.Boolean"
+                                                                           },
+                                                     "ResupplyIconType":  {
+                                                                              "kind":  "prop",
+                                                                              "writable":  true,
+                                                                              "type":  "Il2CppBrokenArrow.DataBase.Enums.ResupplyIconType"
+                                                                          },
+                                                     "ResupplyRadius":  {
+                                                                            "kind":  "prop",
+                                                                            "writable":  true,
+                                                                            "type":  "System.Single"
+                                                                        },
+                                                     "CanHeal":  {
+                                                                     "kind":  "prop",
+                                                                     "writable":  true,
+                                                                     "type":  "System.Boolean"
+                                                                 },
+                                                     "CanRepair":  {
+                                                                       "kind":  "prop",
+                                                                       "writable":  true,
+                                                                       "type":  "System.Boolean"
+                                                                   },
+                                                     "CanResupply":  {
+                                                                         "kind":  "prop",
+                                                                         "writable":  true,
+                                                                         "type":  "System.Boolean"
+                                                                     },
+                                                     "ResupplyPoints":  {
+                                                                            "kind":  "prop",
+                                                                            "writable":  true,
+                                                                            "type":  "System.Int32"
+                                                                        },
+                                                     "CanSelfSupply":  {
+                                                                           "kind":  "prop",
+                                                                           "writable":  true,
+                                                                           "type":  "System.Boolean"
+                                                                       },
+                                                     "CanWorkOnMove":  {
+                                                                           "kind":  "prop",
+                                                                           "writable":  true,
+                                                                           "type":  "System.Boolean"
+                                                                       },
+                                                     "SupplyPointCost":  {
+                                                                             "kind":  "prop",
+                                                                             "writable":  true,
+                                                                             "type":  "System.Single"
+                                                                         },
+                                                     "SupplyTargetsMask":  {
+                                                                               "kind":  "prop",
+                                                                               "writable":  true,
+                                                                               "type":  "Il2CppNetworkCommon.Enums.Common.UnitType"
+                                                                           },
+                                                     "IsSneakAbility":  {
+                                                                            "kind":  "prop",
+                                                                            "writable":  true,
+                                                                            "type":  "System.Boolean"
+                                                                        },
+                                                     "SneakCoverBonus":  {
+                                                                             "kind":  "prop",
+                                                                             "writable":  true,
+                                                                             "type":  "System.Single"
+                                                                         },
+                                                     "SneakVehicleSpeedMultiplier":  {
+                                                                                         "kind":  "prop",
+                                                                                         "writable":  true,
+                                                                                         "type":  "System.Single"
+                                                                                     },
+                                                     "IsArtilleryAutoFire":  {
+                                                                                 "kind":  "prop",
+                                                                                 "writable":  true,
+                                                                                 "type":  "System.Boolean"
+                                                                             }
+                                                 }
+                                 },
+                   "UnitAbilities":  {
+                                         "modelType":  "Il2CppBrokenArrow.DataBase.Models.UnitAbilities",
+                                         "columns":  {
+                                                         "Id":  {
+                                                                    "kind":  "prop",
+                                                                    "writable":  true,
+                                                                    "type":  "System.Int32"
+                                                                },
+                                                         "UnitId":  {
+                                                                        "kind":  "prop",
+                                                                        "writable":  true,
+                                                                        "type":  "System.Int32"
+                                                                    },
+                                                         "AbilityId":  {
+                                                                           "kind":  "prop",
+                                                                           "writable":  true,
+                                                                           "type":  "System.Int32"
+                                                                       }
+                                                     }
+                                     },
+                   "Ammunitions":  {
+                                       "modelType":  "Il2CppBrokenArrow.DataBase.Models.Ammunitions",
+                                       "columns":  {
+                                                       "Id":  {
+                                                                  "kind":  "prop",
+                                                                  "writable":  true,
+                                                                  "type":  "System.Int32"
+                                                              },
+                                                       "Name":  {
+                                                                    "kind":  "prop",
+                                                                    "writable":  true,
+                                                                    "type":  "System.String"
+                                                                },
+                                                       "HUDName":  {
+                                                                       "kind":  "prop",
+                                                                       "writable":  true,
+                                                                       "type":  "System.String"
+                                                                   },
+                                                       "HUDIcon":  {
+                                                                       "kind":  "prop",
+                                                                       "writable":  true,
+                                                                       "type":  "System.String"
+                                                                   },
+                                                       "HUDMultiplier":  {
+                                                                             "kind":  "prop",
+                                                                             "writable":  true,
+                                                                             "type":  "System.Int32"
+                                                                         },
+                                                       "UiOptions":  {
+                                                                         "kind":  "prop",
+                                                                         "writable":  true,
+                                                                         "type":  "Il2CppBrokenArrow.DataBase.Enums.UiOptions"
+                                                                     },
+                                                       "ModelFileName":  {
+                                                                             "kind":  "prop",
+                                                                             "writable":  true,
+                                                                             "type":  "System.String"
+                                                                         },
+                                                       "AudioPreset":  {
+                                                                           "kind":  "prop",
+                                                                           "writable":  true,
+                                                                           "type":  "System.String"
+                                                                       },
+                                                       "FXPreset":  {
+                                                                        "kind":  "prop",
+                                                                        "writable":  true,
+                                                                        "type":  "System.String"
+                                                                    },
+                                                       "VfxCountPerShot":  {
+                                                                               "kind":  "prop",
+                                                                               "writable":  true,
+                                                                               "type":  "System.Int32"
+                                                                           },
+                                                       "VfxCountPerShotMax":  {
+                                                                                  "kind":  "prop",
+                                                                                  "writable":  true,
+                                                                                  "type":  "System.Int32"
+                                                                              },
+                                                       "Airburst":  {
+                                                                        "kind":  "prop",
+                                                                        "writable":  true,
+                                                                        "type":  "System.Boolean"
+                                                                    },
+                                                       "SupplyCost":  {
+                                                                          "kind":  "prop",
+                                                                          "writable":  true,
+                                                                          "type":  "System.Single"
+                                                                      },
+                                                       "ResupplyTime":  {
+                                                                            "kind":  "prop",
+                                                                            "writable":  true,
+                                                                            "type":  "System.Single"
+                                                                        },
+                                                       "Damage":  {
+                                                                      "kind":  "prop",
+                                                                      "writable":  true,
+                                                                      "type":  "System.Single"
+                                                                  },
+                                                       "StressDamage":  {
+                                                                            "kind":  "prop",
+                                                                            "writable":  true,
+                                                                            "type":  "System.Single"
+                                                                        },
+                                                       "DamageOverTimeDuration":  {
+                                                                                      "kind":  "prop",
+                                                                                      "writable":  true,
+                                                                                      "type":  "System.Single"
+                                                                                  },
+                                                       "IgnoreCover":  {
+                                                                           "kind":  "prop",
+                                                                           "writable":  true,
+                                                                           "type":  "System.Single"
+                                                                       },
+                                                       "TargetType":  {
+                                                                          "kind":  "prop",
+                                                                          "writable":  true,
+                                                                          "type":  "Il2CppBrokenArrow.DataBase.Enums.TargetType"
+                                                                      },
+                                                       "ArmorTargeted":  {
+                                                                             "kind":  "prop",
+                                                                             "writable":  true,
+                                                                             "type":  "Il2CppBrokenArrow.DataBase.Enums.ArmorType"
+                                                                         },
+                                                       "PenetrationAtMinRange":  {
+                                                                                     "kind":  "prop",
+                                                                                     "writable":  true,
+                                                                                     "type":  "System.Single"
+                                                                                 },
+                                                       "PenetrationAtGroundRange":  {
+                                                                                        "kind":  "prop",
+                                                                                        "writable":  true,
+                                                                                        "type":  "System.Single"
+                                                                                    },
+                                                       "NoDamageFalloff":  {
+                                                                               "kind":  "prop",
+                                                                               "writable":  true,
+                                                                               "type":  "System.Boolean"
+                                                                           },
+                                                       "TopArmorAttack":  {
+                                                                              "kind":  "prop",
+                                                                              "writable":  true,
+                                                                              "type":  "System.Boolean"
+                                                                          },
+                                                       "HealthAOERadius":  {
+                                                                               "kind":  "prop",
+                                                                               "writable":  true,
+                                                                               "type":  "System.Single"
+                                                                           },
+                                                       "StressAOERadius":  {
+                                                                               "kind":  "prop",
+                                                                               "writable":  true,
+                                                                               "type":  "System.Single"
+                                                                           },
+                                                       "OverpressureRadius":  {
+                                                                                  "kind":  "prop",
+                                                                                  "writable":  true,
+                                                                                  "type":  "System.Single"
+                                                                              },
+                                                       "RadioFuseDistance":  {
+                                                                                 "kind":  "prop",
+                                                                                 "writable":  true,
+                                                                                 "type":  "System.Single"
+                                                                             },
+                                                       "CriticMultiplier":  {
+                                                                                "kind":  "prop",
+                                                                                "writable":  true,
+                                                                                "type":  "System.Single"
+                                                                            },
+                                                       "CanBeIntercepted":  {
+                                                                                "kind":  "prop",
+                                                                                "writable":  true,
+                                                                                "type":  "System.Boolean"
+                                                                            },
+                                                       "CanBeTargeted":  {
+                                                                             "kind":  "prop",
+                                                                             "writable":  true,
+                                                                             "type":  "System.Boolean"
+                                                                         },
+                                                       "TrajectoryType":  {
+                                                                              "kind":  "prop",
+                                                                              "writable":  true,
+                                                                              "type":  "Il2CppBrokenArrow.DataBase.Enums.TrajectoryType"
+                                                                          },
+                                                       "MinimalRange":  {
+                                                                            "kind":  "prop",
+                                                                            "writable":  true,
+                                                                            "type":  "System.Single"
+                                                                        },
+                                                       "GroundRange":  {
+                                                                           "kind":  "prop",
+                                                                           "writable":  true,
+                                                                           "type":  "System.Single"
+                                                                       },
+                                                       "LowAltRange":  {
+                                                                           "kind":  "prop",
+                                                                           "writable":  true,
+                                                                           "type":  "System.Single"
+                                                                       },
+                                                       "HighAltRange":  {
+                                                                            "kind":  "prop",
+                                                                            "writable":  true,
+                                                                            "type":  "System.Single"
+                                                                        },
+                                                       "NonSeadProjectileRangeOverride":  {
+                                                                                              "kind":  "prop",
+                                                                                              "writable":  true,
+                                                                                              "type":  "System.Single"
+                                                                                          },
+                                                       "SeadProjectileRangeOverride":  {
+                                                                                           "kind":  "prop",
+                                                                                           "writable":  true,
+                                                                                           "type":  "System.Single"
+                                                                                       },
+                                                       "OverflyHeight":  {
+                                                                             "kind":  "prop",
+                                                                             "writable":  true,
+                                                                             "type":  "System.Int32"
+                                                                         },
+                                                       "MuzzleVelocity":  {
+                                                                              "kind":  "prop",
+                                                                              "writable":  true,
+                                                                              "type":  "System.Single"
+                                                                          },
+                                                       "MaxSpeed":  {
+                                                                        "kind":  "prop",
+                                                                        "writable":  true,
+                                                                        "type":  "System.Single"
+                                                                    },
+                                                       "Acceleration":  {
+                                                                            "kind":  "prop",
+                                                                            "writable":  true,
+                                                                            "type":  "System.Single"
+                                                                        },
+                                                       "DispersionHorizontalRadius":  {
+                                                                                          "kind":  "prop",
+                                                                                          "writable":  true,
+                                                                                          "type":  "System.Single"
+                                                                                      },
+                                                       "DispersionVerticalRadius":  {
+                                                                                        "kind":  "prop",
+                                                                                        "writable":  true,
+                                                                                        "type":  "System.Single"
+                                                                                    },
+                                                       "DispersionMinimal":  {
+                                                                                 "kind":  "prop",
+                                                                                 "writable":  true,
+                                                                                 "type":  "System.Single"
+                                                                             },
+                                                       "LaunchMarginAngle":  {
+                                                                                 "kind":  "prop",
+                                                                                 "writable":  true,
+                                                                                 "type":  "System.Single"
+                                                                             },
+                                                       "LoftAngle":  {
+                                                                         "kind":  "prop",
+                                                                         "writable":  true,
+                                                                         "type":  "System.Int32"
+                                                                     },
+                                                       "LoftHeight":  {
+                                                                          "kind":  "prop",
+                                                                          "writable":  true,
+                                                                          "type":  "System.Int32"
+                                                                      },
+                                                       "AimTimeMinOverride":  {
+                                                                                  "kind":  "prop",
+                                                                                  "writable":  true,
+                                                                                  "type":  "System.Single"
+                                                                              },
+                                                       "AimTimeMaxOverride":  {
+                                                                                  "kind":  "prop",
+                                                                                  "writable":  true,
+                                                                                  "type":  "System.Single"
+                                                                              },
+                                                       "GenerateSmoke":  {
+                                                                             "kind":  "prop",
+                                                                             "writable":  true,
+                                                                             "type":  "System.Boolean"
+                                                                         },
+                                                       "SmokeRadius":  {
+                                                                           "kind":  "prop",
+                                                                           "writable":  true,
+                                                                           "type":  "System.Single"
+                                                                       },
+                                                       "SmokeDuration":  {
+                                                                             "kind":  "prop",
+                                                                             "writable":  true,
+                                                                             "type":  "System.Single"
+                                                                         },
+                                                       "SmokeFadeDuration":  {
+                                                                                 "kind":  "prop",
+                                                                                 "writable":  true,
+                                                                                 "type":  "System.Single"
+                                                                             },
+                                                       "Seeker":  {
+                                                                      "kind":  "prop",
+                                                                      "writable":  true,
+                                                                      "type":  "Il2CppBrokenArrow.DataBase.Enums.SeekerType"
+                                                                  },
+                                                       "LaserGuided":  {
+                                                                           "kind":  "prop",
+                                                                           "writable":  true,
+                                                                           "type":  "System.Boolean"
+                                                                       },
+                                                       "SeekerAngle":  {
+                                                                           "kind":  "prop",
+                                                                           "writable":  true,
+                                                                           "type":  "System.Single"
+                                                                       },
+                                                       "MaxSeekerDistance":  {
+                                                                                 "kind":  "prop",
+                                                                                 "writable":  true,
+                                                                                 "type":  "System.Single"
+                                                                             },
+                                                       "CanReaquire":  {
+                                                                           "kind":  "prop",
+                                                                           "writable":  true,
+                                                                           "type":  "System.Boolean"
+                                                                       },
+                                                       "AimStartDelay":  {
+                                                                             "kind":  "prop",
+                                                                             "writable":  true,
+                                                                             "type":  "System.Single"
+                                                                         },
+                                                       "MainEngineIgnitionDelay":  {
+                                                                                       "kind":  "prop",
+                                                                                       "writable":  true,
+                                                                                       "type":  "System.Single"
+                                                                                   },
+                                                       "RotationSpeed":  {
+                                                                             "kind":  "prop",
+                                                                             "writable":  true,
+                                                                             "type":  "System.Single"
+                                                                         },
+                                                       "BurnTime":  {
+                                                                        "kind":  "prop",
+                                                                        "writable":  true,
+                                                                        "type":  "System.Single"
+                                                                    },
+                                                       "PreEgnitionRotationSpeed":  {
+                                                                                        "kind":  "prop",
+                                                                                        "writable":  true,
+                                                                                        "type":  "System.Single"
+                                                                                    },
+                                                       "PreventReloadWhileTracked":  {
+                                                                                         "kind":  "prop",
+                                                                                         "writable":  true,
+                                                                                         "type":  "System.Boolean"
+                                                                                     },
+                                                       "StripingIgnore":  {
+                                                                              "kind":  "prop",
+                                                                              "writable":  true,
+                                                                              "type":  "System.Boolean"
+                                                                          },
+                                                       "IsTopArmorArmorAttack":  {
+                                                                                     "kind":  "prop",
+                                                                                     "writable":  false,
+                                                                                     "type":  "System.Boolean"
+                                                                                 }
+                                                   }
+                                   },
+                   "Units":  {
+                                 "modelType":  "Il2CppBrokenArrow.DataBase.Models.Units",
+                                 "columns":  {
+                                                 "OriginalName":  {
+                                                                      "kind":  "prop",
+                                                                      "writable":  true,
+                                                                      "type":  "System.String"
+                                                                  },
+                                                 "OwnerInfantryID":  {
+                                                                         "kind":  "prop",
+                                                                         "writable":  true,
+                                                                         "type":  "System.Int32"
+                                                                     },
+                                                 "OriginalCost":  {
+                                                                      "kind":  "prop",
+                                                                      "writable":  true,
+                                                                      "type":  "System.Int32"
+                                                                  },
+                                                 "Id":  {
+                                                            "kind":  "prop",
+                                                            "writable":  true,
+                                                            "type":  "System.Int32"
+                                                        },
+                                                 "DisplayInArmory":  {
+                                                                         "kind":  "prop",
+                                                                         "writable":  true,
+                                                                         "type":  "System.Boolean"
+                                                                     },
+                                                 "IsUnitModification":  {
+                                                                            "kind":  "prop",
+                                                                            "writable":  true,
+                                                                            "type":  "System.Boolean"
+                                                                        },
+                                                 "HUDName":  {
+                                                                 "kind":  "prop",
+                                                                 "writable":  true,
+                                                                 "type":  "System.String"
+                                                             },
+                                                 "Name":  {
+                                                              "kind":  "prop",
+                                                              "writable":  true,
+                                                              "type":  "System.String"
+                                                          },
+                                                 "CountryId":  {
+                                                                   "kind":  "prop",
+                                                                   "writable":  true,
+                                                                   "type":  "System.Int32"
+                                                               },
+                                                 "Description":  {
+                                                                     "kind":  "prop",
+                                                                     "writable":  true,
+                                                                     "type":  "System.String"
+                                                                 },
+                                                 "ModelFileName":  {
+                                                                       "kind":  "prop",
+                                                                       "writable":  true,
+                                                                       "type":  "System.String"
+                                                                   },
+                                                 "PortraitFileName":  {
+                                                                          "kind":  "prop",
+                                                                          "writable":  true,
+                                                                          "type":  "System.String"
+                                                                      },
+                                                 "ThumbnailFileName":  {
+                                                                           "kind":  "prop",
+                                                                           "writable":  true,
+                                                                           "type":  "System.String"
+                                                                       },
+                                                 "AudioPreset":  {
+                                                                     "kind":  "prop",
+                                                                     "writable":  true,
+                                                                     "type":  "System.String"
+                                                                 },
+                                                 "Cost":  {
+                                                              "kind":  "prop",
+                                                              "writable":  true,
+                                                              "type":  "System.Int32"
+                                                          },
+                                                 "UpkeepMultiplier":  {
+                                                                          "kind":  "prop",
+                                                                          "writable":  true,
+                                                                          "type":  "System.Single"
+                                                                      },
+                                                 "TimeModifierRefund":  {
+                                                                            "kind":  "prop",
+                                                                            "writable":  true,
+                                                                            "type":  "System.Single"
+                                                                        },
+                                                 "TimeModifierResurrect":  {
+                                                                               "kind":  "prop",
+                                                                               "writable":  true,
+                                                                               "type":  "System.Single"
+                                                                           },
+                                                 "Type":  {
+                                                              "kind":  "prop",
+                                                              "writable":  true,
+                                                              "type":  "Il2CppNetworkCommon.Enums.Common.UnitType"
+                                                          },
+                                                 "CategoryType":  {
+                                                                      "kind":  "prop",
+                                                                      "writable":  true,
+                                                                      "type":  "Il2CppNetworkCommon.Enums.Common.UnitCategoryType"
+                                                                  },
+                                                 "Role":  {
+                                                              "kind":  "prop",
+                                                              "writable":  true,
+                                                              "type":  "Il2CppNetworkCommon.Enums.Common.UnitRole"
+                                                          },
+                                                 "Length":  {
+                                                                "kind":  "prop",
+                                                                "writable":  true,
+                                                                "type":  "System.Single"
+                                                            },
+                                                 "Width":  {
+                                                               "kind":  "prop",
+                                                               "writable":  true,
+                                                               "type":  "System.Single"
+                                                           },
+                                                 "Height":  {
+                                                                "kind":  "prop",
+                                                                "writable":  true,
+                                                                "type":  "System.Single"
+                                                            },
+                                                 "Weight":  {
+                                                                "kind":  "prop",
+                                                                "writable":  true,
+                                                                "type":  "System.Int32"
+                                                            },
+                                                 "Stealth":  {
+                                                                 "kind":  "prop",
+                                                                 "writable":  true,
+                                                                 "type":  "System.Single"
+                                                             },
+                                                 "InfantrySlots":  {
+                                                                       "kind":  "prop",
+                                                                       "writable":  true,
+                                                                       "type":  "System.Int32"
+                                                                   },
+                                                 "MaxStress":  {
+                                                                   "kind":  "prop",
+                                                                   "writable":  true,
+                                                                   "type":  "System.Single"
+                                                               },
+                                                 "WaterDiveOffset":  {
+                                                                         "kind":  "prop",
+                                                                         "writable":  true,
+                                                                         "type":  "System.Single"
+                                                                     },
+                                                 "ContentMembership":  {
+                                                                           "kind":  "prop",
+                                                                           "writable":  true,
+                                                                           "type":  "Il2CppNetworkCommon.Enums.ContentMembership"
+                                                                       },
+                                                 "CurrentStealth":  {
+                                                                        "kind":  "prop",
+                                                                        "writable":  false,
+                                                                        "type":  "System.Single"
+                                                                    }
+                                             }
+                             },
+                   "Armors":  {
+                                  "modelType":  "Il2CppBrokenArrow.DataBase.Models.Armors",
+                                  "columns":  {
+                                                  "Id":  {
+                                                             "kind":  "prop",
+                                                             "writable":  true,
+                                                             "type":  "System.Int32"
+                                                         },
+                                                  "IsDefault":  {
+                                                                    "kind":  "prop",
+                                                                    "writable":  true,
+                                                                    "type":  "System.Boolean"
+                                                                },
+                                                  "Name":  {
+                                                               "kind":  "prop",
+                                                               "writable":  true,
+                                                               "type":  "System.String"
+                                                           },
+                                                  "ModelFileName":  {
+                                                                        "kind":  "prop",
+                                                                        "writable":  true,
+                                                                        "type":  "System.String"
+                                                                    },
+                                                  "ArmorValue":  {
+                                                                     "kind":  "prop",
+                                                                     "writable":  true,
+                                                                     "type":  "System.Int32"
+                                                                 },
+                                                  "MaxHealthPoints":  {
+                                                                          "kind":  "prop",
+                                                                          "writable":  true,
+                                                                          "type":  "System.Int32"
+                                                                      },
+                                                  "HeatArmorFront":  {
+                                                                         "kind":  "prop",
+                                                                         "writable":  true,
+                                                                         "type":  "System.Int32"
+                                                                     },
+                                                  "HeatArmorRear":  {
+                                                                        "kind":  "prop",
+                                                                        "writable":  true,
+                                                                        "type":  "System.Int32"
+                                                                    },
+                                                  "HeatArmorSides":  {
+                                                                         "kind":  "prop",
+                                                                         "writable":  true,
+                                                                         "type":  "System.Int32"
+                                                                     },
+                                                  "HeatArmorTop":  {
+                                                                       "kind":  "prop",
+                                                                       "writable":  true,
+                                                                       "type":  "System.Int32"
+                                                                   },
+                                                  "KinArmorFront":  {
+                                                                        "kind":  "prop",
+                                                                        "writable":  true,
+                                                                        "type":  "System.Int32"
+                                                                    },
+                                                  "KinArmorRear":  {
+                                                                       "kind":  "prop",
+                                                                       "writable":  true,
+                                                                       "type":  "System.Int32"
+                                                                   },
+                                                  "KinArmorSides":  {
+                                                                        "kind":  "prop",
+                                                                        "writable":  true,
+                                                                        "type":  "System.Int32"
+                                                                    },
+                                                  "KinArmorTop":  {
+                                                                      "kind":  "prop",
+                                                                      "writable":  true,
+                                                                      "type":  "System.Int32"
+                                                                  }
+                                              }
+                              },
+                   "Mobility":  {
+                                    "modelType":  "Il2CppBrokenArrow.DataBase.Models.Mobility",
+                                    "columns":  {
+                                                    "FlyPreset":  {
+                                                                      "kind":  "prop",
+                                                                      "writable":  true,
+                                                                      "type":  "Il2CppBrokenArrow.DataBase.Models.PlaneFlyPreset"
+                                                                  },
+                                                    "Id":  {
+                                                               "kind":  "prop",
+                                                               "writable":  true,
+                                                               "type":  "System.Int32"
+                                                           },
+                                                    "Name":  {
+                                                                 "kind":  "prop",
+                                                                 "writable":  true,
+                                                                 "type":  "System.String"
+                                                             },
+                                                    "ModelFileName":  {
+                                                                          "kind":  "prop",
+                                                                          "writable":  true,
+                                                                          "type":  "System.String"
+                                                                      },
+                                                    "IsDefault":  {
+                                                                      "kind":  "prop",
+                                                                      "writable":  true,
+                                                                      "type":  "System.Boolean"
+                                                                  },
+                                                    "IsAmphibious":  {
+                                                                         "kind":  "prop",
+                                                                         "writable":  true,
+                                                                         "type":  "System.Boolean"
+                                                                     },
+                                                    "IsAirDroppable":  {
+                                                                           "kind":  "prop",
+                                                                           "writable":  true,
+                                                                           "type":  "System.Boolean"
+                                                                       },
+                                                    "Weight":  {
+                                                                   "kind":  "prop",
+                                                                   "writable":  true,
+                                                                   "type":  "System.Int32"
+                                                               },
+                                                    "HeavyLiftWeight":  {
+                                                                            "kind":  "prop",
+                                                                            "writable":  true,
+                                                                            "type":  "System.Int32"
+                                                                        },
+                                                    "TurnRate":  {
+                                                                     "kind":  "prop",
+                                                                     "writable":  true,
+                                                                     "type":  "System.Single"
+                                                                 },
+                                                    "Acceleration":  {
+                                                                         "kind":  "prop",
+                                                                         "writable":  true,
+                                                                         "type":  "System.Single"
+                                                                     },
+                                                    "MaxCrossCountrySpeed":  {
+                                                                                 "kind":  "prop",
+                                                                                 "writable":  true,
+                                                                                 "type":  "System.Single"
+                                                                             },
+                                                    "MaxSpeedRoad":  {
+                                                                         "kind":  "prop",
+                                                                         "writable":  true,
+                                                                         "type":  "System.Single"
+                                                                     },
+                                                    "MaxSpeedReverse":  {
+                                                                            "kind":  "prop",
+                                                                            "writable":  true,
+                                                                            "type":  "System.Single"
+                                                                        },
+                                                    "MaxSpeedWater":  {
+                                                                          "kind":  "prop",
+                                                                          "writable":  true,
+                                                                          "type":  "System.Single"
+                                                                      },
+                                                    "Agility":  {
+                                                                    "kind":  "prop",
+                                                                    "writable":  true,
+                                                                    "type":  "System.Single"
+                                                                },
+                                                    "ClimbRate":  {
+                                                                      "kind":  "prop",
+                                                                      "writable":  true,
+                                                                      "type":  "System.Single"
+                                                                  },
+                                                    "IsChangeAltitude":  {
+                                                                             "kind":  "prop",
+                                                                             "writable":  true,
+                                                                             "type":  "System.Boolean"
+                                                                         },
+                                                    "LoiteringTime":  {
+                                                                          "kind":  "prop",
+                                                                          "writable":  true,
+                                                                          "type":  "System.Single"
+                                                                      },
+                                                    "IsAfterburner":  {
+                                                                          "kind":  "prop",
+                                                                          "writable":  true,
+                                                                          "type":  "System.Boolean"
+                                                                      },
+                                                    "AfterBurningLoiteringTime":  {
+                                                                                      "kind":  "prop",
+                                                                                      "writable":  true,
+                                                                                      "type":  "System.Single"
+                                                                                  },
+                                                    "FlyPresetId":  {
+                                                                        "kind":  "prop",
+                                                                        "writable":  true,
+                                                                        "type":  "System.Int32"
+                                                                    }
+                                                }
+                                },
+                   "PlaneFlyPresets":  {
+                                           "modelType":  "Il2CppBrokenArrow.DataBase.Models.PlaneFlyPreset",
+                                           "columns":  {
+                                                           "Id":  {
+                                                                      "kind":  "prop",
+                                                                      "writable":  true,
+                                                                      "type":  "System.Int32"
+                                                                  },
+                                                           "Name":  {
+                                                                        "kind":  "prop",
+                                                                        "writable":  true,
+                                                                        "type":  "System.String"
+                                                                    },
+                                                           "LowAltitudeIsDefault":  {
+                                                                                        "kind":  "prop",
+                                                                                        "writable":  true,
+                                                                                        "type":  "System.Boolean"
+                                                                                    },
+                                                           "OverrideAltitude":  {
+                                                                                    "kind":  "prop",
+                                                                                    "writable":  true,
+                                                                                    "type":  "System.Boolean"
+                                                                                },
+                                                           "OverrideAltitideRatio":  {
+                                                                                         "kind":  "prop",
+                                                                                         "writable":  true,
+                                                                                         "type":  "System.Single"
+                                                                                     },
+                                                           "MinSpeed":  {
+                                                                            "kind":  "prop",
+                                                                            "writable":  true,
+                                                                            "type":  "System.Single"
+                                                                        },
+                                                           "CornerSpeed":  {
+                                                                               "kind":  "prop",
+                                                                               "writable":  true,
+                                                                               "type":  "System.Single"
+                                                                           },
+                                                           "MaxSpeed":  {
+                                                                            "kind":  "prop",
+                                                                            "writable":  true,
+                                                                            "type":  "System.Single"
+                                                                        },
+                                                           "AfterburnSpeed":  {
+                                                                                  "kind":  "prop",
+                                                                                  "writable":  true,
+                                                                                  "type":  "System.Single"
+                                                                              },
+                                                           "AfterburnCornerSpeed":  {
+                                                                                        "kind":  "prop",
+                                                                                        "writable":  false,
+                                                                                        "type":  "System.Single"
+                                                                                    },
+                                                           "Acceleration":  {
+                                                                                "kind":  "prop",
+                                                                                "writable":  true,
+                                                                                "type":  "System.Single"
+                                                                            },
+                                                           "AfterburnerAcceleration":  {
+                                                                                           "kind":  "prop",
+                                                                                           "writable":  true,
+                                                                                           "type":  "System.Single"
+                                                                                       },
+                                                           "Deceleration":  {
+                                                                                "kind":  "prop",
+                                                                                "writable":  true,
+                                                                                "type":  "System.Single"
+                                                                            },
+                                                           "AfterburnerDeceleration":  {
+                                                                                           "kind":  "prop",
+                                                                                           "writable":  true,
+                                                                                           "type":  "System.Single"
+                                                                                       },
+                                                           "MinSpeedYaw":  {
+                                                                               "kind":  "prop",
+                                                                               "writable":  true,
+                                                                               "type":  "System.Single"
+                                                                           },
+                                                           "MaxSpeedYaw":  {
+                                                                               "kind":  "prop",
+                                                                               "writable":  true,
+                                                                               "type":  "System.Single"
+                                                                           },
+                                                           "AfterburnYaw":  {
+                                                                                "kind":  "prop",
+                                                                                "writable":  true,
+                                                                                "type":  "System.Single"
+                                                                            },
+                                                           "CornerSpeedYaw":  {
+                                                                                  "kind":  "prop",
+                                                                                  "writable":  false,
+                                                                                  "type":  "System.Single"
+                                                                              },
+                                                           "CornerAfterburnSpeedYaw":  {
+                                                                                           "kind":  "prop",
+                                                                                           "writable":  false,
+                                                                                           "type":  "System.Single"
+                                                                                       },
+                                                           "MinSpeedPitch":  {
+                                                                                 "kind":  "prop",
+                                                                                 "writable":  true,
+                                                                                 "type":  "System.Single"
+                                                                             },
+                                                           "MaxSpeedPitch":  {
+                                                                                 "kind":  "prop",
+                                                                                 "writable":  true,
+                                                                                 "type":  "System.Single"
+                                                                             },
+                                                           "AfterburnPitch":  {
+                                                                                  "kind":  "prop",
+                                                                                  "writable":  true,
+                                                                                  "type":  "System.Single"
+                                                                              },
+                                                           "MaxRoll":  {
+                                                                           "kind":  "prop",
+                                                                           "writable":  true,
+                                                                           "type":  "System.Single"
+                                                                       },
+                                                           "NoiseSpeed":  {
+                                                                              "kind":  "prop",
+                                                                              "writable":  true,
+                                                                              "type":  "System.Single"
+                                                                          },
+                                                           "NoiseSize":  {
+                                                                             "kind":  "prop",
+                                                                             "writable":  true,
+                                                                             "type":  "System.Single"
+                                                                         },
+                                                           "LocalShakingDepth":  {
+                                                                                     "kind":  "prop",
+                                                                                     "writable":  true,
+                                                                                     "type":  "System.Single"
+                                                                                 },
+                                                           "LocalShakingSpeed":  {
+                                                                                     "kind":  "prop",
+                                                                                     "writable":  true,
+                                                                                     "type":  "System.Single"
+                                                                                 },
+                                                           "NoseLiftStartSpeed":  {
+                                                                                      "kind":  "prop",
+                                                                                      "writable":  true,
+                                                                                      "type":  "System.Single"
+                                                                                  },
+                                                           "NoseLiftAngle":  {
+                                                                                 "kind":  "prop",
+                                                                                 "writable":  true,
+                                                                                 "type":  "System.Single"
+                                                                             },
+                                                           "ForceCounterClockwise":  {
+                                                                                         "kind":  "prop",
+                                                                                         "writable":  true,
+                                                                                         "type":  "System.Boolean"
+                                                                                     },
+                                                           "TargetAheadFactor":  {
+                                                                                     "kind":  "prop",
+                                                                                     "writable":  true,
+                                                                                     "type":  "System.Single"
+                                                                                 },
+                                                           "StrafeDiveAngle":  {
+                                                                                   "kind":  "prop",
+                                                                                   "writable":  true,
+                                                                                   "type":  "System.Single"
+                                                                               },
+                                                           "StrafeSpeedRatio":  {
+                                                                                    "kind":  "prop",
+                                                                                    "writable":  true,
+                                                                                    "type":  "System.Single"
+                                                                                }
+                                                       }
+                                       },
+                   "UnitPropulsions":  {
+                                           "modelType":  "Il2CppBrokenArrow.DataBase.Models.UnitPropulsions",
+                                           "columns":  {
+                                                           "Id":  {
+                                                                      "kind":  "prop",
+                                                                      "writable":  true,
+                                                                      "type":  "System.Int32"
+                                                                  },
+                                                           "UnitId":  {
+                                                                          "kind":  "prop",
+                                                                          "writable":  true,
+                                                                          "type":  "System.Int32"
+                                                                      },
+                                                           "MobilityId":  {
+                                                                              "kind":  "prop",
+                                                                              "writable":  true,
+                                                                              "type":  "System.Int32"
+                                                                          }
+                                                       }
+                                       },
+                   "Countries":  {
+                                     "modelType":  "Il2CppBrokenArrow.DataBase.Models.Countries",
+                                     "columns":  {
+                                                     "Id":  {
+                                                                "kind":  "prop",
+                                                                "writable":  true,
+                                                                "type":  "System.Int32"
+                                                            },
+                                                     "Name":  {
+                                                                  "kind":  "prop",
+                                                                  "writable":  true,
+                                                                  "type":  "System.String"
+                                                              },
+                                                     "UIName":  {
+                                                                    "kind":  "prop",
+                                                                    "writable":  true,
+                                                                    "type":  "System.String"
+                                                                },
+                                                     "FlagFileName":  {
+                                                                          "kind":  "prop",
+                                                                          "writable":  true,
+                                                                          "type":  "System.String"
+                                                                      },
+                                                     "MaxPoints":  {
+                                                                       "kind":  "prop",
+                                                                       "writable":  true,
+                                                                       "type":  "System.Int32"
+                                                                   },
+                                                     "Hidden":  {
+                                                                    "kind":  "prop",
+                                                                    "writable":  true,
+                                                                    "type":  "System.Boolean"
+                                                                },
+                                                     "ContentMembership":  {
+                                                                               "kind":  "prop",
+                                                                               "writable":  true,
+                                                                               "type":  "Il2CppNetworkCommon.Enums.ContentMembership"
+                                                                           }
+                                                 }
+                                 },
+                   "Turrets":  {
+                                   "modelType":  "Il2CppBrokenArrow.DataBase.Models.Turrets",
+                                   "columns":  {
+                                                   "Id":  {
+                                                              "kind":  "prop",
+                                                              "writable":  true,
+                                                              "type":  "System.Int32"
+                                                          },
+                                                   "Name":  {
+                                                                "kind":  "prop",
+                                                                "writable":  true,
+                                                                "type":  "System.String"
+                                                            },
+                                                   "ModelFileName":  {
+                                                                         "kind":  "prop",
+                                                                         "writable":  true,
+                                                                         "type":  "System.String"
+                                                                     },
+                                                   "IsDefault":  {
+                                                                     "kind":  "prop",
+                                                                     "writable":  true,
+                                                                     "type":  "System.Boolean"
+                                                                 },
+                                                   "IsDynamicTurret":  {
+                                                                           "kind":  "prop",
+                                                                           "writable":  true,
+                                                                           "type":  "System.Boolean"
+                                                                       },
+                                                   "ParentTurretId":  {
+                                                                          "kind":  "prop",
+                                                                          "writable":  true,
+                                                                          "type":  "Il2CppSystem.Nullable`1\u003cSystem.Int32\u003e"
+                                                                      },
+                                                   "FullRotation":  {
+                                                                        "kind":  "prop",
+                                                                        "writable":  true,
+                                                                        "type":  "System.Boolean"
+                                                                    },
+                                                   "LeftHorizontalAngle":  {
+                                                                               "kind":  "prop",
+                                                                               "writable":  true,
+                                                                               "type":  "System.Single"
+                                                                           },
+                                                   "RightHorizontalAngle":  {
+                                                                                "kind":  "prop",
+                                                                                "writable":  true,
+                                                                                "type":  "System.Single"
+                                                                            },
+                                                   "HorizontalRotationSpeed":  {
+                                                                                   "kind":  "prop",
+                                                                                   "writable":  true,
+                                                                                   "type":  "System.Single"
+                                                                               }
+                                               }
+                               },
+                   "TurretUnits":  {
+                                       "modelType":  "Il2CppBrokenArrow.DataBase.Models.TurretUnits",
+                                       "columns":  {
+                                                       "Id":  {
+                                                                  "kind":  "prop",
+                                                                  "writable":  true,
+                                                                  "type":  "System.Int32"
+                                                              },
+                                                       "UnitId":  {
+                                                                      "kind":  "prop",
+                                                                      "writable":  true,
+                                                                      "type":  "System.Int32"
+                                                                  },
+                                                       "TurretId":  {
+                                                                        "kind":  "prop",
+                                                                        "writable":  true,
+                                                                        "type":  "System.Int32"
+                                                                    },
+                                                       "Order":  {
+                                                                     "kind":  "prop",
+                                                                     "writable":  true,
+                                                                     "type":  "System.Int32"
+                                                                 }
+                                                   }
+                                   },
+                   "Weapons":  {
+                                   "modelType":  "Il2CppBrokenArrow.DataBase.Models.Weapons",
+                                   "columns":  {
+                                                   "WeaponChannel":  {
+                                                                         "kind":  "prop",
+                                                                         "writable":  true,
+                                                                         "type":  "System.Int32"
+                                                                     },
+                                                   "WeaponPriority":  {
+                                                                          "kind":  "prop",
+                                                                          "writable":  true,
+                                                                          "type":  "System.Int32"
+                                                                      },
+                                                   "Id":  {
+                                                              "kind":  "prop",
+                                                              "writable":  true,
+                                                              "type":  "System.Int32"
+                                                          },
+                                                   "Name":  {
+                                                                "kind":  "prop",
+                                                                "writable":  true,
+                                                                "type":  "System.String"
+                                                            },
+                                                   "HUDName":  {
+                                                                   "kind":  "prop",
+                                                                   "writable":  true,
+                                                                   "type":  "System.String"
+                                                               },
+                                                   "Type":  {
+                                                                "kind":  "prop",
+                                                                "writable":  true,
+                                                                "type":  "Il2CppBrokenArrow.DataBase.Enums.WeaponType"
+                                                            },
+                                                   "HUDIcon":  {
+                                                                   "kind":  "prop",
+                                                                   "writable":  true,
+                                                                   "type":  "System.String"
+                                                               },
+                                                   "AudioPreset":  {
+                                                                       "kind":  "prop",
+                                                                       "writable":  true,
+                                                                       "type":  "System.String"
+                                                                   },
+                                                   "ModelFileName":  {
+                                                                         "kind":  "prop",
+                                                                         "writable":  true,
+                                                                         "type":  "System.String"
+                                                                     },
+                                                   "AutoLoaded":  {
+                                                                      "kind":  "prop",
+                                                                      "writable":  true,
+                                                                      "type":  "System.Boolean"
+                                                                  },
+                                                   "Silent":  {
+                                                                  "kind":  "prop",
+                                                                  "writable":  true,
+                                                                  "type":  "System.Boolean"
+                                                              },
+                                                   "HasPriorityOnChassis":  {
+                                                                                "kind":  "prop",
+                                                                                "writable":  true,
+                                                                                "type":  "System.Boolean"
+                                                                            },
+                                                   "CQC":  {
+                                                               "kind":  "prop",
+                                                               "writable":  true,
+                                                               "type":  "System.Boolean"
+                                                           },
+                                                   "IsRadarDependent":  {
+                                                                            "kind":  "prop",
+                                                                            "writable":  true,
+                                                                            "type":  "System.Boolean"
+                                                                        },
+                                                   "IsVerticalLauncher":  {
+                                                                              "kind":  "prop",
+                                                                              "writable":  true,
+                                                                              "type":  "System.Boolean"
+                                                                          },
+                                                   "IsLowAltDirectWeapon":  {
+                                                                                "kind":  "prop",
+                                                                                "writable":  true,
+                                                                                "type":  "System.Boolean"
+                                                                            },
+                                                   "IsHighAltDirectWeapon":  {
+                                                                                 "kind":  "prop",
+                                                                                 "writable":  true,
+                                                                                 "type":  "System.Boolean"
+                                                                             },
+                                                   "IsUnderbarrel":  {
+                                                                         "kind":  "prop",
+                                                                         "writable":  true,
+                                                                         "type":  "System.Boolean"
+                                                                     },
+                                                   "AimTimeMin":  {
+                                                                      "kind":  "prop",
+                                                                      "writable":  true,
+                                                                      "type":  "System.Single"
+                                                                  },
+                                                   "AimTimeMax":  {
+                                                                      "kind":  "prop",
+                                                                      "writable":  true,
+                                                                      "type":  "System.Single"
+                                                                  },
+                                                   "MultiTargetTracking":  {
+                                                                               "kind":  "prop",
+                                                                               "writable":  true,
+                                                                               "type":  "System.Int32"
+                                                                           },
+                                                   "SimultaneousTracking":  {
+                                                                                "kind":  "prop",
+                                                                                "writable":  true,
+                                                                                "type":  "System.Int32"
+                                                                            },
+                                                   "CanShootOnTheMove":  {
+                                                                             "kind":  "prop",
+                                                                             "writable":  true,
+                                                                             "type":  "System.Boolean"
+                                                                         },
+                                                   "StabilizerQuality":  {
+                                                                             "kind":  "prop",
+                                                                             "writable":  true,
+                                                                             "type":  "System.Single"
+                                                                         },
+                                                   "FlashPerShot":  {
+                                                                        "kind":  "prop",
+                                                                        "writable":  true,
+                                                                        "type":  "System.Single"
+                                                                    },
+                                                   "CanBeMerged":  {
+                                                                       "kind":  "prop",
+                                                                       "writable":  true,
+                                                                       "type":  "System.Boolean"
+                                                                   },
+                                                   "LowerVerticalAngle":  {
+                                                                              "kind":  "prop",
+                                                                              "writable":  true,
+                                                                              "type":  "System.Int32"
+                                                                          },
+                                                   "UpperVerticalAngles":  {
+                                                                               "kind":  "prop",
+                                                                               "writable":  true,
+                                                                               "type":  "System.Int32"
+                                                                           },
+                                                   "VerticalRotationSpeed":  {
+                                                                                 "kind":  "prop",
+                                                                                 "writable":  true,
+                                                                                 "type":  "System.Int32"
+                                                                             },
+                                                   "MagazineSize":  {
+                                                                        "kind":  "prop",
+                                                                        "writable":  true,
+                                                                        "type":  "System.Int32"
+                                                                    },
+                                                   "MagazineReloadTimeMin":  {
+                                                                                 "kind":  "prop",
+                                                                                 "writable":  true,
+                                                                                 "type":  "System.Single"
+                                                                             },
+                                                   "MagazineReloadTimeMax":  {
+                                                                                 "kind":  "prop",
+                                                                                 "writable":  true,
+                                                                                 "type":  "System.Single"
+                                                                             },
+                                                   "ShotsPerBurstMin":  {
+                                                                            "kind":  "prop",
+                                                                            "writable":  true,
+                                                                            "type":  "System.Int32"
+                                                                        },
+                                                   "ShotsPerBurstMax":  {
+                                                                            "kind":  "prop",
+                                                                            "writable":  true,
+                                                                            "type":  "System.Int32"
+                                                                        },
+                                                   "TimeBetweenBurstsMin":  {
+                                                                                "kind":  "prop",
+                                                                                "writable":  true,
+                                                                                "type":  "System.Single"
+                                                                            },
+                                                   "TimeBetweenBurstsMax":  {
+                                                                                "kind":  "prop",
+                                                                                "writable":  true,
+                                                                                "type":  "System.Single"
+                                                                            },
+                                                   "TimeBetweenShotsInBurst":  {
+                                                                                   "kind":  "prop",
+                                                                                   "writable":  true,
+                                                                                   "type":  "System.Single"
+                                                                               },
+                                                   "ShortGroundAttackBurst":  {
+                                                                                  "kind":  "prop",
+                                                                                  "writable":  true,
+                                                                                  "type":  "System.Int32"
+                                                                              },
+                                                   "NormalGroundAttackBurst":  {
+                                                                                   "kind":  "prop",
+                                                                                   "writable":  true,
+                                                                                   "type":  "System.Int32"
+                                                                               },
+                                                   "LongGroundAttackBurst":  {
+                                                                                 "kind":  "prop",
+                                                                                 "writable":  true,
+                                                                                 "type":  "System.Int32"
+                                                                             }
+                                               }
+                               },
+                   "TurretWeapons":  {
+                                         "modelType":  "Il2CppBrokenArrow.DataBase.Models.TurretWeapons",
+                                         "columns":  {
+                                                         "Id":  {
+                                                                    "kind":  "prop",
+                                                                    "writable":  true,
+                                                                    "type":  "System.Int32"
+                                                                },
+                                                         "WeaponId":  {
+                                                                          "kind":  "prop",
+                                                                          "writable":  true,
+                                                                          "type":  "System.Int32"
+                                                                      },
+                                                         "TurretId":  {
+                                                                          "kind":  "prop",
+                                                                          "writable":  true,
+                                                                          "type":  "System.Int32"
+                                                                      },
+                                                         "Order":  {
+                                                                       "kind":  "prop",
+                                                                       "writable":  true,
+                                                                       "type":  "System.Int32"
+                                                                   },
+                                                         "WeaponChannel":  {
+                                                                               "kind":  "prop",
+                                                                               "writable":  true,
+                                                                               "type":  "System.Int32"
+                                                                           },
+                                                         "WeaponPriority":  {
+                                                                                "kind":  "prop",
+                                                                                "writable":  true,
+                                                                                "type":  "System.Int32"
+                                                                            }
+                                                     }
+                                     },
+                   "WeaponAmmunitions":  {
+                                             "modelType":  "Il2CppBrokenArrow.DataBase.Models.WeaponAmmunitions",
+                                             "columns":  {
+                                                             "Id":  {
+                                                                        "kind":  "prop",
+                                                                        "writable":  true,
+                                                                        "type":  "System.Int32"
+                                                                    },
+                                                             "UnitId":  {
+                                                                            "kind":  "prop",
+                                                                            "writable":  true,
+                                                                            "type":  "System.Int32"
+                                                                        },
+                                                             "WeaponId":  {
+                                                                              "kind":  "prop",
+                                                                              "writable":  true,
+                                                                              "type":  "System.Int32"
+                                                                          },
+                                                             "AmmunitionId":  {
+                                                                                  "kind":  "prop",
+                                                                                  "writable":  true,
+                                                                                  "type":  "System.Int32"
+                                                                              },
+                                                             "Order":  {
+                                                                           "kind":  "prop",
+                                                                           "writable":  true,
+                                                                           "type":  "System.Int32"
+                                                                       },
+                                                             "Quantity":  {
+                                                                              "kind":  "prop",
+                                                                              "writable":  true,
+                                                                              "type":  "System.Int32"
+                                                                          }
+                                                         }
+                                         },
+                   "SensorUnits":  {
+                                       "modelType":  "Il2CppBrokenArrow.DataBase.Models.SensorUnits",
+                                       "columns":  {
+                                                       "Id":  {
+                                                                  "kind":  "prop",
+                                                                  "writable":  true,
+                                                                  "type":  "System.Int32"
+                                                              },
+                                                       "UnitId":  {
+                                                                      "kind":  "prop",
+                                                                      "writable":  true,
+                                                                      "type":  "System.Int32"
+                                                                  },
+                                                       "SensorId":  {
+                                                                        "kind":  "prop",
+                                                                        "writable":  true,
+                                                                        "type":  "System.Int32"
+                                                                    }
+                                                   }
+                                   },
+                   "Sensors":  {
+                                   "modelType":  "Il2CppBrokenArrow.DataBase.Models.Sensors",
+                                   "columns":  {
+                                                   "Id":  {
+                                                              "kind":  "prop",
+                                                              "writable":  true,
+                                                              "type":  "System.Int32"
+                                                          },
+                                                   "Name":  {
+                                                                "kind":  "prop",
+                                                                "writable":  true,
+                                                                "type":  "System.String"
+                                                            },
+                                                   "IsDefault":  {
+                                                                     "kind":  "prop",
+                                                                     "writable":  true,
+                                                                     "type":  "System.Boolean"
+                                                                 },
+                                                   "OpticsGround":  {
+                                                                        "kind":  "prop",
+                                                                        "writable":  true,
+                                                                        "type":  "System.Single"
+                                                                    },
+                                                   "OpticsHighAltitude":  {
+                                                                              "kind":  "prop",
+                                                                              "writable":  true,
+                                                                              "type":  "System.Single"
+                                                                          },
+                                                   "OpticsLowAltitude":  {
+                                                                             "kind":  "prop",
+                                                                             "writable":  true,
+                                                                             "type":  "System.Single"
+                                                                         },
+                                                   "ModelFileName":  {
+                                                                         "kind":  "prop",
+                                                                         "writable":  true,
+                                                                         "type":  "System.String"
+                                                                     }
+                                               }
+                               },
+                   "SquadMembers":  {
+                                        "modelType":  "Il2CppBrokenArrow.DataBase.Models.SquadMembers",
+                                        "columns":  {
+                                                        "Id":  {
+                                                                   "kind":  "prop",
+                                                                   "writable":  true,
+                                                                   "type":  "System.Int32"
+                                                               },
+                                                        "DeathPriority":  {
+                                                                              "kind":  "prop",
+                                                                              "writable":  true,
+                                                                              "type":  "System.Int32"
+                                                                          },
+                                                        "ModelFileName":  {
+                                                                              "kind":  "prop",
+                                                                              "writable":  true,
+                                                                              "type":  "System.String"
+                                                                          },
+                                                        "PrimaryWeaponId":  {
+                                                                                "kind":  "prop",
+                                                                                "writable":  true,
+                                                                                "type":  "System.Int32"
+                                                                            },
+                                                        "SpecialWeaponId":  {
+                                                                                "kind":  "prop",
+                                                                                "writable":  true,
+                                                                                "type":  "System.Int32"
+                                                                            },
+                                                        "UnitId":  {
+                                                                       "kind":  "prop",
+                                                                       "writable":  true,
+                                                                       "type":  "System.Int32"
+                                                                   }
+                                                    }
+                                    },
+                   "SquadWeapons":  {
+                                        "modelType":  "Il2CppBrokenArrow.DataBase.Models.SquadWeapons",
+                                        "columns":  {
+                                                        "Id":  {
+                                                                   "kind":  "prop",
+                                                                   "writable":  true,
+                                                                   "type":  "System.Int32"
+                                                               },
+                                                        "WeaponId":  {
+                                                                         "kind":  "prop",
+                                                                         "writable":  true,
+                                                                         "type":  "System.Int32"
+                                                                     },
+                                                        "Order":  {
+                                                                      "kind":  "prop",
+                                                                      "writable":  true,
+                                                                      "type":  "System.Int32"
+                                                                  },
+                                                        "UnitId":  {
+                                                                       "kind":  "prop",
+                                                                       "writable":  true,
+                                                                       "type":  "System.Int32"
+                                                                   }
+                                                    }
+                                    },
+                   "Modifications":  {
+                                         "modelType":  "Il2CppBrokenArrow.DataBase.Models.Modifications",
+                                         "columns":  {
+                                                         "Id":  {
+                                                                    "kind":  "prop",
+                                                                    "writable":  true,
+                                                                    "type":  "System.Int32"
+                                                                },
+                                                         "UnitId":  {
+                                                                        "kind":  "prop",
+                                                                        "writable":  true,
+                                                                        "type":  "System.Int32"
+                                                                    },
+                                                         "Name":  {
+                                                                      "kind":  "prop",
+                                                                      "writable":  true,
+                                                                      "type":  "System.String"
+                                                                  },
+                                                         "Type":  {
+                                                                      "kind":  "prop",
+                                                                      "writable":  true,
+                                                                      "type":  "Il2CppBrokenArrow.DataBase.Enums.ModificationType"
+                                                                  },
+                                                         "UIName":  {
+                                                                        "kind":  "prop",
+                                                                        "writable":  true,
+                                                                        "type":  "System.String"
+                                                                    },
+                                                         "ThumbnailFileName":  {
+                                                                                   "kind":  "prop",
+                                                                                   "writable":  true,
+                                                                                   "type":  "System.String"
+                                                                               },
+                                                         "Order":  {
+                                                                       "kind":  "prop",
+                                                                       "writable":  true,
+                                                                       "type":  "System.Int32"
+                                                                   }
+                                                     }
+                                     },
+                   "Options":  {
+                                   "modelType":  "Il2CppBrokenArrow.DataBase.Models.Options",
+                                   "columns":  {
+                                                   "Id":  {
+                                                              "kind":  "prop",
+                                                              "writable":  true,
+                                                              "type":  "System.Int32"
+                                                          },
+                                                   "IsDefault":  {
+                                                                     "kind":  "prop",
+                                                                     "writable":  true,
+                                                                     "type":  "System.Boolean"
+                                                                 },
+                                                   "ModificationId":  {
+                                                                          "kind":  "prop",
+                                                                          "writable":  true,
+                                                                          "type":  "System.Int32"
+                                                                      },
+                                                   "Name":  {
+                                                                "kind":  "prop",
+                                                                "writable":  true,
+                                                                "type":  "System.String"
+                                                            },
+                                                   "Order":  {
+                                                                 "kind":  "prop",
+                                                                 "writable":  true,
+                                                                 "type":  "System.Int32"
+                                                             },
+                                                   "UIName":  {
+                                                                  "kind":  "prop",
+                                                                  "writable":  true,
+                                                                  "type":  "System.String"
+                                                              },
+                                                   "ConcatenateWithUnitName":  {
+                                                                                   "kind":  "prop",
+                                                                                   "writable":  true,
+                                                                                   "type":  "System.String"
+                                                                               },
+                                                   "ReplaceUnitName":  {
+                                                                           "kind":  "prop",
+                                                                           "writable":  true,
+                                                                           "type":  "System.String"
+                                                                       },
+                                                   "ReplaceUnitId":  {
+                                                                         "kind":  "prop",
+                                                                         "writable":  true,
+                                                                         "type":  "System.Int32"
+                                                                     },
+                                                   "Cost":  {
+                                                                "kind":  "prop",
+                                                                "writable":  true,
+                                                                "type":  "System.Int32"
+                                                            },
+                                                   "TimeModifierRefund":  {
+                                                                              "kind":  "prop",
+                                                                              "writable":  true,
+                                                                              "type":  "System.Single"
+                                                                          },
+                                                   "TimeModifierResurrect":  {
+                                                                                 "kind":  "prop",
+                                                                                 "writable":  true,
+                                                                                 "type":  "System.Single"
+                                                                             },
+                                                   "OptionPicture":  {
+                                                                         "kind":  "prop",
+                                                                         "writable":  true,
+                                                                         "type":  "System.String"
+                                                                     },
+                                                   "ThumbnailOverride":  {
+                                                                             "kind":  "prop",
+                                                                             "writable":  true,
+                                                                             "type":  "System.String"
+                                                                         },
+                                                   "PortraitOverride":  {
+                                                                            "kind":  "prop",
+                                                                            "writable":  true,
+                                                                            "type":  "System.String"
+                                                                        },
+                                                   "AudioPresetOverride":  {
+                                                                               "kind":  "prop",
+                                                                               "writable":  true,
+                                                                               "type":  "System.String"
+                                                                           },
+                                                   "ArmorId":  {
+                                                                   "kind":  "prop",
+                                                                   "writable":  true,
+                                                                   "type":  "System.Int32"
+                                                               },
+                                                   "MobilityId":  {
+                                                                      "kind":  "prop",
+                                                                      "writable":  true,
+                                                                      "type":  "System.Int32"
+                                                                  },
+                                                   "MainSensorId":  {
+                                                                        "kind":  "prop",
+                                                                        "writable":  true,
+                                                                        "type":  "System.Int32"
+                                                                    },
+                                                   "ExtraSensorId":  {
+                                                                         "kind":  "prop",
+                                                                         "writable":  true,
+                                                                         "type":  "System.Int32"
+                                                                     },
+                                                   "StealthOverride":  {
+                                                                           "kind":  "prop",
+                                                                           "writable":  true,
+                                                                           "type":  "System.Single"
+                                                                       },
+                                                   "IsDynamicTurretOption":  {
+                                                                                 "kind":  "prop",
+                                                                                 "writable":  true,
+                                                                                 "type":  "System.Boolean"
+                                                                             },
+                                                   "Ability1Id":  {
+                                                                      "kind":  "prop",
+                                                                      "writable":  true,
+                                                                      "type":  "System.Int32"
+                                                                  },
+                                                   "Ability2Id":  {
+                                                                      "kind":  "prop",
+                                                                      "writable":  true,
+                                                                      "type":  "System.Int32"
+                                                                  },
+                                                   "Ability3Id":  {
+                                                                      "kind":  "prop",
+                                                                      "writable":  true,
+                                                                      "type":  "System.Int32"
+                                                                  },
+                                                   "Turret0Id":  {
+                                                                     "kind":  "prop",
+                                                                     "writable":  true,
+                                                                     "type":  "System.Int32"
+                                                                 },
+                                                   "Turret1Id":  {
+                                                                     "kind":  "prop",
+                                                                     "writable":  true,
+                                                                     "type":  "System.Int32"
+                                                                 },
+                                                   "Turret2Id":  {
+                                                                     "kind":  "prop",
+                                                                     "writable":  true,
+                                                                     "type":  "System.Int32"
+                                                                 },
+                                                   "Turret3Id":  {
+                                                                     "kind":  "prop",
+                                                                     "writable":  true,
+                                                                     "type":  "System.Int32"
+                                                                 },
+                                                   "Turret4Id":  {
+                                                                     "kind":  "prop",
+                                                                     "writable":  true,
+                                                                     "type":  "System.Int32"
+                                                                 },
+                                                   "Turret5Id":  {
+                                                                     "kind":  "prop",
+                                                                     "writable":  true,
+                                                                     "type":  "System.Int32"
+                                                                 },
+                                                   "Turret6Id":  {
+                                                                     "kind":  "prop",
+                                                                     "writable":  true,
+                                                                     "type":  "System.Int32"
+                                                                 },
+                                                   "Turret7Id":  {
+                                                                     "kind":  "prop",
+                                                                     "writable":  true,
+                                                                     "type":  "System.Int32"
+                                                                 },
+                                                   "Turret8Id":  {
+                                                                     "kind":  "prop",
+                                                                     "writable":  true,
+                                                                     "type":  "System.Int32"
+                                                                 },
+                                                   "Turret9Id":  {
+                                                                     "kind":  "prop",
+                                                                     "writable":  true,
+                                                                     "type":  "System.Int32"
+                                                                 },
+                                                   "Turret10Id":  {
+                                                                      "kind":  "prop",
+                                                                      "writable":  true,
+                                                                      "type":  "System.Int32"
+                                                                  },
+                                                   "Turret11Id":  {
+                                                                      "kind":  "prop",
+                                                                      "writable":  true,
+                                                                      "type":  "System.Int32"
+                                                                  },
+                                                   "Turret12Id":  {
+                                                                      "kind":  "prop",
+                                                                      "writable":  true,
+                                                                      "type":  "System.Int32"
+                                                                  },
+                                                   "Turret13Id":  {
+                                                                      "kind":  "prop",
+                                                                      "writable":  true,
+                                                                      "type":  "System.Int32"
+                                                                  },
+                                                   "Turret14Id":  {
+                                                                      "kind":  "prop",
+                                                                      "writable":  true,
+                                                                      "type":  "System.Int32"
+                                                                  },
+                                                   "Turret15Id":  {
+                                                                      "kind":  "prop",
+                                                                      "writable":  true,
+                                                                      "type":  "System.Int32"
+                                                                  },
+                                                   "Turret16Id":  {
+                                                                      "kind":  "prop",
+                                                                      "writable":  true,
+                                                                      "type":  "System.Int32"
+                                                                  },
+                                                   "Turret17Id":  {
+                                                                      "kind":  "prop",
+                                                                      "writable":  true,
+                                                                      "type":  "System.Int32"
+                                                                  },
+                                                   "Turret18Id":  {
+                                                                      "kind":  "prop",
+                                                                      "writable":  true,
+                                                                      "type":  "System.Int32"
+                                                                  },
+                                                   "Turret19Id":  {
+                                                                      "kind":  "prop",
+                                                                      "writable":  true,
+                                                                      "type":  "System.Int32"
+                                                                  },
+                                                   "Turret20Id":  {
+                                                                      "kind":  "prop",
+                                                                      "writable":  true,
+                                                                      "type":  "System.Int32"
+                                                                  }
+                                               }
+                               },
+                   "UnitArmors":  {
+                                      "modelType":  "Il2CppBrokenArrow.DataBase.Models.UnitArmors",
+                                      "columns":  {
+                                                      "Id":  {
+                                                                 "kind":  "prop",
+                                                                 "writable":  true,
+                                                                 "type":  "System.Int32"
+                                                             },
+                                                      "UnitId":  {
+                                                                     "kind":  "prop",
+                                                                     "writable":  true,
+                                                                     "type":  "System.Int32"
+                                                                 },
+                                                      "ArmorId":  {
+                                                                      "kind":  "prop",
+                                                                      "writable":  true,
+                                                                      "type":  "System.Int32"
+                                                                  }
+                                                  }
+                                  },
+                   "SpecializationAvailabilities":  {
+                                                        "modelType":  "Il2CppBrokenArrow.DataBase.Models.SpecializationAvailabilities",
+                                                        "columns":  {
+                                                                        "Id":  {
+                                                                                   "kind":  "prop",
+                                                                                   "writable":  true,
+                                                                                   "type":  "System.Int32"
+                                                                               },
+                                                                        "SpecializationId":  {
+                                                                                                 "kind":  "prop",
+                                                                                                 "writable":  true,
+                                                                                                 "type":  "System.Int32"
+                                                                                             },
+                                                                        "UnitId":  {
+                                                                                       "kind":  "prop",
+                                                                                       "writable":  true,
+                                                                                       "type":  "System.Int32"
+                                                                                   },
+                                                                        "MaxAvailabilityXp0":  {
+                                                                                                   "kind":  "prop",
+                                                                                                   "writable":  true,
+                                                                                                   "type":  "System.Int32"
+                                                                                               },
+                                                                        "MaxAvailabilityXp1":  {
+                                                                                                   "kind":  "prop",
+                                                                                                   "writable":  true,
+                                                                                                   "type":  "System.Int32"
+                                                                                               },
+                                                                        "MaxAvailabilityXp2":  {
+                                                                                                   "kind":  "prop",
+                                                                                                   "writable":  true,
+                                                                                                   "type":  "System.Int32"
+                                                                                               },
+                                                                        "MaxAvailabilityXp3":  {
+                                                                                                   "kind":  "prop",
+                                                                                                   "writable":  true,
+                                                                                                   "type":  "System.Int32"
+                                                                                               }
+                                                                    }
+                                                    },
+                   "Specializations":  {
+                                           "modelType":  "Il2CppBrokenArrow.DataBase.Models.Specializations",
+                                           "columns":  {
+                                                           "Id":  {
+                                                                      "kind":  "prop",
+                                                                      "writable":  true,
+                                                                      "type":  "System.Int32"
+                                                                  },
+                                                           "CountryId":  {
+                                                                             "kind":  "prop",
+                                                                             "writable":  true,
+                                                                             "type":  "System.Int32"
+                                                                         },
+                                                           "Name":  {
+                                                                        "kind":  "prop",
+                                                                        "writable":  true,
+                                                                        "type":  "System.String"
+                                                                    },
+                                                           "UIName":  {
+                                                                          "kind":  "prop",
+                                                                          "writable":  true,
+                                                                          "type":  "System.String"
+                                                                      },
+                                                           "UIDescription":  {
+                                                                                 "kind":  "prop",
+                                                                                 "writable":  true,
+                                                                                 "type":  "System.String"
+                                                                             },
+                                                           "Icon":  {
+                                                                        "kind":  "prop",
+                                                                        "writable":  true,
+                                                                        "type":  "System.String"
+                                                                    },
+                                                           "Illustration":  {
+                                                                                "kind":  "prop",
+                                                                                "writable":  true,
+                                                                                "type":  "System.String"
+                                                                            },
+                                                           "ShowInHangar":  {
+                                                                                "kind":  "prop",
+                                                                                "writable":  true,
+                                                                                "type":  "System.Boolean"
+                                                                            },
+                                                           "ContentMembership":  {
+                                                                                     "kind":  "prop",
+                                                                                     "writable":  true,
+                                                                                     "type":  "Il2CppNetworkCommon.Enums.ContentMembership"
+                                                                                 },
+                                                           "ReconSlots":  {
+                                                                              "kind":  "prop",
+                                                                              "writable":  true,
+                                                                              "type":  "System.Int32"
+                                                                          },
+                                                           "InfantrySlots":  {
+                                                                                 "kind":  "prop",
+                                                                                 "writable":  true,
+                                                                                 "type":  "System.Int32"
+                                                                             },
+                                                           "CombatSlots":  {
+                                                                               "kind":  "prop",
+                                                                               "writable":  true,
+                                                                               "type":  "System.Int32"
+                                                                           },
+                                                           "SupportSlots":  {
+                                                                                "kind":  "prop",
+                                                                                "writable":  true,
+                                                                                "type":  "System.Int32"
+                                                                            },
+                                                           "LogisticsSlots":  {
+                                                                                  "kind":  "prop",
+                                                                                  "writable":  true,
+                                                                                  "type":  "System.Int32"
+                                                                              },
+                                                           "HelicoptersSlots":  {
+                                                                                    "kind":  "prop",
+                                                                                    "writable":  true,
+                                                                                    "type":  "System.Int32"
+                                                                                },
+                                                           "AirSlots":  {
+                                                                            "kind":  "prop",
+                                                                            "writable":  true,
+                                                                            "type":  "System.Int32"
+                                                                        },
+                                                           "MaxSlots":  {
+                                                                            "kind":  "prop",
+                                                                            "writable":  false,
+                                                                            "type":  "System.Int32"
+                                                                        },
+                                                           "ReconPoints":  {
+                                                                               "kind":  "prop",
+                                                                               "writable":  true,
+                                                                               "type":  "System.Int32"
+                                                                           },
+                                                           "InfantryPoints":  {
+                                                                                  "kind":  "prop",
+                                                                                  "writable":  true,
+                                                                                  "type":  "System.Int32"
+                                                                              },
+                                                           "CombatPoints":  {
+                                                                                "kind":  "prop",
+                                                                                "writable":  true,
+                                                                                "type":  "System.Int32"
+                                                                            },
+                                                           "SupportPoints":  {
+                                                                                 "kind":  "prop",
+                                                                                 "writable":  true,
+                                                                                 "type":  "System.Int32"
+                                                                             },
+                                                           "LogisticsPoints":  {
+                                                                                   "kind":  "prop",
+                                                                                   "writable":  true,
+                                                                                   "type":  "System.Int32"
+                                                                               },
+                                                           "HelicoptersPoints":  {
+                                                                                     "kind":  "prop",
+                                                                                     "writable":  true,
+                                                                                     "type":  "System.Int32"
+                                                                                 },
+                                                           "AirPoints":  {
+                                                                             "kind":  "prop",
+                                                                             "writable":  true,
+                                                                             "type":  "System.Int32"
+                                                                         }
+                                                       }
+                                       },
+                   "TransportAvailabilities":  {
+                                                   "modelType":  "Il2CppBrokenArrow.DataBase.Models.TransportAvailabilities",
+                                                   "columns":  {
+                                                                   "Id":  {
+                                                                              "kind":  "prop",
+                                                                              "writable":  true,
+                                                                              "type":  "System.Int32"
+                                                                          },
+                                                                   "SpecializationAvailabilityId":  {
+                                                                                                        "kind":  "prop",
+                                                                                                        "writable":  true,
+                                                                                                        "type":  "System.Int32"
+                                                                                                    },
+                                                                   "UnitId":  {
+                                                                                  "kind":  "prop",
+                                                                                  "writable":  true,
+                                                                                  "type":  "System.Int32"
+                                                                              }
+                                                               }
+                                               }
+               }
+}

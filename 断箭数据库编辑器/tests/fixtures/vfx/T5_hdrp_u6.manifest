@@ -1,0 +1,35 @@
+ManifestFileVersion: 0
+UnityVersion: 6000.3.24f1
+CRC: 2461913857
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 895e86362676174b071c6aed79a2d769
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 294354c0a31325699050c38e1e3270b4
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 1640f37cc692e7854ed8c41540992ffb
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 72
+  Script: {instanceID: 0}
+- Class: 73398921
+  Script: {instanceID: 0}
+- Class: 2058629509
+  Script: {instanceID: 0}
+- Class: 2083052967
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/L4/T2Hdrp.prefab
+Dependencies: []

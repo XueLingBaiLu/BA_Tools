@@ -1,0 +1,169 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "ba-mod-maker"
+# 版本号**只有一处**：src/ba_mod_maker/__init__.py::__version__（由下面
+# [tool.hatch.version] 取）。两处各写一个 0.1.0 时，改一处忘一处就会出现
+# 「装出来的包是 0.1.0、源码里是 0.2.0」而没人发现 —— tests/test_version.py 守着这条。
+dynamic = ["version"]
+description = "断箭（Broken Arrow）Mod 制作工具 · 数据表本体"
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+license = { text = "Proprietary" }
+dependencies = [
+  "PySide6>=6.8,<7",
+  # ❗ UnityPy + Pillow 是**运行时**依赖：图标直接从游戏自己的 .bundle 里按地址取，
+  # 不再预提取成 cache/icons（见 docs/设计稿-图标管线.png）。
+  # 代价是 16.6 MB 的包，换来的是不用随产品分发 185 MB 的图，
+  # 而且改了图标地址立刻见效、游戏新增图标自动可见。
+  "UnityPy>=1.25,<2",
+  "Pillow>=10.0",
+]
+
+[project.optional-dependencies]
+# 容器/加密那条线才需要：AES 解密与 LZ4 解压（与外部库 BA_Mod.zip 无关，后者是明文 zip）。
+asset = [
+  "pycryptodome>=3.20",
+  "lz4>=4.3",
+]
+dev = [
+  "pytest>=8.0",
+  # 并行跑测试用（addopts 里那个 -n）。**必须是声明依赖** —— 早先只往 .venv 里
+  # 手装过一次，于是换台机器 / 重建 venv 就 "unrecognized arguments: -n"。
+  "pytest-xdist>=3.6",
+  "ruff>=0.6",
+]
+
+[project.scripts]
+ba-mod-maker = "ba_mod_maker.cli.__main__:main"
+
+[tool.hatch.version]
+# 版本号的唯一来源。hatch 读的是这个文件里的 `__version__` 字面量，
+# 所以"改版本"这件事只有一步：改 src/ba_mod_maker/__init__.py。
+path = "src/ba_mod_maker/__init__.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/ba_mod_maker"]
+# ❗ cache/ 是**开发机上的兜底图标缓存**（185 MB，其中立绘 165 MB），
+# 绝不能进发布包：产品装了游戏就直接读 bundle（见 ADR 0003），
+# cache/ 只在"没装游戏的机器"上当兜底。
+exclude = ["cache", "cache/**"]
+
+[tool.hatch.build.targets.sdist]
+exclude = ["cache", "cache/**", "docs/**", "_work/**", "tests/**"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+# -q                  少啰嗦
+# -n auto             并行。**默认就该并行**：这套用例是"单线程 Python + Qt + 磁盘 IO"，
+#                     串行时 16 个逻辑核只用到 1 个（实测 CPU 时间 / 墙钟 ≈ 1/6）。
+#                     auto = 本机逻辑核数（本机没装 psutil，xdist 回落到 os.cpu_count() = 16）。
+#                     这台机器实测（2026-09-30，Ryzen 7 7800X3D / 16 逻辑核 / 31 GB）：
+#                        串行 ≈ 6 分钟  ->  -n 8 ≈ 95 秒  ->  -n 16 ≈ 96 秒（全量，含 slow）
+#                        -m "not slow"：-n 8 ≈ 33 秒  ->  -n 16 ≈ 23 秒
+#                     峰值内存：全量 12 GB / 日常档 4.9 GB（可用 31 GB）。
+#                     想串行：pytest -n 0
+# -n auto --dist worksteal
+#                     worksteal 让同一个文件的用例尽量待在同一个 worker 上
+#                     （模块级窗口/夹具只建一次），闲下来再去偷别的 ——
+#                     实测比默认的 load 快（同一批用例 30.9s vs 33.3s）。
+# -m "not slow"        默认只跑**日常档**。slow = 要真读游戏 bundle 的那几条
+#                      （单条最慢 17 秒）。
+#                      全量：  pytest --all     <- 见 tests/conftest.py 里的开关
+#                      只慢档：pytest -m slow
+#                      （为什么不用 -m "" 表达全量：PowerShell 会把那个空参数吞掉，
+#                       结果变成「以为跑了全量、其实还是日常档」。--all 没有这个歧义。）
+addopts = "-q -n auto --dist worksteal -m \"not slow\""
+pythonpath = ["src"]
+# slow = 要真读游戏 bundle 的用例（全套约 2.5 分钟）。
+# ⚠️ 跑测试前先看 AGENTS.md 第 0 条：**没有用户的明确命令不要跑**。
+# 全量（含 -m "not slow"）只在用户要求时跑；改完某个模块可以只跑那个测试文件。
+markers = [
+  "slow: 需要读游戏 bundle 的慢用例（-m 'not slow' 可跳过）",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+src = ["src", "tests"]
+# 只检查产品代码。kb/ _work/ 是知识与派生数据，不是源码；
+# 将来 Unity 导出物也会落进这些目录，不能让 linter 去扫。
+# ⚠ 2026-10-13 加后两项：pytest 的临时目录就落在**仓根**（pytest-of-*/ 与 pytest-temproot-*/），
+#   里面是测试自己写的小脚本 ⇒ 不排掉的话 ruff check . 会**多报一批与源码无关的红**
+#   （实测 33 条，全在 pytest-of-XueLingBaiLu/ 下）。**尺子要指向源码，不能指向测试垃圾。**
+extend-exclude = ["_work", "kb", "out", "pytest-of-*", "pytest-temproot-*",
+                  "blender_addon/_kernel", "blender_addon/_vendor"]
+# ⚠ 2026-10-14 加后两项：`_kernel/` 是**指回产品源码的 junction**（开发期不失同步），
+#   `_vendor/` 是打包时灌进来的第三方 —— 两个都不该由产品的 ruff 再扫一遍。
+#   实测不加：`ruff check blender_addon` = 176 条，其中 **83 条 invalid-syntax 全在 _kernel/**
+#   （同一批 py 文件被 src/ 与 blender_addon/ 各扫一次，junction 下路径判定还会打架）。
+
+[tool.ruff.lint]
+# —— 2026-10-02 清债：四族开进来，豁免**集中在这一节**，不再散成几百条 noqa ——
+# 旧样子：select 只开 E/F/I/UP/B/SIM，而代码里躺着 495 行 `# noqa: SLF001/PLC0415/…`
+# 压着**没开的**规则 —— RUF100 一量：**530 条 noqa 一条都不起作用**（假抑制）。
+# 实测四族全开 = 1259 条（PLC0415 766 / SLF001 467 / BLE001 16 / N802 7 / N818 2 / N813 1），
+# 但其中 **约 1120 条在 tests/tools**，是"用例戳内部成员""脚本延迟 import"这类**约定**；
+# 所以约定用下面的 per-file-ignores 一次写清（带走理由），产品侧的真违规逐条修。
+select = [
+  "E",
+  "F",
+  "I",
+  "UP",
+  "B",
+  "SIM",
+  "N",       # 含 N802 / N813 / N818（N803 / N806 本来就开着）
+  "SLF",
+  "PLC",
+  "BLE",
+  "RUF100",  # 这条 noqa 到底有没有抑制住东西 —— 防假抑制回潮
+]
+
+[tool.ruff.lint.per-file-ignores]
+# —— 约定类豁免：理由写在旁边，别再散回代码里 ——
+# Blender 插件（blender_addon/）：四条全是**宿主约定**，不是绕过封装 ——
+#   N801 面板类名必须跟 bl_idname 走（VIEW3D_PT_ba_*）；N802 `draw` 是 Blender 覆写；
+#   PLC0415 内核**必须**函数内 import（模块级 import 会让内核缺失时整个插件注册不上）；
+#   E402 `_kernel_path` 必须排在其它 import **之前**（它负责把内核挂进 sys.path）。
+"blender_addon/*.py" = ["N801", "N802", "N806", "PLC0415", "E402", "UP009"]
+# 用例戳内部成员是它的职责；函数内 import 让被 skip 的用例不必付 import 代价；
+# except Exception + pytest.skip 是**环境**判据（没有 QApplication / 字体就跳过）。
+"tests/**" = ["SLF001", "PLC0415", "BLE001", "N802"]
+# 一次性脚本：--help 要秒开。
+"tools/**" = ["PLC0415", "BLE001", "N802"]
+# 尺子工具：**就是要按私有容器属性**（page._scroll / window._unit_editor）量几何与计数 ——
+# 这是它的用途，不是绕过封装（AGENTS.md §0.9 动作 2：尺子只认产品自己的标识）。
+"tools/where.py" = ["SLF001"]
+# 移植包 `asset_kernel/qem/`：逐段移植自 C#（harness235，对过游戏 ISIL 的那份），**故意保持与参考实现
+# 逐行可对**——改成 PEP8 风格会让「和 C# 哪一段对应」变难，也容易引入行为差异。集中豁免，逐条理由：
+#   E501 行宽（C# 原名/长表达式）；UP004 object 继承（数据类写法照抄）；UP031 printf（与 C# 格式串一一对应）；
+#   UP009 utf8 声明；N812/UP035 局部别名（`qem_edge as E` 保持与 C# 命名一致）；E402（模块内条件 import）；
+#   RUF100 未启用的 noqa；SIM103 直白写法更贴 C#。
+"src/ba_mod_maker/asset_kernel/qem/*.py" = ["E501", "E702", "I001", "UP004", "UP031", "UP009", "N812", "UP035", "E402", "RUF100", "SIM103", "PLC0415"]
+# （2026-10-25：`core/assets/mesh_bridge.py` 已删 —— 旧的手写网格桥整条退役，这里那条豁免随之删掉。）
+# CLI 与 GUI 分开可用：不许为了 --help 把 Qt 或重模块拉起来。
+"src/ba_mod_maker/cli/**" = ["PLC0415"]
+# 诊断模块不许在 import 期依赖 Qt，否则"Qt 起不来"这种错就写不进日志。
+"src/ba_mod_maker/app/diag/**" = ["PLC0415"]
+# 屏幕之间互相 import 会成环；界面按需拉（先建后 show 也是这个原因）。
+"src/ba_mod_maker/app/screens/**" = ["PLC0415"]
+# 主窗口按需拉对话框（导入框 / 日志框 / 打补丁框…）。
+"src/ba_mod_maker/app/shell/main_window.py" = ["PLC0415"]
+# core 里的延迟 import 是两件正事的手段：① 拆环（session ↔ edit.package、
+# dataset ↔ loader、dllpatch ↔ assets.game）② 可选依赖（lz4 / lzma 装了才用）。
+"src/ba_mod_maker/core/**" = ["PLC0415"]
+# enterEvent / leaveEvent / hideEvent 是 **Qt 覆写**，改名就失去覆写语义。
+"src/ba_mod_maker/app/widgets/row_entries.py" = ["N802"]
+
+[tool.ruff.format]
+# `ruff format` **只在冻结后由 Lead 统一跑一次**（多人并行时跑 format 会互相踩）。
+# 本机实测（2026-10-01）：`ruff format --check .` 还有 105 / 192 个文件待格式化，
+# 提交前会统一抹平 —— 所以 CI 里那道 `ruff format --check` 从第一个提交起就是绿的。
+# 行宽 / target-version 继承 [tool.ruff]（line-length = 100）。
+# 下面几个是"会影响判定结果"的口径，显式写死，免得某次 ruff 升级悄悄改了默认值：
+quote-style = "double"
+indent-style = "space"
+line-ending = "auto"          # 仓里混有 LF（入库口径见 .gitattributes），别让 formatter 再改一遍
+docstring-code-format = false # 文档字符串里的示例代码不重排（给人读的片段）

@@ -1,0 +1,1552 @@
+{
+ "schema": 1,
+ "derived_from": {
+  "relations": "_relations.json",
+  "rules": "_rules.json",
+  "bounds": "core/rules/range_bounds.json",
+  "instance": "52085",
+  "note": "由 tools/gen_rulebook.py 生成，**不要手改**。游戏更新后重跑。前 93 条来自数据侧 _rules.json；后 20 条（range / cross_range）来自 core/rules/range_bounds.json。"
+ },
+ "instances": {
+  "default_non_campaign": 52085,
+  "campaign_route": 52082,
+  "note": "52085 = DefaultConfigProfile；52082 = ConfigProfile_1.1.0.4，被唯一一条 gameMode=Campaign 的路由指向",
+  "evidence": "measured+code"
+ },
+ "baseline_rows": {
+  "Units": 540,
+  "Abilities": 78,
+  "UnitAbilities": 655,
+  "Ammunitions": 630,
+  "Armors": 319,
+  "Mobility": 266,
+  "FlyPresets": 23,
+  "UnitPropulsions": 646,
+  "Countries": 3,
+  "Turrets": 1055,
+  "TurretUnits": 1597,
+  "Weapons": 804,
+  "TurretWeapons": 1279,
+  "WeaponAmmunitions": 2357,
+  "SensorUnits": 609,
+  "Sensors": 36,
+  "SquadMembers": 1134,
+  "SquadWeapons": 706,
+  "Modifications": 615,
+  "Options": 2046,
+  "UnitArmors": 711,
+  "SpecializationAvailabilities": 338,
+  "Specializations": 13,
+  "TransportAvailabilities": 227
+ },
+ "rule_count": 113,
+ "rules": [
+  {
+   "id": "req.UnitPropulsions",
+   "kind": "row_required_per_unit",
+   "severity": "error",
+   "evidence": "measured",
+   "note": "原版覆盖 540/540，缺 0",
+   "expr": "每个 Units.Id 都要有至少一行 UnitPropulsions",
+   "check": "required_per_unit",
+   "table": "UnitPropulsions",
+   "unit_column": "UnitId"
+  },
+  {
+   "id": "req.UnitArmors",
+   "kind": "row_required_per_unit",
+   "severity": "error",
+   "evidence": "measured",
+   "note": "原版覆盖 540/540，缺 0",
+   "expr": "每个 Units.Id 都要有至少一行 UnitArmors",
+   "check": "required_per_unit",
+   "table": "UnitArmors",
+   "unit_column": "UnitId"
+  },
+  {
+   "id": "req.UnitAbilities",
+   "kind": "row_required_per_unit",
+   "severity": "warning",
+   "evidence": "measured",
+   "note": "原版覆盖 453/540，缺 87",
+   "expr": "每个 Units.Id 都要有至少一行 UnitAbilities",
+   "check": "required_per_unit",
+   "table": "UnitAbilities",
+   "unit_column": "UnitId"
+  },
+  {
+   "id": "req.SensorUnits",
+   "kind": "row_required_per_unit",
+   "severity": "warning",
+   "evidence": "measured",
+   "note": "原版覆盖 539/540，缺 1",
+   "expr": "每个 Units.Id 都要有至少一行 SensorUnits",
+   "check": "required_per_unit",
+   "table": "SensorUnits",
+   "unit_column": "UnitId"
+  },
+  {
+   "id": "req.TurretUnits",
+   "kind": "row_required_per_unit",
+   "severity": "warning",
+   "evidence": "measured",
+   "note": "原版覆盖 312/540，缺 228",
+   "expr": "每个 Units.Id 都要有至少一行 TurretUnits",
+   "check": "required_per_unit",
+   "table": "TurretUnits",
+   "unit_column": "UnitId"
+  },
+  {
+   "id": "req.WeaponAmmunitions",
+   "kind": "row_required_per_unit",
+   "severity": "warning",
+   "evidence": "measured",
+   "note": "原版覆盖 505/540，缺 35",
+   "expr": "每个 Units.Id 都要有至少一行 WeaponAmmunitions",
+   "check": "required_per_unit",
+   "table": "WeaponAmmunitions",
+   "unit_column": "UnitId"
+  },
+  {
+   "id": "req.SquadMembers",
+   "kind": "row_required_per_unit",
+   "severity": "warning",
+   "evidence": "measured",
+   "note": "原版覆盖 194/540，缺 346",
+   "expr": "每个 Units.Id 都要有至少一行 SquadMembers",
+   "check": "required_per_unit",
+   "table": "SquadMembers",
+   "unit_column": "UnitId"
+  },
+  {
+   "id": "req.UnitArmors.IsDefault",
+   "kind": "default_flag_required",
+   "severity": "error",
+   "evidence": "measured",
+   "note": "原版 540/540",
+   "expr": "每个单位的 UnitArmors 里至少一条指向 IsDefault=true 的 Armors",
+   "check": "default_flag_required",
+   "table": "UnitArmors",
+   "unit_column": "UnitId",
+   "target": "Armors",
+   "flag_column": "IsDefault"
+  },
+  {
+   "id": "uniq.UnitAbilities",
+   "kind": "unique_key",
+   "severity": "error",
+   "evidence": "measured",
+   "note": "原版重复组合 0 组",
+   "expr": "唯一键 = UnitId + AbilityId",
+   "check": "unique_key",
+   "table": "UnitAbilities",
+   "columns": [
+    "UnitId",
+    "AbilityId"
+   ]
+  },
+  {
+   "id": "uniq.UnitPropulsions",
+   "kind": "unique_key",
+   "severity": "error",
+   "evidence": "measured",
+   "note": "原版重复组合 0 组",
+   "expr": "唯一键 = UnitId + MobilityId",
+   "check": "unique_key",
+   "table": "UnitPropulsions",
+   "columns": [
+    "UnitId",
+    "MobilityId"
+   ]
+  },
+  {
+   "id": "uniq.UnitArmors",
+   "kind": "unique_key",
+   "severity": "error",
+   "evidence": "measured",
+   "note": "原版重复组合 0 组",
+   "expr": "唯一键 = UnitId + ArmorId",
+   "check": "unique_key",
+   "table": "UnitArmors",
+   "columns": [
+    "UnitId",
+    "ArmorId"
+   ]
+  },
+  {
+   "id": "uniq.SensorUnits",
+   "kind": "unique_key",
+   "severity": "error",
+   "evidence": "measured",
+   "note": "原版重复组合 0 组",
+   "expr": "唯一键 = UnitId + SensorId",
+   "check": "unique_key",
+   "table": "SensorUnits",
+   "columns": [
+    "UnitId",
+    "SensorId"
+   ]
+  },
+  {
+   "id": "uniq.TurretUnits",
+   "kind": "unique_key",
+   "severity": "error",
+   "evidence": "measured",
+   "note": "原版重复组合 0 组",
+   "expr": "唯一键 = UnitId + TurretId",
+   "check": "unique_key",
+   "table": "TurretUnits",
+   "columns": [
+    "UnitId",
+    "TurretId"
+   ]
+  },
+  {
+   "id": "uniq.TurretWeapons",
+   "kind": "unique_key",
+   "severity": "info",
+   "evidence": "measured",
+   "note": "原版重复组合 2 组",
+   "expr": "唯一键 = TurretId + WeaponId",
+   "check": "unique_key",
+   "table": "TurretWeapons",
+   "columns": [
+    "TurretId",
+    "WeaponId"
+   ]
+  },
+  {
+   "id": "uniq.WeaponAmmunitions",
+   "kind": "unique_key",
+   "severity": "info",
+   "evidence": "measured",
+   "note": "原版重复组合 1 组",
+   "expr": "唯一键 = UnitId + WeaponId + AmmunitionId",
+   "check": "unique_key",
+   "table": "WeaponAmmunitions",
+   "columns": [
+    "UnitId",
+    "WeaponId",
+    "AmmunitionId"
+   ]
+  },
+  {
+   "id": "uniq.SquadWeapons",
+   "kind": "unique_key",
+   "severity": "error",
+   "evidence": "measured",
+   "note": "原版重复组合 0 组",
+   "expr": "唯一键 = UnitId + WeaponId",
+   "check": "unique_key",
+   "table": "SquadWeapons",
+   "columns": [
+    "UnitId",
+    "WeaponId"
+   ]
+  },
+  {
+   "id": "uniq.SquadMembers",
+   "kind": "unique_key",
+   "severity": "info",
+   "evidence": "measured",
+   "note": "原版重复组合 245 组",
+   "expr": "唯一键 = UnitId + PrimaryWeaponId",
+   "check": "unique_key",
+   "table": "SquadMembers",
+   "columns": [
+    "UnitId",
+    "PrimaryWeaponId"
+   ]
+  },
+  {
+   "id": "uniq.TransportAvailabilities",
+   "kind": "unique_key",
+   "severity": "error",
+   "evidence": "measured",
+   "note": "原版重复组合 0 组",
+   "expr": "唯一键 = SpecializationAvailabilityId + UnitId",
+   "check": "unique_key",
+   "table": "TransportAvailabilities",
+   "columns": [
+    "SpecializationAvailabilityId",
+    "UnitId"
+   ]
+  },
+  {
+   "id": "uniq.SpecializationAvailabilities",
+   "kind": "unique_key",
+   "severity": "error",
+   "evidence": "measured",
+   "note": "原版重复组合 0 组",
+   "expr": "唯一键 = SpecializationId + UnitId",
+   "check": "unique_key",
+   "table": "SpecializationAvailabilities",
+   "columns": [
+    "SpecializationId",
+    "UnitId"
+   ]
+  },
+  {
+   "id": "uniq.Modifications",
+   "kind": "unique_key",
+   "severity": "info",
+   "evidence": "measured",
+   "note": "原版重复组合 173 组",
+   "expr": "唯一键 = UnitId",
+   "check": "unique_key",
+   "table": "Modifications",
+   "columns": [
+    "UnitId"
+   ]
+  },
+  {
+   "id": "uniq.Options",
+   "kind": "unique_key",
+   "severity": "info",
+   "evidence": "measured",
+   "note": "原版重复组合 615 组",
+   "expr": "唯一键 = ModificationId",
+   "check": "unique_key",
+   "table": "Options",
+   "columns": [
+    "ModificationId"
+   ]
+  },
+  {
+   "id": "natkey.Modifications.UnitId_Name",
+   "kind": "natural_key",
+   "severity": "info",
+   "evidence": "measured",
+   "note": "实测唯一",
+   "expr": "自然键 = UnitId + Name",
+   "check": "unique_key",
+   "table": "Modifications",
+   "columns": [
+    "UnitId",
+    "Name"
+   ]
+  },
+  {
+   "id": "natkey.Options.ModificationId_Name",
+   "kind": "natural_key",
+   "severity": "info",
+   "evidence": "measured",
+   "note": "实测唯一",
+   "expr": "自然键 = ModificationId + Name",
+   "check": "unique_key",
+   "table": "Options",
+   "columns": [
+    "ModificationId",
+    "Name"
+   ]
+  },
+  {
+   "id": "natkey.Options.ModificationId_Order_Name",
+   "kind": "natural_key",
+   "severity": "info",
+   "evidence": "measured",
+   "note": "实测唯一",
+   "expr": "自然键 = ModificationId + Order + Name",
+   "check": "unique_key",
+   "table": "Options",
+   "columns": [
+    "ModificationId",
+    "Order",
+    "Name"
+   ]
+  },
+  {
+   "id": "natkey.TurretUnits.UnitId_TurretId_Order",
+   "kind": "natural_key",
+   "severity": "info",
+   "evidence": "measured",
+   "note": "实测唯一",
+   "expr": "自然键 = UnitId + TurretId + Order",
+   "check": "unique_key",
+   "table": "TurretUnits",
+   "columns": [
+    "UnitId",
+    "TurretId",
+    "Order"
+   ]
+  },
+  {
+   "id": "natkey.SquadWeapons.UnitId_WeaponId_Order",
+   "kind": "natural_key",
+   "severity": "info",
+   "evidence": "measured",
+   "note": "实测唯一",
+   "expr": "自然键 = UnitId + WeaponId + Order",
+   "check": "unique_key",
+   "table": "SquadWeapons",
+   "columns": [
+    "UnitId",
+    "WeaponId",
+    "Order"
+   ]
+  },
+  {
+   "id": "natkey.SpecializationAvailabilities.SpecializationId_UnitId",
+   "kind": "natural_key",
+   "severity": "info",
+   "evidence": "measured",
+   "note": "实测唯一",
+   "expr": "自然键 = SpecializationId + UnitId",
+   "check": "unique_key",
+   "table": "SpecializationAvailabilities",
+   "columns": [
+    "SpecializationId",
+    "UnitId"
+   ]
+  },
+  {
+   "id": "natkey.TransportAvailabilities.SpecializationAvailabilityId_UnitId",
+   "kind": "natural_key",
+   "severity": "info",
+   "evidence": "measured",
+   "note": "实测唯一",
+   "expr": "自然键 = SpecializationAvailabilityId + UnitId",
+   "check": "unique_key",
+   "table": "TransportAvailabilities",
+   "columns": [
+    "SpecializationAvailabilityId",
+    "UnitId"
+   ]
+  },
+  {
+   "id": "fk.Units.CountryId",
+   "kind": "foreign_key",
+   "severity": "error",
+   "evidence": "measured",
+   "note": "原版命中率 1.0；0 值表示不使用",
+   "expr": "CountryId -> Countries",
+   "check": "foreign_key",
+   "table": "Units",
+   "column": "CountryId",
+   "target": "Countries"
+  },
+  {
+   "id": "fk.Abilities.SmokeAmmunitionId",
+   "kind": "foreign_key",
+   "severity": "error",
+   "evidence": "measured",
+   "note": "原版命中率 1.0；0 值表示不使用",
+   "expr": "SmokeAmmunitionId -> Ammunitions",
+   "check": "foreign_key",
+   "table": "Abilities",
+   "column": "SmokeAmmunitionId",
+   "target": "Ammunitions"
+  },
+  {
+   "id": "fk.UnitAbilities.AbilityId",
+   "kind": "foreign_key",
+   "severity": "error",
+   "evidence": "measured",
+   "note": "原版命中率 1.0；0 值表示不使用",
+   "expr": "AbilityId -> Abilities",
+   "check": "foreign_key",
+   "table": "UnitAbilities",
+   "column": "AbilityId",
+   "target": "Abilities"
+  },
+  {
+   "id": "fk.UnitAbilities.UnitId",
+   "kind": "foreign_key",
+   "severity": "error",
+   "evidence": "measured",
+   "note": "原版命中率 1.0；0 值表示不使用",
+   "expr": "UnitId -> Units",
+   "check": "foreign_key",
+   "table": "UnitAbilities",
+   "column": "UnitId",
+   "target": "Units"
+  },
+  {
+   "id": "fk.UnitPropulsions.MobilityId",
+   "kind": "foreign_key",
+   "severity": "error",
+   "evidence": "measured",
+   "note": "原版命中率 1.0；0 值表示不使用",
+   "expr": "MobilityId -> Mobility",
+   "check": "foreign_key",
+   "table": "UnitPropulsions",
+   "column": "MobilityId",
+   "target": "Mobility"
+  },
+  {
+   "id": "fk.UnitPropulsions.UnitId",
+   "kind": "foreign_key",
+   "severity": "error",
+   "evidence": "measured",
+   "note": "原版命中率 1.0；0 值表示不使用",
+   "expr": "UnitId -> Units",
+   "check": "foreign_key",
+   "table": "UnitPropulsions",
+   "column": "UnitId",
+   "target": "Units"
+  },
+  {
+   "id": "fk.Turrets.ParentTurretId",
+   "kind": "foreign_key",
+   "severity": "error",
+   "evidence": "measured",
+   "note": "原版命中率 1.0；0 值表示不使用",
+   "expr": "ParentTurretId -> Turrets",
+   "check": "foreign_key",
+   "table": "Turrets",
+   "column": "ParentTurretId",
+   "target": "Turrets"
+  },
+  {
+   "id": "fk.TurretUnits.TurretId",
+   "kind": "foreign_key",
+   "severity": "error",
+   "evidence": "measured",
+   "note": "原版命中率 1.0；0 值表示不使用",
+   "expr": "TurretId -> Turrets",
+   "check": "foreign_key",
+   "table": "TurretUnits",
+   "column": "TurretId",
+   "target": "Turrets"
+  },
+  {
+   "id": "fk.TurretUnits.UnitId",
+   "kind": "foreign_key",
+   "severity": "error",
+   "evidence": "measured",
+   "note": "原版命中率 1.0；0 值表示不使用",
+   "expr": "UnitId -> Units",
+   "check": "foreign_key",
+   "table": "TurretUnits",
+   "column": "UnitId",
+   "target": "Units"
+  },
+  {
+   "id": "fk.TurretWeapons.TurretId",
+   "kind": "foreign_key",
+   "severity": "error",
+   "evidence": "measured",
+   "note": "原版命中率 1.0；0 值表示不使用",
+   "expr": "TurretId -> Turrets",
+   "check": "foreign_key",
+   "table": "TurretWeapons",
+   "column": "TurretId",
+   "target": "Turrets"
+  },
+  {
+   "id": "fk.TurretWeapons.WeaponId",
+   "kind": "foreign_key",
+   "severity": "error",
+   "evidence": "measured",
+   "note": "原版命中率 1.0；0 值表示不使用",
+   "expr": "WeaponId -> Weapons",
+   "check": "foreign_key",
+   "table": "TurretWeapons",
+   "column": "WeaponId",
+   "target": "Weapons"
+  },
+  {
+   "id": "fk.WeaponAmmunitions.AmmunitionId",
+   "kind": "foreign_key",
+   "severity": "error",
+   "evidence": "measured",
+   "note": "原版命中率 1.0；0 值表示不使用",
+   "expr": "AmmunitionId -> Ammunitions",
+   "check": "foreign_key",
+   "table": "WeaponAmmunitions",
+   "column": "AmmunitionId",
+   "target": "Ammunitions"
+  },
+  {
+   "id": "fk.WeaponAmmunitions.UnitId",
+   "kind": "foreign_key",
+   "severity": "error",
+   "evidence": "measured",
+   "note": "原版命中率 1.0；0 值表示不使用",
+   "expr": "UnitId -> Units",
+   "check": "foreign_key",
+   "table": "WeaponAmmunitions",
+   "column": "UnitId",
+   "target": "Units"
+  },
+  {
+   "id": "fk.WeaponAmmunitions.WeaponId",
+   "kind": "foreign_key",
+   "severity": "error",
+   "evidence": "measured",
+   "note": "原版命中率 1.0；0 值表示不使用",
+   "expr": "WeaponId -> Weapons",
+   "check": "foreign_key",
+   "table": "WeaponAmmunitions",
+   "column": "WeaponId",
+   "target": "Weapons"
+  },
+  {
+   "id": "fk.SensorUnits.SensorId",
+   "kind": "foreign_key",
+   "severity": "error",
+   "evidence": "measured",
+   "note": "原版命中率 1.0；0 值表示不使用",
+   "expr": "SensorId -> Sensors",
+   "check": "foreign_key",
+   "table": "SensorUnits",
+   "column": "SensorId",
+   "target": "Sensors"
+  },
+  {
+   "id": "fk.SensorUnits.UnitId",
+   "kind": "foreign_key",
+   "severity": "error",
+   "evidence": "measured",
+   "note": "原版命中率 1.0；0 值表示不使用",
+   "expr": "UnitId -> Units",
+   "check": "foreign_key",
+   "table": "SensorUnits",
+   "column": "UnitId",
+   "target": "Units"
+  },
+  {
+   "id": "fk.SquadMembers.PrimaryWeaponId",
+   "kind": "foreign_key",
+   "severity": "error",
+   "evidence": "measured",
+   "note": "原版命中率 1.0；0 值表示不使用",
+   "expr": "PrimaryWeaponId -> Weapons",
+   "check": "foreign_key",
+   "table": "SquadMembers",
+   "column": "PrimaryWeaponId",
+   "target": "Weapons"
+  },
+  {
+   "id": "fk.SquadMembers.SpecialWeaponId",
+   "kind": "foreign_key",
+   "severity": "error",
+   "evidence": "measured",
+   "note": "原版命中率 1.0；0 值表示不使用",
+   "expr": "SpecialWeaponId -> Weapons",
+   "check": "foreign_key",
+   "table": "SquadMembers",
+   "column": "SpecialWeaponId",
+   "target": "Weapons"
+  },
+  {
+   "id": "fk.SquadMembers.UnitId",
+   "kind": "foreign_key",
+   "severity": "error",
+   "evidence": "measured",
+   "note": "原版命中率 1.0；0 值表示不使用",
+   "expr": "UnitId -> Units",
+   "check": "foreign_key",
+   "table": "SquadMembers",
+   "column": "UnitId",
+   "target": "Units"
+  },
+  {
+   "id": "fk.SquadWeapons.UnitId",
+   "kind": "foreign_key",
+   "severity": "error",
+   "evidence": "measured",
+   "note": "原版命中率 1.0；0 值表示不使用",
+   "expr": "UnitId -> Units",
+   "check": "foreign_key",
+   "table": "SquadWeapons",
+   "column": "UnitId",
+   "target": "Units"
+  },
+  {
+   "id": "fk.SquadWeapons.WeaponId",
+   "kind": "foreign_key",
+   "severity": "error",
+   "evidence": "measured",
+   "note": "原版命中率 1.0；0 值表示不使用",
+   "expr": "WeaponId -> Weapons",
+   "check": "foreign_key",
+   "table": "SquadWeapons",
+   "column": "WeaponId",
+   "target": "Weapons"
+  },
+  {
+   "id": "fk.Modifications.UnitId",
+   "kind": "foreign_key",
+   "severity": "error",
+   "evidence": "measured",
+   "note": "原版命中率 1.0；0 值表示不使用",
+   "expr": "UnitId -> Units",
+   "check": "foreign_key",
+   "table": "Modifications",
+   "column": "UnitId",
+   "target": "Units"
+  },
+  {
+   "id": "fk.Options.Ability1Id",
+   "kind": "foreign_key",
+   "severity": "error",
+   "evidence": "measured",
+   "note": "原版命中率 1.0；0 值表示不使用",
+   "expr": "Ability1Id -> Abilities",
+   "check": "foreign_key",
+   "table": "Options",
+   "column": "Ability1Id",
+   "target": "Abilities"
+  },
+  {
+   "id": "fk.Options.Ability2Id",
+   "kind": "foreign_key",
+   "severity": "error",
+   "evidence": "measured",
+   "note": "原版命中率 1.0；0 值表示不使用",
+   "expr": "Ability2Id -> Abilities",
+   "check": "foreign_key",
+   "table": "Options",
+   "column": "Ability2Id",
+   "target": "Abilities"
+  },
+  {
+   "id": "fk.Options.Ability3Id",
+   "kind": "foreign_key",
+   "severity": "error",
+   "evidence": "measured",
+   "note": "原版命中率 1.0；0 值表示不使用",
+   "expr": "Ability3Id -> Abilities",
+   "check": "foreign_key",
+   "table": "Options",
+   "column": "Ability3Id",
+   "target": "Abilities"
+  },
+  {
+   "id": "fk.Options.ArmorId",
+   "kind": "foreign_key",
+   "severity": "error",
+   "evidence": "measured",
+   "note": "原版命中率 1.0；0 值表示不使用",
+   "expr": "ArmorId -> Armors",
+   "check": "foreign_key",
+   "table": "Options",
+   "column": "ArmorId",
+   "target": "Armors"
+  },
+  {
+   "id": "fk.Options.ExtraSensorId",
+   "kind": "foreign_key",
+   "severity": "error",
+   "evidence": "measured",
+   "note": "原版命中率 1.0；0 值表示不使用",
+   "expr": "ExtraSensorId -> Sensors",
+   "check": "foreign_key",
+   "table": "Options",
+   "column": "ExtraSensorId",
+   "target": "Sensors"
+  },
+  {
+   "id": "fk.Options.MainSensorId",
+   "kind": "foreign_key",
+   "severity": "error",
+   "evidence": "measured",
+   "note": "原版命中率 1.0；0 值表示不使用",
+   "expr": "MainSensorId -> Sensors",
+   "check": "foreign_key",
+   "table": "Options",
+   "column": "MainSensorId",
+   "target": "Sensors"
+  },
+  {
+   "id": "fk.Options.MobilityId",
+   "kind": "foreign_key",
+   "severity": "error",
+   "evidence": "measured",
+   "note": "原版命中率 1.0；0 值表示不使用",
+   "expr": "MobilityId -> Mobility",
+   "check": "foreign_key",
+   "table": "Options",
+   "column": "MobilityId",
+   "target": "Mobility"
+  },
+  {
+   "id": "fk.Options.ModificationId",
+   "kind": "foreign_key",
+   "severity": "error",
+   "evidence": "measured",
+   "note": "原版命中率 1.0；0 值表示不使用",
+   "expr": "ModificationId -> Modifications",
+   "check": "foreign_key",
+   "table": "Options",
+   "column": "ModificationId",
+   "target": "Modifications"
+  },
+  {
+   "id": "fk.Options.ReplaceUnitId",
+   "kind": "foreign_key",
+   "severity": "error",
+   "evidence": "measured",
+   "note": "原版命中率 1.0；0 值表示不使用",
+   "expr": "ReplaceUnitId -> Units",
+   "check": "foreign_key",
+   "table": "Options",
+   "column": "ReplaceUnitId",
+   "target": "Units"
+  },
+  {
+   "id": "fk.Options.Turret0Id",
+   "kind": "foreign_key",
+   "severity": "error",
+   "evidence": "measured",
+   "note": "原版命中率 1.0；0 值表示不使用",
+   "expr": "Turret0Id -> Turrets",
+   "check": "foreign_key",
+   "table": "Options",
+   "column": "Turret0Id",
+   "target": "Turrets"
+  },
+  {
+   "id": "fk.Options.Turret10Id",
+   "kind": "foreign_key",
+   "severity": "error",
+   "evidence": "measured",
+   "note": "原版命中率 1.0；0 值表示不使用",
+   "expr": "Turret10Id -> Turrets",
+   "check": "foreign_key",
+   "table": "Options",
+   "column": "Turret10Id",
+   "target": "Turrets"
+  },
+  {
+   "id": "fk.Options.Turret11Id",
+   "kind": "foreign_key",
+   "severity": "error",
+   "evidence": "measured",
+   "note": "原版命中率 1.0；0 值表示不使用",
+   "expr": "Turret11Id -> Turrets",
+   "check": "foreign_key",
+   "table": "Options",
+   "column": "Turret11Id",
+   "target": "Turrets"
+  },
+  {
+   "id": "fk.Options.Turret12Id",
+   "kind": "foreign_key",
+   "severity": "error",
+   "evidence": "measured",
+   "note": "原版命中率 1.0；0 值表示不使用",
+   "expr": "Turret12Id -> Turrets",
+   "check": "foreign_key",
+   "table": "Options",
+   "column": "Turret12Id",
+   "target": "Turrets"
+  },
+  {
+   "id": "fk.Options.Turret13Id",
+   "kind": "foreign_key",
+   "severity": "error",
+   "evidence": "measured",
+   "note": "原版命中率 1.0；0 值表示不使用",
+   "expr": "Turret13Id -> Turrets",
+   "check": "foreign_key",
+   "table": "Options",
+   "column": "Turret13Id",
+   "target": "Turrets"
+  },
+  {
+   "id": "fk.Options.Turret14Id",
+   "kind": "foreign_key",
+   "severity": "error",
+   "evidence": "measured",
+   "note": "原版命中率 1.0；0 值表示不使用",
+   "expr": "Turret14Id -> Turrets",
+   "check": "foreign_key",
+   "table": "Options",
+   "column": "Turret14Id",
+   "target": "Turrets"
+  },
+  {
+   "id": "fk.Options.Turret15Id",
+   "kind": "foreign_key",
+   "severity": "error",
+   "evidence": "measured",
+   "note": "原版命中率 1.0；0 值表示不使用",
+   "expr": "Turret15Id -> Turrets",
+   "check": "foreign_key",
+   "table": "Options",
+   "column": "Turret15Id",
+   "target": "Turrets"
+  },
+  {
+   "id": "fk.Options.Turret16Id",
+   "kind": "foreign_key",
+   "severity": "error",
+   "evidence": "measured",
+   "note": "原版命中率 1.0；0 值表示不使用",
+   "expr": "Turret16Id -> Turrets",
+   "check": "foreign_key",
+   "table": "Options",
+   "column": "Turret16Id",
+   "target": "Turrets"
+  },
+  {
+   "id": "fk.Options.Turret17Id",
+   "kind": "foreign_key",
+   "severity": "error",
+   "evidence": "measured",
+   "note": "原版命中率 1.0；0 值表示不使用",
+   "expr": "Turret17Id -> Turrets",
+   "check": "foreign_key",
+   "table": "Options",
+   "column": "Turret17Id",
+   "target": "Turrets"
+  },
+  {
+   "id": "fk.Options.Turret18Id",
+   "kind": "foreign_key",
+   "severity": "error",
+   "evidence": "measured",
+   "note": "原版命中率 1.0；0 值表示不使用",
+   "expr": "Turret18Id -> Turrets",
+   "check": "foreign_key",
+   "table": "Options",
+   "column": "Turret18Id",
+   "target": "Turrets"
+  },
+  {
+   "id": "fk.Options.Turret19Id",
+   "kind": "foreign_key",
+   "severity": "error",
+   "evidence": "measured",
+   "note": "原版命中率 1.0；0 值表示不使用",
+   "expr": "Turret19Id -> Turrets",
+   "check": "foreign_key",
+   "table": "Options",
+   "column": "Turret19Id",
+   "target": "Turrets"
+  },
+  {
+   "id": "fk.Options.Turret1Id",
+   "kind": "foreign_key",
+   "severity": "error",
+   "evidence": "measured",
+   "note": "原版命中率 1.0；0 值表示不使用",
+   "expr": "Turret1Id -> Turrets",
+   "check": "foreign_key",
+   "table": "Options",
+   "column": "Turret1Id",
+   "target": "Turrets"
+  },
+  {
+   "id": "fk.Options.Turret20Id",
+   "kind": "foreign_key",
+   "severity": "error",
+   "evidence": "measured",
+   "note": "原版命中率 0.0；0 值表示不使用",
+   "expr": "Turret20Id -> Turrets",
+   "check": "foreign_key",
+   "table": "Options",
+   "column": "Turret20Id",
+   "target": "Turrets"
+  },
+  {
+   "id": "fk.Options.Turret2Id",
+   "kind": "foreign_key",
+   "severity": "error",
+   "evidence": "measured",
+   "note": "原版命中率 1.0；0 值表示不使用",
+   "expr": "Turret2Id -> Turrets",
+   "check": "foreign_key",
+   "table": "Options",
+   "column": "Turret2Id",
+   "target": "Turrets"
+  },
+  {
+   "id": "fk.Options.Turret3Id",
+   "kind": "foreign_key",
+   "severity": "error",
+   "evidence": "measured",
+   "note": "原版命中率 1.0；0 值表示不使用",
+   "expr": "Turret3Id -> Turrets",
+   "check": "foreign_key",
+   "table": "Options",
+   "column": "Turret3Id",
+   "target": "Turrets"
+  },
+  {
+   "id": "fk.Options.Turret4Id",
+   "kind": "foreign_key",
+   "severity": "error",
+   "evidence": "measured",
+   "note": "原版命中率 1.0；0 值表示不使用",
+   "expr": "Turret4Id -> Turrets",
+   "check": "foreign_key",
+   "table": "Options",
+   "column": "Turret4Id",
+   "target": "Turrets"
+  },
+  {
+   "id": "fk.Options.Turret5Id",
+   "kind": "foreign_key",
+   "severity": "error",
+   "evidence": "measured",
+   "note": "原版命中率 1.0；0 值表示不使用",
+   "expr": "Turret5Id -> Turrets",
+   "check": "foreign_key",
+   "table": "Options",
+   "column": "Turret5Id",
+   "target": "Turrets"
+  },
+  {
+   "id": "fk.Options.Turret6Id",
+   "kind": "foreign_key",
+   "severity": "error",
+   "evidence": "measured",
+   "note": "原版命中率 1.0；0 值表示不使用",
+   "expr": "Turret6Id -> Turrets",
+   "check": "foreign_key",
+   "table": "Options",
+   "column": "Turret6Id",
+   "target": "Turrets"
+  },
+  {
+   "id": "fk.Options.Turret7Id",
+   "kind": "foreign_key",
+   "severity": "error",
+   "evidence": "measured",
+   "note": "原版命中率 1.0；0 值表示不使用",
+   "expr": "Turret7Id -> Turrets",
+   "check": "foreign_key",
+   "table": "Options",
+   "column": "Turret7Id",
+   "target": "Turrets"
+  },
+  {
+   "id": "fk.Options.Turret8Id",
+   "kind": "foreign_key",
+   "severity": "error",
+   "evidence": "measured",
+   "note": "原版命中率 1.0；0 值表示不使用",
+   "expr": "Turret8Id -> Turrets",
+   "check": "foreign_key",
+   "table": "Options",
+   "column": "Turret8Id",
+   "target": "Turrets"
+  },
+  {
+   "id": "fk.Options.Turret9Id",
+   "kind": "foreign_key",
+   "severity": "error",
+   "evidence": "measured",
+   "note": "原版命中率 1.0；0 值表示不使用",
+   "expr": "Turret9Id -> Turrets",
+   "check": "foreign_key",
+   "table": "Options",
+   "column": "Turret9Id",
+   "target": "Turrets"
+  },
+  {
+   "id": "fk.UnitArmors.ArmorId",
+   "kind": "foreign_key",
+   "severity": "error",
+   "evidence": "measured",
+   "note": "原版命中率 1.0；0 值表示不使用",
+   "expr": "ArmorId -> Armors",
+   "check": "foreign_key",
+   "table": "UnitArmors",
+   "column": "ArmorId",
+   "target": "Armors"
+  },
+  {
+   "id": "fk.UnitArmors.UnitId",
+   "kind": "foreign_key",
+   "severity": "error",
+   "evidence": "measured",
+   "note": "原版命中率 1.0；0 值表示不使用",
+   "expr": "UnitId -> Units",
+   "check": "foreign_key",
+   "table": "UnitArmors",
+   "column": "UnitId",
+   "target": "Units"
+  },
+  {
+   "id": "fk.SpecializationAvailabilities.SpecializationId",
+   "kind": "foreign_key",
+   "severity": "error",
+   "evidence": "measured",
+   "note": "原版命中率 1.0；0 值表示不使用",
+   "expr": "SpecializationId -> Specializations",
+   "check": "foreign_key",
+   "table": "SpecializationAvailabilities",
+   "column": "SpecializationId",
+   "target": "Specializations"
+  },
+  {
+   "id": "fk.SpecializationAvailabilities.UnitId",
+   "kind": "foreign_key",
+   "severity": "error",
+   "evidence": "measured",
+   "note": "原版命中率 1.0；0 值表示不使用",
+   "expr": "UnitId -> Units",
+   "check": "foreign_key",
+   "table": "SpecializationAvailabilities",
+   "column": "UnitId",
+   "target": "Units"
+  },
+  {
+   "id": "fk.Specializations.CountryId",
+   "kind": "foreign_key",
+   "severity": "error",
+   "evidence": "measured",
+   "note": "原版命中率 1.0；0 值表示不使用",
+   "expr": "CountryId -> Countries",
+   "check": "foreign_key",
+   "table": "Specializations",
+   "column": "CountryId",
+   "target": "Countries"
+  },
+  {
+   "id": "fk.TransportAvailabilities.SpecializationAvailabilityId",
+   "kind": "foreign_key",
+   "severity": "error",
+   "evidence": "measured",
+   "note": "原版命中率 1.0；0 值表示不使用",
+   "expr": "SpecializationAvailabilityId -> SpecializationAvailabilities",
+   "check": "foreign_key",
+   "table": "TransportAvailabilities",
+   "column": "SpecializationAvailabilityId",
+   "target": "SpecializationAvailabilities"
+  },
+  {
+   "id": "fk.TransportAvailabilities.UnitId",
+   "kind": "foreign_key",
+   "severity": "error",
+   "evidence": "measured",
+   "note": "原版命中率 1.0；0 值表示不使用",
+   "expr": "UnitId -> Units",
+   "check": "foreign_key",
+   "table": "TransportAvailabilities",
+   "column": "UnitId",
+   "target": "Units"
+  },
+  {
+   "id": "fk.Mobility.FlyPresetId",
+   "kind": "foreign_key",
+   "severity": "error",
+   "evidence": "measured",
+   "note": "列名不含表名，靠数值判定；0 = 地面单位",
+   "expr": "FlyPresetId -> PlaneFlyPresets",
+   "check": "foreign_key",
+   "table": "Mobility",
+   "column": "FlyPresetId",
+   "target": "FlyPresets"
+  },
+  {
+   "id": "zero.Options.Turret20Id",
+   "kind": "unused_slot",
+   "severity": "info",
+   "evidence": "measured",
+   "note": "不要用它当第 21 个炮塔槽",
+   "expr": "Turret20Id 恒为 0",
+   "check": "constant_zero",
+   "table": "Options",
+   "column": "Turret20Id",
+   "expected": 0
+  },
+  {
+   "id": "inv.infantry.squadmembers_subset_squadweapons",
+   "kind": "cross_table",
+   "severity": "error",
+   "evidence": "user+measured",
+   "note": "单向包含：反向不要求（清单可有多余武器，合法且不显示）；原版 1134/1134 + 460/460，0 例外",
+   "expr": "SquadMembers 的 PrimaryWeaponId / SpecialWeaponId 全部要出现在同单位的 SquadWeapons 里",
+   "check": "cross_table"
+  },
+  {
+   "id": "inv.infantry.armor_men",
+   "kind": "cross_table",
+   "severity": "warning",
+   "evidence": "measured",
+   "note": "原版 188/193 成立，5 个例外全是 ZOM 系列（复用行）",
+   "expr": "步兵单位的护甲套装名 Armor Infantry <N>Men 的 N 应等于该单位 SquadMembers 行数",
+   "check": "cross_table"
+  },
+  {
+   "id": "inv.transport.capacity",
+   "kind": "cross_table",
+   "severity": "warning",
+   "evidence": "measured",
+   "note": "原版 227/227 成立；载量不足的后果未实测",
+   "expr": "TransportAvailabilities 行内的载具 Units.InfantrySlots >= 乘客单位 SquadMembers 行数",
+   "check": "cross_table"
+  },
+  {
+   "id": "inv.weapons.no_orphan",
+   "kind": "cross_table",
+   "severity": "info",
+   "evidence": "measured",
+   "note": "原版 558 只走炮塔 / 246 只走班组 / 0 既此又彼 / 0 孤儿",
+   "expr": "每件武器要么走炮塔（TurretWeapons）要么走班组（SquadWeapons）",
+   "check": "cross_table"
+  },
+  {
+   "id": "range.Ammunitions.GroundRange",
+   "kind": "range",
+   "severity": "warning",
+   "evidence": "mod-authored",
+   "note": "出处 BrokenArrowRealismOverhaul (BARO) 5.9.2 的 RealStats.Bounds（decompiled.cs:501539-501559）；原版 52085 实测越界 0 行（**原版既有形态**，不是改动引入的），跳过哨兵后 0 行。哨兵（逐列枚举，括号里是原版命中行数）：0（63 行）。 required=false：BARO 原判据还把下界当开区间，本产品按 [lo, hi] 闭环执行（口径 C）。",
+   "expr": "GroundRange 必须落在 [0, 100000] 里",
+   "check": "range",
+   "table": "Ammunitions",
+   "column": "GroundRange",
+   "lo": 0,
+   "hi": 100000,
+   "required": false,
+   "sentinels": [
+    0
+   ]
+  },
+  {
+   "id": "range.Ammunitions.LowAltRange",
+   "kind": "range",
+   "severity": "warning",
+   "evidence": "mod-authored",
+   "note": "出处 BrokenArrowRealismOverhaul (BARO) 5.9.2 的 RealStats.Bounds（decompiled.cs:501539-501559）；原版 52085 实测越界 0 行（**原版既有形态**，不是改动引入的），跳过哨兵后 0 行。哨兵（逐列枚举，括号里是原版命中行数）：0（478 行）。 required=false：BARO 原判据还把下界当开区间，本产品按 [lo, hi] 闭环执行（口径 C）。",
+   "expr": "LowAltRange 必须落在 [0, 100000] 里",
+   "check": "range",
+   "table": "Ammunitions",
+   "column": "LowAltRange",
+   "lo": 0,
+   "hi": 100000,
+   "required": false,
+   "sentinels": [
+    0
+   ]
+  },
+  {
+   "id": "range.Ammunitions.HighAltRange",
+   "kind": "range",
+   "severity": "warning",
+   "evidence": "mod-authored",
+   "note": "出处 BrokenArrowRealismOverhaul (BARO) 5.9.2 的 RealStats.Bounds（decompiled.cs:501539-501559）；原版 52085 实测越界 35 行（**原版既有形态**，不是改动引入的），跳过哨兵后 0 行。哨兵（逐列枚举，括号里是原版命中行数）：0（512 行）、-1（35 行）。 required=false：BARO 原判据还把下界当开区间，本产品按 [lo, hi] 闭环执行（口径 C）。",
+   "expr": "HighAltRange 必须落在 [0, 100000] 里",
+   "check": "range",
+   "table": "Ammunitions",
+   "column": "HighAltRange",
+   "lo": 0,
+   "hi": 100000,
+   "required": false,
+   "sentinels": [
+    0,
+    -1
+   ]
+  },
+  {
+   "id": "range.Ammunitions.MinimalRange",
+   "kind": "range",
+   "severity": "warning",
+   "evidence": "mod-authored",
+   "note": "出处 BrokenArrowRealismOverhaul (BARO) 5.9.2 的 RealStats.Bounds（decompiled.cs:501539-501559）；原版 52085 实测越界 0 行（**原版既有形态**，不是改动引入的），跳过哨兵后 0 行。哨兵（逐列枚举，括号里是原版命中行数）：0（287 行）。 required=false：BARO 原判据还把下界当开区间，本产品按 [lo, hi] 闭环执行（口径 C）。",
+   "expr": "MinimalRange 必须落在 [0, 100000] 里",
+   "check": "range",
+   "table": "Ammunitions",
+   "column": "MinimalRange",
+   "lo": 0,
+   "hi": 100000,
+   "required": false,
+   "sentinels": [
+    0
+   ]
+  },
+  {
+   "id": "range.Ammunitions.MaxSeekerDistance",
+   "kind": "range",
+   "severity": "warning",
+   "evidence": "mod-authored",
+   "note": "出处 BrokenArrowRealismOverhaul (BARO) 5.9.2 的 RealStats.Bounds（decompiled.cs:501539-501559）；原版 52085 实测越界 0 行（**原版既有形态**，不是改动引入的），跳过哨兵后 0 行。哨兵（逐列枚举，括号里是原版命中行数）：0（450 行）。 required=false：BARO 原判据还把下界当开区间，本产品按 [lo, hi] 闭环执行（口径 C）。",
+   "expr": "MaxSeekerDistance 必须落在 [0, 100000] 里",
+   "check": "range",
+   "table": "Ammunitions",
+   "column": "MaxSeekerDistance",
+   "lo": 0,
+   "hi": 100000,
+   "required": false,
+   "sentinels": [
+    0
+   ]
+  },
+  {
+   "id": "range.Ammunitions.SeadProjectileRangeOverride",
+   "kind": "range",
+   "severity": "warning",
+   "evidence": "mod-authored",
+   "note": "出处 BrokenArrowRealismOverhaul (BARO) 5.9.2 的 RealStats.Bounds（decompiled.cs:501539-501559）；原版 52085 实测越界 0 行（**原版既有形态**，不是改动引入的），跳过哨兵后 0 行。哨兵（逐列枚举，括号里是原版命中行数）：0（629 行）。 required=false：BARO 原判据还把下界当开区间，本产品按 [lo, hi] 闭环执行（口径 C）。",
+   "expr": "SeadProjectileRangeOverride 必须落在 [0, 100000] 里",
+   "check": "range",
+   "table": "Ammunitions",
+   "column": "SeadProjectileRangeOverride",
+   "lo": 0,
+   "hi": 100000,
+   "required": false,
+   "sentinels": [
+    0
+   ]
+  },
+  {
+   "id": "range.Ammunitions.NonSeadProjectileRangeOverride",
+   "kind": "range",
+   "severity": "warning",
+   "evidence": "mod-authored",
+   "note": "出处 BrokenArrowRealismOverhaul (BARO) 5.9.2 的 RealStats.Bounds（decompiled.cs:501539-501559）；原版 52085 实测越界 0 行（**原版既有形态**，不是改动引入的），跳过哨兵后 0 行。哨兵（逐列枚举，括号里是原版命中行数）：0（630 行）。 required=false：BARO 原判据还把下界当开区间，本产品按 [lo, hi] 闭环执行（口径 C）。",
+   "expr": "NonSeadProjectileRangeOverride 必须落在 [0, 100000] 里",
+   "check": "range",
+   "table": "Ammunitions",
+   "column": "NonSeadProjectileRangeOverride",
+   "lo": 0,
+   "hi": 100000,
+   "required": false,
+   "sentinels": [
+    0
+   ]
+  },
+  {
+   "id": "range.Ammunitions.MuzzleVelocity",
+   "kind": "range",
+   "severity": "warning",
+   "evidence": "mod-authored",
+   "note": "出处 BrokenArrowRealismOverhaul (BARO) 5.9.2 的 RealStats.Bounds（decompiled.cs:501539-501559）；原版 52085 实测越界 158 行（**原版既有形态**，不是改动引入的），跳过哨兵后 0 行。哨兵（逐列枚举，括号里是原版命中行数）：0（130 行）、5（24 行）、20（4 行）。",
+   "expr": "MuzzleVelocity 必须落在 [50, 2000] 里",
+   "check": "range",
+   "table": "Ammunitions",
+   "column": "MuzzleVelocity",
+   "lo": 50,
+   "hi": 2000,
+   "required": true,
+   "sentinels": [
+    0,
+    5,
+    20
+   ]
+  },
+  {
+   "id": "range.Ammunitions.MaxSpeed",
+   "kind": "range",
+   "severity": "warning",
+   "evidence": "mod-authored",
+   "note": "出处 BrokenArrowRealismOverhaul (BARO) 5.9.2 的 RealStats.Bounds（decompiled.cs:501539-501559）；原版 52085 实测越界 446 行（**原版既有形态**，不是改动引入的），跳过哨兵后 0 行。哨兵（逐列枚举，括号里是原版命中行数）：0（446 行）。",
+   "expr": "MaxSpeed 必须落在 [50, 2700] 里",
+   "check": "range",
+   "table": "Ammunitions",
+   "column": "MaxSpeed",
+   "lo": 50,
+   "hi": 2700,
+   "required": true,
+   "sentinels": [
+    0
+   ]
+  },
+  {
+   "id": "range.Ammunitions.Acceleration",
+   "kind": "range",
+   "severity": "warning",
+   "evidence": "mod-authored",
+   "note": "出处 BrokenArrowRealismOverhaul (BARO) 5.9.2 的 RealStats.Bounds（decompiled.cs:501539-501559）；原版 52085 实测越界 446 行（**原版既有形态**，不是改动引入的），跳过哨兵后 0 行。哨兵（逐列枚举，括号里是原版命中行数）：0（446 行）。",
+   "expr": "Acceleration 必须落在 [1, 3000] 里",
+   "check": "range",
+   "table": "Ammunitions",
+   "column": "Acceleration",
+   "lo": 1,
+   "hi": 3000,
+   "required": true,
+   "sentinels": [
+    0
+   ]
+  },
+  {
+   "id": "range.Ammunitions.BurnTime",
+   "kind": "range",
+   "severity": "warning",
+   "evidence": "mod-authored",
+   "note": "出处 BrokenArrowRealismOverhaul (BARO) 5.9.2 的 RealStats.Bounds（decompiled.cs:501539-501559）；原版 52085 实测越界 446 行（**原版既有形态**，不是改动引入的），跳过哨兵后 0 行。哨兵（逐列枚举，括号里是原版命中行数）：0（446 行）。",
+   "expr": "BurnTime 必须落在 [0.1, 60] 里",
+   "check": "range",
+   "table": "Ammunitions",
+   "column": "BurnTime",
+   "lo": 0.1,
+   "hi": 60,
+   "required": true,
+   "sentinels": [
+    0
+   ]
+  },
+  {
+   "id": "range.Ammunitions.SmokeRadius",
+   "kind": "range",
+   "severity": "warning",
+   "evidence": "mod-authored",
+   "note": "出处 BrokenArrowRealismOverhaul (BARO) 5.9.2 的 RealStats.Bounds（decompiled.cs:501539-501559）；原版 52085 实测越界 611 行（**原版既有形态**，不是改动引入的），跳过哨兵后 0 行。哨兵（逐列枚举，括号里是原版命中行数）：0（611 行）。",
+   "expr": "SmokeRadius 必须落在 [1, 300] 里",
+   "check": "range",
+   "table": "Ammunitions",
+   "column": "SmokeRadius",
+   "lo": 1,
+   "hi": 300,
+   "required": true,
+   "sentinels": [
+    0
+   ]
+  },
+  {
+   "id": "range.Ammunitions.SmokeDuration",
+   "kind": "range",
+   "severity": "warning",
+   "evidence": "mod-authored",
+   "note": "出处 BrokenArrowRealismOverhaul (BARO) 5.9.2 的 RealStats.Bounds（decompiled.cs:501539-501559）；原版 52085 实测越界 611 行（**原版既有形态**，不是改动引入的），跳过哨兵后 0 行。哨兵（逐列枚举，括号里是原版命中行数）：0（611 行）。",
+   "expr": "SmokeDuration 必须落在 [1, 120] 里",
+   "check": "range",
+   "table": "Ammunitions",
+   "column": "SmokeDuration",
+   "lo": 1,
+   "hi": 120,
+   "required": true,
+   "sentinels": [
+    0
+   ]
+  },
+  {
+   "id": "range.Ammunitions.SmokeFadeDuration",
+   "kind": "range",
+   "severity": "warning",
+   "evidence": "mod-authored",
+   "note": "出处 BrokenArrowRealismOverhaul (BARO) 5.9.2 的 RealStats.Bounds（decompiled.cs:501539-501559）；原版 52085 实测越界 0 行（**原版既有形态**，不是改动引入的），跳过哨兵后 0 行。哨兵（逐列枚举，括号里是原版命中行数）：0（612 行）。",
+   "expr": "SmokeFadeDuration 必须落在 [0, 30] 里",
+   "check": "range",
+   "table": "Ammunitions",
+   "column": "SmokeFadeDuration",
+   "lo": 0,
+   "hi": 30,
+   "required": true,
+   "sentinels": [
+    0
+   ]
+  },
+  {
+   "id": "range.Sensors.OpticsGround",
+   "kind": "range",
+   "severity": "warning",
+   "evidence": "mod-authored",
+   "note": "出处 BrokenArrowRealismOverhaul (BARO) 5.9.2 的 RealStats.Bounds（decompiled.cs:501539-501559）；原版 52085 实测越界 0 行（**原版既有形态**，不是改动引入的），跳过哨兵后 0 行。哨兵（逐列枚举，括号里是原版命中行数）：0（2 行）。 required=false：BARO 原判据还把下界当开区间，本产品按 [lo, hi] 闭环执行（口径 C）。",
+   "expr": "OpticsGround 必须落在 [0, 100000] 里",
+   "check": "range",
+   "table": "Sensors",
+   "column": "OpticsGround",
+   "lo": 0,
+   "hi": 100000,
+   "required": false,
+   "sentinels": [
+    0
+   ]
+  },
+  {
+   "id": "range.Sensors.OpticsLowAltitude",
+   "kind": "range",
+   "severity": "warning",
+   "evidence": "mod-authored",
+   "note": "出处 BrokenArrowRealismOverhaul (BARO) 5.9.2 的 RealStats.Bounds（decompiled.cs:501539-501559）；原版 52085 实测越界 0 行（**原版既有形态**，不是改动引入的），跳过哨兵后 0 行。哨兵（逐列枚举，括号里是原版命中行数）：0（0 行）。 required=false：BARO 原判据还把下界当开区间，本产品按 [lo, hi] 闭环执行（口径 C）。",
+   "expr": "OpticsLowAltitude 必须落在 [0, 100000] 里",
+   "check": "range",
+   "table": "Sensors",
+   "column": "OpticsLowAltitude",
+   "lo": 0,
+   "hi": 100000,
+   "required": false,
+   "sentinels": [
+    0
+   ]
+  },
+  {
+   "id": "range.Sensors.OpticsHighAltitude",
+   "kind": "range",
+   "severity": "warning",
+   "evidence": "mod-authored",
+   "note": "出处 BrokenArrowRealismOverhaul (BARO) 5.9.2 的 RealStats.Bounds（decompiled.cs:501539-501559）；原版 52085 实测越界 1 行（**原版既有形态**，不是改动引入的），跳过哨兵后 0 行。哨兵（逐列枚举，括号里是原版命中行数）：0（1 行）。 required=false：BARO 原判据还把下界当开区间，本产品按 [lo, hi] 闭环执行（口径 C）。",
+   "expr": "OpticsHighAltitude 必须落在 [0, 100000] 里",
+   "check": "range",
+   "table": "Sensors",
+   "column": "OpticsHighAltitude",
+   "lo": 0,
+   "hi": 100000,
+   "required": false,
+   "sentinels": [
+    0
+   ]
+  },
+  {
+   "id": "range.Abilities.LaserMaxRange",
+   "kind": "range",
+   "severity": "warning",
+   "evidence": "mod-authored",
+   "note": "出处 BrokenArrowRealismOverhaul (BARO) 5.9.2 的 RealStats.Bounds（decompiled.cs:501539-501559）；原版 52085 实测越界 0 行（**原版既有形态**，不是改动引入的），跳过哨兵后 0 行。哨兵（逐列枚举，括号里是原版命中行数）：0（65 行）。",
+   "expr": "LaserMaxRange 必须落在 [0, 100000] 里",
+   "check": "range",
+   "table": "Abilities",
+   "column": "LaserMaxRange",
+   "lo": 0,
+   "hi": 100000,
+   "required": true,
+   "sentinels": [
+    0
+   ]
+  },
+  {
+   "id": "cross.Ammunitions.MinimalRange_lt_90pct_of_max_range",
+   "kind": "cross_range",
+   "severity": "warning",
+   "evidence": "mod-authored",
+   "note": "**逐字对应原文**（decompiled.cs:503144-503157）：num = Math.Max(Get(line,\"GroundRange\"), Math.Max(Get(line,\"LowAltRange\"), Get(line,\"HighAltRange\")))；num2 = MinimalRange； 原版 52085 实测不成立 0 行。过了前置条件的 626 行里违 0 行。",
+   "expr": "MinimalRange < 0.9*max(GroundRange, LowAltRange, HighAltRange)（仅当 max(GroundRange, LowAltRange, HighAltRange) > 0 时判）",
+   "check": "cross_range",
+   "table": "Ammunitions",
+   "left_terms": [
+    [
+     "MinimalRange",
+     1
+    ]
+   ],
+   "right_terms": [],
+   "right_const": 0.0,
+   "right_max_of": [
+    "GroundRange",
+    "LowAltRange",
+    "HighAltRange"
+   ],
+   "right_scale": 0.9,
+   "gate_max_of": [
+    "GroundRange",
+    "LowAltRange",
+    "HighAltRange"
+   ],
+   "gate_gt": 0.0,
+   "relation": "<"
+  },
+  {
+   "id": "cross.Ammunitions.SmokeDuration_plus_SmokeFadeDuration_le_120",
+   "kind": "cross_range",
+   "severity": "warning",
+   "evidence": "mod-authored",
+   "note": "与 BARO 逐字一致：(SmokeDuration) + (SmokeFadeDuration) > 120 即报 “au-delà du plafond de 120 s”。 原版 52085 实测不成立 0 行。",
+   "expr": "SmokeDuration + SmokeFadeDuration <= 120",
+   "check": "cross_range",
+   "table": "Ammunitions",
+   "left_terms": [
+    [
+     "SmokeDuration",
+     1
+    ],
+    [
+     "SmokeFadeDuration",
+     1
+    ]
+   ],
+   "right_terms": [],
+   "right_const": 120.0,
+   "right_max_of": [],
+   "right_scale": 1.0,
+   "gate_max_of": [],
+   "gate_gt": 0.0,
+   "relation": "<="
+  }
+ ]
+}

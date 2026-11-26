@@ -1,0 +1,2150 @@
+{
+ "behaviours": {
+  "AnimationHub": {
+   "file": "AnimationHub.cs",
+   "line": 9,
+   "fields": []
+  },
+  "AnimationManager": {
+   "file": "AnimationManager.cs",
+   "line": 5,
+   "fields": [
+    {
+     "name": "_container",
+     "type": {
+      "kind": "nested",
+      "name": "BoneContainer"
+     }
+    },
+    {
+     "name": "_weaponsVfxContainer",
+     "type": {
+      "kind": "nested",
+      "name": "WeaponVfxDictionary"
+     }
+    }
+   ]
+  },
+  "AnimationManagerBridge": {
+   "file": "AnimationManagerBridge.cs",
+   "line": 5,
+   "fields": [
+    {
+     "name": "_recoils",
+     "type": {
+      "kind": "unknown",
+      "raw": "BoneContainer.RecoilDataDictionary"
+     }
+    },
+    {
+     "name": "_weaponsVfxContainer",
+     "type": {
+      "kind": "nested",
+      "name": "WeaponVfxDictionary"
+     }
+    }
+   ]
+  },
+  "AnimatorConnect": {
+   "file": "AnimationBehaviorsTurrets2.cs",
+   "line": 59,
+   "fields": [
+    {
+     "name": "_animator",
+     "type": {
+      "kind": "ref",
+      "target": "Animator"
+     }
+    },
+    {
+     "name": "_loadStartTrigger",
+     "type": {
+      "kind": "string"
+     }
+    },
+    {
+     "name": "_loadEndTrigger",
+     "type": {
+      "kind": "string"
+     }
+    },
+    {
+     "name": "_unloadStartTrigger",
+     "type": {
+      "kind": "string"
+     }
+    },
+    {
+     "name": "_unloadEndTrigger",
+     "type": {
+      "kind": "string"
+     }
+    },
+    {
+     "name": "_radarActivateTrigger",
+     "type": {
+      "kind": "string"
+     }
+    },
+    {
+     "name": "_radarDeactivateTrigger",
+     "type": {
+      "kind": "string"
+     }
+    },
+    {
+     "name": "_staticPositionTrigger",
+     "type": {
+      "kind": "string"
+     }
+    },
+    {
+     "name": "_startMovingTrigger",
+     "type": {
+      "kind": "string"
+     }
+    },
+    {
+     "name": "_reloadTrigger",
+     "type": {
+      "kind": "string"
+     }
+    },
+    {
+     "name": "_aimStartTrigger",
+     "type": {
+      "kind": "string"
+     }
+    },
+    {
+     "name": "_aimEndTrigger",
+     "type": {
+      "kind": "string"
+     }
+    },
+    {
+     "name": "_hangarExcludedTriggers",
+     "type": {
+      "kind": "array",
+      "of": {
+       "kind": "string"
+      }
+     }
+    },
+    {
+     "name": "_hangarOrderedTriggers",
+     "type": {
+      "kind": "bool"
+     }
+    },
+    {
+     "name": "_hangarAnimationSpeed",
+     "type": {
+      "kind": "float"
+     }
+    },
+    {
+     "name": "_weaponTriggers",
+     "type": {
+      "kind": "nested",
+      "name": "WeaponTriggersDictionary"
+     }
+    },
+    {
+     "name": "_terrainTypeTriggers",
+     "type": {
+      "kind": "nested",
+      "name": "TerrainTypeTriggersDictionary"
+     }
+    },
+    {
+     "name": "_entranceTriggers",
+     "type": {
+      "kind": "nested",
+      "name": "EntranceTriggersDictionary"
+     }
+    },
+    {
+     "name": "_extraParameters",
+     "type": {
+      "kind": "nested",
+      "name": "ExtraParametersDictionary"
+     }
+    }
+   ]
+  },
+  "AssetReference": {
+   "file": "Support.cs",
+   "line": 22,
+   "fields": [
+    {
+     "name": "m_AssetGUID",
+     "type": {
+      "kind": "string"
+     }
+    },
+    {
+     "name": "m_SubObjectName",
+     "type": {
+      "kind": "string"
+     }
+    },
+    {
+     "name": "m_SubObjectType",
+     "type": {
+      "kind": "string"
+     }
+    }
+   ]
+  },
+  "AudioPlayer": {
+   "file": "AnimationBehaviorsHelicopters.cs",
+   "line": 83,
+   "fields": [
+    {
+     "name": "_eventPath",
+     "type": {
+      "kind": "string"
+     }
+    },
+    {
+     "name": "_isShotPlay",
+     "type": {
+      "kind": "bool"
+     }
+    },
+    {
+     "name": "_isTimerPlay",
+     "type": {
+      "kind": "bool"
+     }
+    },
+    {
+     "name": "_destroyTimer",
+     "type": {
+      "kind": "float"
+     }
+    }
+   ]
+  },
+  "AxisRandContainer": {
+   "file": "AnimationBehaviorsTurrets2.cs",
+   "line": 27,
+   "fields": [
+    {
+     "name": "Source",
+     "type": {
+      "kind": "ref",
+      "target": "Transform"
+     }
+    },
+    {
+     "name": "MinimalAngle",
+     "type": {
+      "kind": "float"
+     }
+    },
+    {
+     "name": "MaximalAngle",
+     "type": {
+      "kind": "float"
+     }
+    }
+   ]
+  },
+  "AxisRandom": {
+   "file": "AnimationBehaviorsTurrets2.cs",
+   "line": 38,
+   "fields": [
+    {
+     "name": "_lodGroup",
+     "type": {
+      "kind": "int"
+     }
+    },
+    {
+     "name": "_inspectorName",
+     "type": {
+      "kind": "string"
+     }
+    },
+    {
+     "name": "_speed",
+     "type": {
+      "kind": "float"
+     }
+    },
+    {
+     "name": "_minimalTime",
+     "type": {
+      "kind": "float"
+     }
+    },
+    {
+     "name": "_maximalTime",
+     "type": {
+      "kind": "float"
+     }
+    },
+    {
+     "name": "_x",
+     "type": {
+      "kind": "nested",
+      "name": "AxisRandContainer"
+     }
+    },
+    {
+     "name": "_y",
+     "type": {
+      "kind": "nested",
+      "name": "AxisRandContainer"
+     }
+    },
+    {
+     "name": "_z",
+     "type": {
+      "kind": "nested",
+      "name": "AxisRandContainer"
+     }
+    }
+   ]
+  },
+  "BoneContainer": {
+   "file": "BoneSupport.cs",
+   "line": 72,
+   "fields": [
+    {
+     "name": "UseContainer",
+     "type": {
+      "kind": "bool"
+     }
+    },
+    {
+     "name": "_settings",
+     "type": {
+      "kind": "nested",
+      "name": "BoneSettings"
+     }
+    },
+    {
+     "name": "CurrentSpeed",
+     "type": {
+      "kind": "float"
+     }
+    },
+    {
+     "name": "Turn",
+     "type": {
+      "kind": "float"
+     }
+    },
+    {
+     "name": "Shake",
+     "type": {
+      "kind": "float"
+     }
+    },
+    {
+     "name": "_root",
+     "type": {
+      "kind": "ref",
+      "target": "Transform"
+     }
+    },
+    {
+     "name": "_body",
+     "type": {
+      "kind": "ref",
+      "target": "Transform"
+     }
+    },
+    {
+     "name": "_wheels",
+     "type": {
+      "kind": "nested",
+      "name": "Wheels"
+     }
+    },
+    {
+     "name": "_suspension",
+     "type": {
+      "kind": "nested",
+      "name": "Suspension"
+     }
+    },
+    {
+     "name": "_traks",
+     "type": {
+      "kind": "nested",
+      "name": "Tracks"
+     }
+    },
+    {
+     "name": "_acceleration",
+     "type": {
+      "kind": "unknown",
+      "raw": "AnimationCurve"
+     }
+    },
+    {
+     "name": "_recoils",
+     "type": {
+      "kind": "nested",
+      "name": "RecoilDataDictionary"
+     }
+    }
+   ]
+  },
+  "BoneSettings": {
+   "file": "BoneSupport.cs",
+   "line": 9,
+   "fields": [
+    {
+     "name": "WheelSpeed",
+     "type": {
+      "kind": "float"
+     }
+    },
+    {
+     "name": "SuspensionSpeed",
+     "type": {
+      "kind": "float"
+     }
+    },
+    {
+     "name": "TracksSpeed",
+     "type": {
+      "kind": "float"
+     }
+    },
+    {
+     "name": "TurnSpeedMod",
+     "type": {
+      "kind": "float"
+     }
+    },
+    {
+     "name": "BodyShake",
+     "type": {
+      "kind": "float"
+     }
+    },
+    {
+     "name": "BodyShakeAggressive",
+     "type": {
+      "kind": "float"
+     }
+    },
+    {
+     "name": "BodyMass",
+     "type": {
+      "kind": "float"
+     }
+    }
+   ]
+  },
+  "ContainerSeatInitializer": {
+   "file": "ContainerSeatInitializer.cs",
+   "line": 10,
+   "fields": [
+    {
+     "name": "UnitSeatAnimation",
+     "type": {
+      "kind": "unknown",
+      "raw": "byte"
+     }
+    }
+   ]
+  },
+  "DustVFX": {
+   "file": "AnimationBehaviors.cs",
+   "line": 87,
+   "fields": []
+  },
+  "EffectsSpawnPoint": {
+   "file": "EffectsSpawnPoint.cs",
+   "line": 5,
+   "fields": [
+    {
+     "name": "VFXPrefabRef",
+     "type": {
+      "kind": "ref",
+      "target": "GameObject"
+     }
+    },
+    {
+     "name": "LifeTime",
+     "type": {
+      "kind": "float"
+     }
+    },
+    {
+     "name": "AttachVfxToObject",
+     "type": {
+      "kind": "bool"
+     }
+    },
+    {
+     "name": "PlayForce",
+     "type": {
+      "kind": "bool"
+     }
+    },
+    {
+     "name": "SoundEventString",
+     "type": {
+      "kind": "string"
+     }
+    }
+   ]
+  },
+  "EntranceTriggersData": {
+   "file": "AnimationBehaviorsTurrets2.cs",
+   "line": 84,
+   "fields": [
+    {
+     "name": "OnOpen",
+     "type": {
+      "kind": "string"
+     }
+    },
+    {
+     "name": "OnClose",
+     "type": {
+      "kind": "string"
+     }
+    }
+   ]
+  },
+  "EntranceTriggersDictionary": {
+   "file": "AnimationBehaviorsTurrets2.cs",
+   "line": 108,
+   "fields": [
+    {
+     "name": "_keyData",
+     "type": {
+      "kind": "array",
+      "of": {
+       "kind": "ref",
+       "target": "Transform"
+      }
+     }
+    },
+    {
+     "name": "_valueData",
+     "type": {
+      "kind": "array",
+      "of": {
+       "kind": "nested",
+       "name": "EntranceTriggersData"
+      }
+     }
+    }
+   ]
+  },
+  "ExtraParametersDictionary": {
+   "file": "AnimationBehaviorsTurrets2.cs",
+   "line": 116,
+   "fields": [
+    {
+     "name": "_keyData",
+     "type": {
+      "kind": "array",
+      "of": {
+       "kind": "string"
+      }
+     }
+    },
+    {
+     "name": "_valueData",
+     "type": {
+      "kind": "array",
+      "of": {
+       "kind": "int"
+      }
+     }
+    }
+   ]
+  },
+  "FloatEffect": {
+   "file": "AnimationBehaviorsHelicopters.cs",
+   "line": 58,
+   "fields": [
+    {
+     "name": "_lodGroup",
+     "type": {
+      "kind": "int"
+     }
+    },
+    {
+     "name": "_rootBone",
+     "type": {
+      "kind": "ref",
+      "target": "Transform"
+     }
+    },
+    {
+     "name": "_verticalSpeed",
+     "type": {
+      "kind": "float"
+     }
+    },
+    {
+     "name": "_verticalAmplitude",
+     "type": {
+      "kind": "float"
+     }
+    },
+    {
+     "name": "_rotationSpeed",
+     "type": {
+      "kind": "float"
+     }
+    },
+    {
+     "name": "_rotationAmplitude",
+     "type": {
+      "kind": "float"
+     }
+    },
+    {
+     "name": "_horizontalSpeed",
+     "type": {
+      "kind": "float"
+     }
+    },
+    {
+     "name": "_horizontalAmplitude",
+     "type": {
+      "kind": "float"
+     }
+    },
+    {
+     "name": "_forwardBackwardSpeed",
+     "type": {
+      "kind": "float"
+     }
+    },
+    {
+     "name": "_forwardBackwardAmplitude",
+     "type": {
+      "kind": "float"
+     }
+    }
+   ]
+  },
+  "HelicopterDustVFX": {
+   "file": "AnimationBehaviorsHelicopters.cs",
+   "line": 51,
+   "fields": [
+    {
+     "name": "_maxAltitude",
+     "type": {
+      "kind": "float"
+     }
+    }
+   ]
+  },
+  "InfantryHandWeapon": {
+   "file": "InfantryHandWeapon.cs",
+   "line": 7,
+   "fields": [
+    {
+     "name": "ShellSpawnPosition",
+     "type": {
+      "kind": "ref",
+      "target": "Transform"
+     }
+    },
+    {
+     "name": "WeaponVfxDictionary",
+     "type": {
+      "kind": "nested",
+      "name": "WeaponVfxDictionary"
+     }
+    }
+   ]
+  },
+  "MaterialQualityManager": {
+   "file": "MaterialQualityManager.cs",
+   "line": 6,
+   "fields": [
+    {
+     "name": "_renderer",
+     "type": {
+      "kind": "unknown",
+      "raw": "Renderer"
+     }
+    },
+    {
+     "name": "_hiMaterials",
+     "type": {
+      "kind": "array",
+      "of": {
+       "kind": "ref",
+       "target": "Material"
+      }
+     }
+    },
+    {
+     "name": "_lowMaterials",
+     "type": {
+      "kind": "array",
+      "of": {
+       "kind": "ref",
+       "target": "Material"
+      }
+     }
+    }
+   ]
+  },
+  "MathConnect": {
+   "file": "AnimationBehaviorsTurrets.cs",
+   "line": 39,
+   "fields": [
+    {
+     "name": "_lodGroup",
+     "type": {
+      "kind": "int"
+     }
+    },
+    {
+     "name": "_settings",
+     "type": {
+      "kind": "nested",
+      "name": "ObjectFollowerShape"
+     }
+    },
+    {
+     "name": "_root",
+     "type": {
+      "kind": "ref",
+      "target": "Transform"
+     }
+    },
+    {
+     "name": "_target",
+     "type": {
+      "kind": "ref",
+      "target": "Transform"
+     }
+    },
+    {
+     "name": "_freezeXPos",
+     "type": {
+      "kind": "bool"
+     }
+    },
+    {
+     "name": "_freezeYPos",
+     "type": {
+      "kind": "bool"
+     }
+    },
+    {
+     "name": "_freezeZPos",
+     "type": {
+      "kind": "bool"
+     }
+    },
+    {
+     "name": "_shotForces",
+     "type": {
+      "kind": "nested",
+      "name": "WeaponShotForces"
+     }
+    }
+   ]
+  },
+  "ModelReplace": {
+   "file": "AnimationBehaviors.cs",
+   "line": 92,
+   "fields": [
+    {
+     "name": "_root",
+     "type": {
+      "kind": "ref",
+      "target": "GameObject"
+     }
+    },
+    {
+     "name": "_moveToRoot",
+     "type": {
+      "kind": "array",
+      "of": {
+       "kind": "ref",
+       "target": "Transform"
+      }
+     }
+    },
+    {
+     "name": "_remove",
+     "type": {
+      "kind": "array",
+      "of": {
+       "kind": "ref",
+       "target": "GameObject"
+      }
+     }
+    },
+    {
+     "name": "_newModel",
+     "type": {
+      "kind": "ref",
+      "target": "GameObject"
+     }
+    },
+    {
+     "name": "_delay",
+     "type": {
+      "kind": "float"
+     }
+    }
+   ]
+  },
+  "ObjectFollowerShape": {
+   "file": "AnimationBehaviorsTurrets.cs",
+   "line": 26,
+   "fields": [
+    {
+     "name": "_frequency",
+     "type": {
+      "kind": "float"
+     }
+    },
+    {
+     "name": "_damper",
+     "type": {
+      "kind": "float"
+     }
+    },
+    {
+     "name": "_reaction",
+     "type": {
+      "kind": "int"
+     }
+    },
+    {
+     "name": "_defaultSerialized",
+     "type": {
+      "kind": "bool"
+     }
+    }
+   ]
+  },
+  "PlaneInitializer": {
+   "file": "PlaneInitializer.cs",
+   "line": 6,
+   "fields": [
+    {
+     "name": "PilotID",
+     "type": {
+      "kind": "int"
+     }
+    }
+   ]
+  },
+  "PositionRandom": {
+   "file": "AnimationBehaviorsHelicopters.cs",
+   "line": 32,
+   "fields": [
+    {
+     "name": "_target",
+     "type": {
+      "kind": "ref",
+      "target": "Transform"
+     }
+    },
+    {
+     "name": "_minRange",
+     "type": {
+      "kind": "vec",
+      "n": 3
+     }
+    },
+    {
+     "name": "_maxRange",
+     "type": {
+      "kind": "vec",
+      "n": 3
+     }
+    },
+    {
+     "name": "_speed",
+     "type": {
+      "kind": "float"
+     }
+    },
+    {
+     "name": "_minTime",
+     "type": {
+      "kind": "float"
+     }
+    },
+    {
+     "name": "_maxTime",
+     "type": {
+      "kind": "float"
+     }
+    },
+    {
+     "name": "_animMethod",
+     "type": {
+      "kind": "int"
+     }
+    }
+   ]
+  },
+  "ProceduralDirt": {
+   "file": "ProceduralDirt.cs",
+   "line": 13,
+   "fields": [
+    {
+     "name": "_renderers",
+     "type": {
+      "kind": "array",
+      "of": {
+       "kind": "unknown",
+       "raw": "Renderer"
+      }
+     }
+    },
+    {
+     "name": "_materials",
+     "type": {
+      "kind": "array",
+      "of": {
+       "kind": "ref",
+       "target": "Material"
+      }
+     }
+    }
+   ]
+  },
+  "RecoilDataDictionary": {
+   "file": "BoneSupport.cs",
+   "line": 89,
+   "fields": []
+  },
+  "ShellCasingDrop": {
+   "file": "AnimationBehaviorsTurrets.cs",
+   "line": 69,
+   "fields": [
+    {
+     "name": "_shellSpawn",
+     "type": {
+      "kind": "ref",
+      "target": "Transform"
+     }
+    },
+    {
+     "name": "_prefab",
+     "type": {
+      "kind": "ref",
+      "target": "GameObject"
+     }
+    },
+    {
+     "name": "_initialRotation",
+     "type": {
+      "kind": "vec",
+      "n": 3
+     }
+    },
+    {
+     "name": "_mass",
+     "type": {
+      "kind": "float"
+     }
+    },
+    {
+     "name": "_spawnPoint",
+     "type": {
+      "kind": "ref",
+      "target": "Transform"
+     }
+    },
+    {
+     "name": "_spawnOffset",
+     "type": {
+      "kind": "vec",
+      "n": 3
+     }
+    },
+    {
+     "name": "_dropDirection",
+     "type": {
+      "kind": "vec",
+      "n": 3
+     }
+    },
+    {
+     "name": "_randomFactor",
+     "type": {
+      "kind": "vec",
+      "n": 3
+     }
+    },
+    {
+     "name": "_linearForce",
+     "type": {
+      "kind": "float"
+     }
+    },
+    {
+     "name": "_linearDrag",
+     "type": {
+      "kind": "float"
+     }
+    },
+    {
+     "name": "_angularForce",
+     "type": {
+      "kind": "float"
+     }
+    },
+    {
+     "name": "_maxAngularVelocity",
+     "type": {
+      "kind": "float"
+     }
+    },
+    {
+     "name": "_angularDrag",
+     "type": {
+      "kind": "float"
+     }
+    },
+    {
+     "name": "_lifeTime",
+     "type": {
+      "kind": "float"
+     }
+    },
+    {
+     "name": "_dropDelay",
+     "type": {
+      "kind": "float"
+     }
+    },
+    {
+     "name": "_showDropDirection",
+     "type": {
+      "kind": "bool"
+     }
+    }
+   ]
+  },
+  "ShowVFX": {
+   "file": "AnimationBehaviors.cs",
+   "line": 126,
+   "fields": [
+    {
+     "name": "_data",
+     "type": {
+      "kind": "array",
+      "of": {
+       "kind": "nested",
+       "name": "VfxData"
+      }
+     }
+    }
+   ]
+  },
+  "SkinData": {
+   "file": "Skins.cs",
+   "line": 10,
+   "fields": [
+    {
+     "name": "Renderers",
+     "type": {
+      "kind": "array",
+      "of": {
+       "kind": "unknown",
+       "raw": "Renderer"
+      }
+     }
+    }
+   ]
+  },
+  "SkinDataDictionary": {
+   "file": "Skins.cs",
+   "line": 16,
+   "fields": []
+  },
+  "SkinStorageBridge": {
+   "file": "SkinStorageBridge.cs",
+   "line": 6,
+   "fields": [
+    {
+     "name": "Data",
+     "type": {
+      "kind": "array",
+      "of": {
+       "kind": "nested",
+       "name": "SkinStorageData"
+      }
+     }
+    }
+   ]
+  },
+  "SkinStorageData": {
+   "file": "Skins.cs",
+   "line": 26,
+   "fields": [
+    {
+     "name": "Id",
+     "type": {
+      "kind": "int"
+     }
+    }
+   ]
+  },
+  "SkinsSerialized": {
+   "file": "Skins.cs",
+   "line": 21,
+   "fields": []
+  },
+  "SoldierAnimationManager": {
+   "file": "SoldierAnimationManager.cs",
+   "line": 6,
+   "fields": [
+    {
+     "name": "Spine",
+     "type": {
+      "kind": "ref",
+      "target": "Transform"
+     }
+    },
+    {
+     "name": "WeaponPlace",
+     "type": {
+      "kind": "ref",
+      "target": "Transform"
+     }
+    },
+    {
+     "name": "Animator",
+     "type": {
+      "kind": "ref",
+      "target": "Animator"
+     }
+    },
+    {
+     "name": "HangarAnimatorController",
+     "type": {
+      "kind": "unknown",
+      "raw": "RuntimeAnimatorController"
+     }
+    }
+   ]
+  },
+  "SpawnCorrector": {
+   "file": "AnimationBehaviors.cs",
+   "line": 106,
+   "fields": [
+    {
+     "name": "_data",
+     "type": {
+      "kind": "array",
+      "of": {
+       "kind": "nested",
+       "name": "SpawnCorrectorData"
+      }
+     }
+    }
+   ]
+  },
+  "SpawnCorrectorData": {
+   "file": "AnimationBehaviors.cs",
+   "line": 109,
+   "fields": [
+    {
+     "name": "Target",
+     "type": {
+      "kind": "ref",
+      "target": "Transform"
+     }
+    },
+    {
+     "name": "NewRotation",
+     "type": {
+      "kind": "vec",
+      "n": 3
+     }
+    },
+    {
+     "name": "PositionOffset",
+     "type": {
+      "kind": "vec",
+      "n": 3
+     }
+    },
+    {
+     "name": "ApplyRotation",
+     "type": {
+      "kind": "bool"
+     }
+    },
+    {
+     "name": "ApplyPositionOffset",
+     "type": {
+      "kind": "bool"
+     }
+    }
+   ]
+  },
+  "SpawnVFX": {
+   "file": "AnimationBehaviors.cs",
+   "line": 150,
+   "fields": [
+    {
+     "name": "_data",
+     "type": {
+      "kind": "array",
+      "of": {
+       "kind": "nested",
+       "name": "SpawnVfxData"
+      }
+     }
+    }
+   ]
+  },
+  "SpawnVfxData": {
+   "file": "AnimationBehaviors.cs",
+   "line": 175,
+   "fields": [
+    {
+     "name": "GroupName",
+     "type": {
+      "kind": "string"
+     }
+    },
+    {
+     "name": "GroupWeight",
+     "type": {
+      "kind": "float"
+     }
+    },
+    {
+     "name": "TerrainType",
+     "type": {
+      "kind": "enum",
+      "name": "TerrainType"
+     }
+    },
+    {
+     "name": "MinMaxSpawnCount",
+     "type": {
+      "kind": "vec",
+      "n": 2
+     }
+    },
+    {
+     "name": "DeathDelay",
+     "type": {
+      "kind": "float"
+     }
+    },
+    {
+     "name": "Data",
+     "type": {
+      "kind": "array",
+      "of": {
+       "kind": "nested",
+       "name": "VfxData"
+      }
+     }
+    }
+   ]
+  },
+  "Suspension": {
+   "file": "BoneSupport.cs",
+   "line": 40,
+   "fields": [
+    {
+     "name": "Elements",
+     "type": {
+      "kind": "array",
+      "of": {
+       "kind": "nested",
+       "name": "SuspensionElement"
+      }
+     }
+    },
+    {
+     "name": "TurnAxis",
+     "type": {
+      "kind": "int"
+     }
+    }
+   ]
+  },
+  "SuspensionElement": {
+   "file": "BoneSupport.cs",
+   "line": 30,
+   "fields": [
+    {
+     "name": "Side",
+     "type": {
+      "kind": "unknown",
+      "raw": "BoneContainer.SuspensionSide"
+     }
+    },
+    {
+     "name": "DefaultPosition",
+     "type": {
+      "kind": "vec",
+      "n": 3
+     }
+    },
+    {
+     "name": "AxisNumber",
+     "type": {
+      "kind": "unknown",
+      "raw": "byte"
+     }
+    },
+    {
+     "name": "Bone",
+     "type": {
+      "kind": "ref",
+      "target": "Transform"
+     }
+    },
+    {
+     "name": "_maxStroke",
+     "type": {
+      "kind": "float"
+     }
+    }
+   ]
+  },
+  "TerrainTriggersData": {
+   "file": "AnimationBehaviorsTurrets2.cs",
+   "line": 76,
+   "fields": [
+    {
+     "name": "OnEnter",
+     "type": {
+      "kind": "string"
+     }
+    },
+    {
+     "name": "OnExit",
+     "type": {
+      "kind": "string"
+     }
+    }
+   ]
+  },
+  "TerrainTypeTriggersDictionary": {
+   "file": "AnimationBehaviorsTurrets2.cs",
+   "line": 100,
+   "fields": [
+    {
+     "name": "_keyData",
+     "type": {
+      "kind": "array",
+      "of": {
+       "kind": "int"
+      }
+     }
+    },
+    {
+     "name": "_valueData",
+     "type": {
+      "kind": "array",
+      "of": {
+       "kind": "nested",
+       "name": "TerrainTriggersData"
+      }
+     }
+    }
+   ]
+  },
+  "Torque": {
+   "file": "AnimationBehaviorsHelicopters.cs",
+   "line": 19,
+   "fields": [
+    {
+     "name": "_lodGroup",
+     "type": {
+      "kind": "int"
+     }
+    },
+    {
+     "name": "_target",
+     "type": {
+      "kind": "ref",
+      "target": "Transform"
+     }
+    },
+    {
+     "name": "_direction",
+     "type": {
+      "kind": "vec",
+      "n": 3
+     }
+    },
+    {
+     "name": "_speed",
+     "type": {
+      "kind": "float"
+     }
+    }
+   ]
+  },
+  "Tracks": {
+   "file": "BoneSupport.cs",
+   "line": 47,
+   "fields": [
+    {
+     "name": "Left",
+     "type": {
+      "kind": "ref",
+      "target": "Transform"
+     }
+    },
+    {
+     "name": "Right",
+     "type": {
+      "kind": "ref",
+      "target": "Transform"
+     }
+    },
+    {
+     "name": "Extra1",
+     "type": {
+      "kind": "ref",
+      "target": "Transform"
+     }
+    },
+    {
+     "name": "Extra2",
+     "type": {
+      "kind": "ref",
+      "target": "Transform"
+     }
+    }
+   ]
+  },
+  "TurretFly": {
+   "file": "AnimationBehaviorsTurrets2.cs",
+   "line": 164,
+   "fields": [
+    {
+     "name": "Bone",
+     "type": {
+      "kind": "ref",
+      "target": "Transform"
+     }
+    },
+    {
+     "name": "DestroyedRenderers",
+     "type": {
+      "kind": "array",
+      "of": {
+       "kind": "unknown",
+       "raw": "Renderer"
+      }
+     }
+    },
+    {
+     "name": "DestroyedMaterial",
+     "type": {
+      "kind": "ref",
+      "target": "Material"
+     }
+    },
+    {
+     "name": "Colliders",
+     "type": {
+      "kind": "array",
+      "of": {
+       "kind": "unknown",
+       "raw": "Collider"
+      }
+     }
+    },
+    {
+     "name": "Mass",
+     "type": {
+      "kind": "float"
+     }
+    },
+    {
+     "name": "LinearForce",
+     "type": {
+      "kind": "float"
+     }
+    },
+    {
+     "name": "AngularForce",
+     "type": {
+      "kind": "float"
+     }
+    },
+    {
+     "name": "Delay",
+     "type": {
+      "kind": "float"
+     }
+    },
+    {
+     "name": "RemoveTurretIfNotThrow",
+     "type": {
+      "kind": "bool"
+     }
+    },
+    {
+     "name": "DeathVFXs",
+     "type": {
+      "kind": "array",
+      "of": {
+       "kind": "ref",
+       "target": "GameObject"
+      }
+     }
+    },
+    {
+     "name": "VFXParentPosition",
+     "type": {
+      "kind": "ref",
+      "target": "Transform"
+     }
+    },
+    {
+     "name": "SoundEvent",
+     "type": {
+      "kind": "string"
+     }
+    }
+   ]
+  },
+  "UnitBaseTerrainVFX": {
+   "file": "AnimationBehaviors.cs",
+   "line": 71,
+   "fields": [
+    {
+     "name": "_data",
+     "type": {
+      "kind": "array",
+      "of": {
+       "kind": "nested",
+       "name": "VfxTerrainData"
+      }
+     }
+    }
+   ]
+  },
+  "UnitPrefabRoot": {
+   "file": "UnitPrefabRoot.cs",
+   "line": 7,
+   "fields": [
+    {
+     "name": "PrefabRoot",
+     "type": {
+      "kind": "ref",
+      "target": "Transform"
+     }
+    },
+    {
+     "name": "PrefabBody",
+     "type": {
+      "kind": "ref",
+      "target": "Transform"
+     }
+    },
+    {
+     "name": "SpawnTimeObjects",
+     "type": {
+      "kind": "array",
+      "of": {
+       "kind": "ref",
+       "target": "GameObject"
+      }
+     }
+    },
+    {
+     "name": "Renderers",
+     "type": {
+      "kind": "array",
+      "of": {
+       "kind": "unknown",
+       "raw": "Renderer"
+      }
+     }
+    },
+    {
+     "name": "Skins",
+     "type": {
+      "kind": "nested",
+      "name": "UnitSkinStorage"
+     }
+    }
+   ]
+  },
+  "UnitPrefabTurretInfo": {
+   "file": "UnitPrefabTurretInfo.cs",
+   "line": 6,
+   "fields": [
+    {
+     "name": "TurretIndex",
+     "type": {
+      "kind": "int"
+     }
+    },
+    {
+     "name": "Weapons",
+     "type": {
+      "kind": "array",
+      "of": {
+       "kind": "nested",
+       "name": "WeaponPointData"
+      }
+     }
+    }
+   ]
+  },
+  "UnitSkinStorage": {
+   "file": "Skins.cs",
+   "line": 36,
+   "fields": [
+    {
+     "name": "Data",
+     "type": {
+      "kind": "array",
+      "of": {
+       "kind": "nested",
+       "name": "SkinStorageData"
+      }
+     }
+    }
+   ]
+  },
+  "UnitySerializedDictionary": {
+   "file": "Support.cs",
+   "line": 10,
+   "fields": [
+    {
+     "name": "_keyData",
+     "type": {
+      "kind": "array",
+      "of": {
+       "kind": "unknown",
+       "raw": "TKey"
+      }
+     }
+    },
+    {
+     "name": "_valueData",
+     "type": {
+      "kind": "array",
+      "of": {
+       "kind": "unknown",
+       "raw": "TValue"
+      }
+     }
+    }
+   ]
+  },
+  "UnknownEmptyBehaviour": {
+   "file": "UnknownEmptyBehaviour.cs",
+   "line": 8,
+   "fields": []
+  },
+  "VfxData": {
+   "file": "AnimationBehaviors.cs",
+   "line": 153,
+   "fields": [
+    {
+     "name": "Points",
+     "type": {
+      "kind": "array",
+      "of": {
+       "kind": "ref",
+       "target": "Transform"
+      }
+     }
+    },
+    {
+     "name": "Vfx",
+     "type": {
+      "kind": "array",
+      "of": {
+       "kind": "ref",
+       "target": "GameObject"
+      }
+     }
+    },
+    {
+     "name": "DefaultVfxType",
+     "type": {
+      "kind": "enum",
+      "name": "UnitDefaultVfxType"
+     }
+    },
+    {
+     "name": "VfxHandler",
+     "type": {
+      "kind": "array",
+      "of": {
+       "kind": "nested",
+       "name": "VfxHandler"
+      }
+     }
+    },
+    {
+     "name": "PointParent",
+     "type": {
+      "kind": "array",
+      "of": {
+       "kind": "ref",
+       "target": "Transform"
+      }
+     }
+    },
+    {
+     "name": "PointLocalPosition",
+     "type": {
+      "kind": "array",
+      "of": {
+       "kind": "vec",
+       "n": 3
+      }
+     }
+    },
+    {
+     "name": "PointLocalRotation",
+     "type": {
+      "kind": "array",
+      "of": {
+       "kind": "vec",
+       "n": 4
+      }
+     }
+    },
+    {
+     "name": "SpawnPoint",
+     "type": {
+      "kind": "ref",
+      "target": "Transform"
+     }
+    },
+    {
+     "name": "DynamicSpawnPoint",
+     "type": {
+      "kind": "bool"
+     }
+    },
+    {
+     "name": "Vfx",
+     "type": {
+      "kind": "ref",
+      "target": "GameObject"
+     }
+    },
+    {
+     "name": "AudioEvent",
+     "type": {
+      "kind": "string"
+     }
+    },
+    {
+     "name": "SpawnAsChild",
+     "type": {
+      "kind": "bool"
+     }
+    },
+    {
+     "name": "SpawnPointLocalPosition",
+     "type": {
+      "kind": "vec",
+      "n": 3
+     }
+    },
+    {
+     "name": "SpawnPointLocalRotation",
+     "type": {
+      "kind": "vec",
+      "n": 4
+     }
+    },
+    {
+     "name": "SpawnPointParent",
+     "type": {
+      "kind": "ref",
+      "target": "Transform"
+     }
+    },
+    {
+     "name": "VfxHandler",
+     "type": {
+      "kind": "nested",
+      "name": "VfxHandler"
+     }
+    }
+   ]
+  },
+  "VfxHandler": {
+   "file": "AnimationBehaviors.cs",
+   "line": 45,
+   "fields": [
+    {
+     "name": "GameObject",
+     "type": {
+      "kind": "ref",
+      "target": "GameObject"
+     }
+    },
+    {
+     "name": "Transform",
+     "type": {
+      "kind": "ref",
+      "target": "Transform"
+     }
+    },
+    {
+     "name": "Version",
+     "type": {
+      "kind": "int"
+     }
+    },
+    {
+     "name": "Index",
+     "type": {
+      "kind": "int"
+     }
+    },
+    {
+     "name": "IsFree",
+     "type": {
+      "kind": "bool"
+     }
+    },
+    {
+     "name": "IsCooled",
+     "type": {
+      "kind": "bool"
+     }
+    },
+    {
+     "name": "IsDestroyed",
+     "type": {
+      "kind": "bool"
+     }
+    }
+   ]
+  },
+  "VfxTerrainData": {
+   "file": "AnimationBehaviors.cs",
+   "line": 74,
+   "fields": [
+    {
+     "name": "Points",
+     "type": {
+      "kind": "array",
+      "of": {
+       "kind": "ref",
+       "target": "Transform"
+      }
+     }
+    },
+    {
+     "name": "OverrideVfx",
+     "type": {
+      "kind": "array",
+      "of": {
+       "kind": "nested",
+       "name": "VfxTerrain"
+      }
+     }
+    },
+    {
+     "name": "PlayOnlyOnTerrains",
+     "type": {
+      "kind": "array",
+      "of": {
+       "kind": "enum",
+       "name": "TerrainType"
+      }
+     }
+    }
+   ]
+  },
+  "WeaponData": {
+   "file": "AnimationBehaviorsTurrets2.cs",
+   "line": 62,
+   "fields": [
+    {
+     "name": "OnShot",
+     "type": {
+      "kind": "string"
+     }
+    },
+    {
+     "name": "OnStartAiming",
+     "type": {
+      "kind": "string"
+     }
+    },
+    {
+     "name": "OnEndAiming",
+     "type": {
+      "kind": "string"
+     }
+    },
+    {
+     "name": "OnStartReloading",
+     "type": {
+      "kind": "string"
+     }
+    },
+    {
+     "name": "OnEndReloading",
+     "type": {
+      "kind": "string"
+     }
+    }
+   ]
+  },
+  "WeaponPrefabInfo": {
+   "file": "WeaponPrefabInfo.cs",
+   "line": 8,
+   "fields": [
+    {
+     "name": "ShellSpawns",
+     "type": {
+      "kind": "array",
+      "of": {
+       "kind": "nested",
+       "name": "WeaponShellSpawnData"
+      }
+     }
+    },
+    {
+     "name": "VfxContainer",
+     "type": {
+      "kind": "nested",
+      "name": "WeaponVfxDictionary"
+     }
+    }
+   ]
+  },
+  "WeaponShellSpawnData": {
+   "file": "WeaponPrefabInfo.cs",
+   "line": 16,
+   "fields": []
+  },
+  "WeaponShotForces": {
+   "file": "AnimationBehaviorsTurrets.cs",
+   "line": 43,
+   "fields": [
+    {
+     "name": "_keyData",
+     "type": {
+      "kind": "array",
+      "of": {
+       "kind": "ref",
+       "target": "Transform"
+      }
+     }
+    },
+    {
+     "name": "_valueData",
+     "type": {
+      "kind": "array",
+      "of": {
+       "kind": "float"
+      }
+     }
+    }
+   ]
+  },
+  "WeaponTriggersDictionary": {
+   "file": "AnimationBehaviorsTurrets2.cs",
+   "line": 92,
+   "fields": [
+    {
+     "name": "_keyData",
+     "type": {
+      "kind": "array",
+      "of": {
+       "kind": "ref",
+       "target": "Transform"
+      }
+     }
+    },
+    {
+     "name": "_valueData",
+     "type": {
+      "kind": "array",
+      "of": {
+       "kind": "nested",
+       "name": "WeaponData"
+      }
+     }
+    }
+   ]
+  },
+  "WeaponVfxDictionary": {
+   "file": "BoneSupport.cs",
+   "line": 67,
+   "fields": []
+  },
+  "WeaponsVfxContainer": {
+   "file": "BoneSupport.cs",
+   "line": 56,
+   "fields": [
+    {
+     "name": "_vfxCountPerShot",
+     "type": {
+      "kind": "int"
+     }
+    },
+    {
+     "name": "_vfxCountPerShotMax",
+     "type": {
+      "kind": "int"
+     }
+    },
+    {
+     "name": "_timeBetweenVfxInSec",
+     "type": {
+      "kind": "float"
+     }
+    },
+    {
+     "name": "_timeBetweenVfxMax",
+     "type": {
+      "kind": "float"
+     }
+    },
+    {
+     "name": "_forbidRotation",
+     "type": {
+      "kind": "bool"
+     }
+    },
+    {
+     "name": "TimeBetweenVfxInBurst",
+     "type": {
+      "kind": "array",
+      "of": {
+       "kind": "float"
+      }
+     }
+    }
+   ]
+  },
+  "Wheels": {
+   "file": "BoneSupport.cs",
+   "line": 21,
+   "fields": [
+    {
+     "name": "_left",
+     "type": {
+      "kind": "array",
+      "of": {
+       "kind": "ref",
+       "target": "Transform"
+      }
+     }
+    },
+    {
+     "name": "_right",
+     "type": {
+      "kind": "array",
+      "of": {
+       "kind": "ref",
+       "target": "Transform"
+      }
+     }
+    },
+    {
+     "name": "Turn",
+     "type": {
+      "kind": "bool"
+     }
+    }
+   ]
+  }
+ },
+ "structs": {
+  "Recoil": {
+   "file": "BoneSupport.cs",
+   "line": 81,
+   "fields": [
+    {
+     "name": "BodyRecoil",
+     "type": {
+      "kind": "unknown",
+      "raw": "AnimationCurve"
+     }
+    },
+    {
+     "name": "BodyRecoilAmplitude",
+     "type": {
+      "kind": "float"
+     }
+    },
+    {
+     "name": "WeaponRecoil",
+     "type": {
+      "kind": "unknown",
+      "raw": "AnimationCurve"
+     }
+    }
+   ]
+  },
+  "VfxTerrain": {
+   "file": "AnimationBehaviors.cs",
+   "line": 34,
+   "fields": [
+    {
+     "name": "TerrainType",
+     "type": {
+      "kind": "unknown",
+      "raw": "BrokenArrow.Shared.Ecs.Enums.TerrainType"
+     }
+    },
+    {
+     "name": "Effects",
+     "type": {
+      "kind": "array",
+      "of": {
+       "kind": "ref",
+       "target": "GameObject"
+      }
+     }
+    }
+   ]
+  },
+  "WeaponPointData": {
+   "file": "UnitPrefabTurretInfo.cs",
+   "line": 9,
+   "fields": [
+    {
+     "name": "WeaponTransform",
+     "type": {
+      "kind": "ref",
+      "target": "Transform"
+     }
+    },
+    {
+     "name": "ShellSpawn",
+     "type": {
+      "kind": "ref",
+      "target": "Transform"
+     }
+    }
+   ]
+  }
+ },
+ "enums": [
+  "SuspensionSide",
+  "TerrainType",
+  "UnitDefaultVfxType"
+ ]
+}

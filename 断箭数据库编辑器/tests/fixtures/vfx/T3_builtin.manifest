@@ -1,0 +1,28 @@
+ManifestFileVersion: 0
+CRC: 3631158910
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 9440cffc80183f3ddc0fc219583f660c
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 62ab25808f42235d4490ecbdd75aca8e
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 9440cffc80183f3ddc0fc219583f660c
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 73398921
+  Script: {instanceID: 0}
+- Class: 2058629509
+  Script: {instanceID: 0}
+- Class: 2083052967
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/VfxLine/T3Root.prefab
+Dependencies: []

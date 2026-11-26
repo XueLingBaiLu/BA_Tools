@@ -1,0 +1,11 @@
+{
+  "name": "dsh-kb-lookup",
+  "version": "1.0.0",
+  "private": true,
+  "description": "每轮把知识库强命中注入上下文（薄壳；判定在 BA_Mod_Maker_2.0/tools/kb_lookup.py --inject）",
+  "type": "module",
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js"
+  }
+}

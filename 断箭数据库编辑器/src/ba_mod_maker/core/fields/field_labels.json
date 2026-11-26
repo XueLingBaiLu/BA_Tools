@@ -1,0 +1,1643 @@
+{
+ "_meta": {
+  "tables": 24,
+  "columns_total": 407,
+  "covered": 391,
+  "skipped_to_enum_decoder": 16,
+  "skipped_columns": [
+   "Units.Type",
+   "Units.CategoryType",
+   "Units.Role",
+   "Units.CountryId",
+   "Units.ContentMembership",
+   "Weapons.Type",
+   "Ammunitions.TrajectoryType",
+   "Ammunitions.TargetType",
+   "Ammunitions.UiOptions",
+   "Ammunitions.Seeker",
+   "Ammunitions.ArmorTargeted",
+   "Ammunitions.LoftAngle",
+   "Ammunitions.OverflyHeight",
+   "Modifications.Type",
+   "Abilities.SupplyTargetsMask",
+   "Abilities.ResupplyIconType"
+  ],
+  "instance": 52085,
+  "generated_by": "_work/probe_label_build.py（条目在 _work/probe_label_data*.py）",
+  "human_readable": "docs/字段词典-词条中文.md",
+  "enum_dictionary": "_work/field_enums.json / docs/字段词典-枚举与掩码.md（teammate enum-decoder）",
+  "note": "逐表对账通过：covered + skipped_columns == 现读 DataBaseCompiled/52085 的列数。skipped_columns 就是留给 enum-decoder 的那批。别的列若也被 enum-decoder 解了取值表，那是同一列的第二份注解（键 = 表.列），两边并存、互不覆盖。"
+ },
+ "Abilities": {
+  "Id": {
+   "cn": "能力行 ID（主键）",
+   "doc": "主键，78 行、最大 302。被 UnitAbilities.AbilityId 与 Options.Ability1..3Id 引用。"
+  },
+  "Name": {
+   "cn": "能力名",
+   "doc": "英文内部名，写法是「能力组合 + 数量 + 模型后缀」（Smoke x1 NoModel / APS Trophy NoModel / Sprint Laser）。⚠️ **这张表没有 UIName 列** —— 界面上那一排图标的中文名来自本地化键 ui_infocard_ability_*（烟雾弹 / 主动防护系统 / 激光指示…），不是这一列。"
+  },
+  "IsDefault": {
+   "cn": "是否默认",
+   "doc": "软标志（41/78 为 true），语义同 Armors.IsDefault。能力是**共享模板**：均 8.40 个单位共用、最多的一个被 79 个单位用 —— 就地改一个能力会一起改到那一片。"
+  },
+  "ModelFileName": {
+   "cn": "能力模型节点名",
+   "doc": "能力挂件的模型节点名（ECM / Shtora 这类，预制体节点名不是 catalog 键）。13 行有值（10 种写法），其余 null（NoModel 后缀那批）。产品不做 3D。"
+  },
+  "ECMAccuracyMultiplier": {
+   "cn": "精度倍率（电子对抗）",
+   "doc": "**倍率**，让来袭导弹的命中精度乘以它（0.7 = 精度降到 70%）。卡片上显示为「精度」（键 ui_infocard_accuracy）。31 行非默认：ECM Shtora 是 0.7，**非 ECM 能力那批是 0.0**（占位，不是「精度 0」）—— 判「有没有 ECM」要看它 < 1 而不是 != 0。本地化注解「降低来袭导弹的精度」。"
+  },
+  "IsRadar": {
+   "cn": "雷达",
+   "doc": "为 true（7 行）= 这是雷达能力。本地化注解：「雷达能够增加对飞机的射击和探测范围」（键 ui_hint_ability_radar）；卡片右上那排图标里它是「雷达」。配套下面四个 Radar*Modifier 与 RadarSwitchCooldown。"
+  },
+  "RadarLowAltOpticsModifier": {
+   "cn": "雷达低空视野倍率",
+   "doc": "**倍率**（1.0 = 不变，1.25 = 提升 25%，0.0 = 该高度无效）。雷达开机时对**低空目标**的观瞄距离乘数。13 行非默认。（推断：列名 + 配套四列的取值分布。）"
+  },
+  "RadarHighAltOpticsModifier": {
+   "cn": "雷达高空视野倍率",
+   "doc": "**倍率**（1.0 / 2.0 / 0.0）。雷达开机时对**高空目标**的观瞄距离乘数 —— 本地化那句「增加对飞机的探测范围」说的就是它。14 行非默认。"
+  },
+  "RadarLowAltWeaponRangeModifier": {
+   "cn": "雷达低空武器射程倍率",
+   "doc": "**倍率**。雷达开机时，对低空目标**武器射程**的乘数（与视野那一列不是一回事：一个管看得见多远、一个管打得到多远）。14 行非默认。"
+  },
+  "RadarHighAltWeaponRangeModifier": {
+   "cn": "雷达高空武器射程倍率",
+   "doc": "**倍率**（1.0 / 2.0 / 3.0）。雷达开机时对高空目标武器射程的乘数。11 行非默认。"
+  },
+  "RadarSwitchCooldown": {
+   "cn": "雷达开关冷却",
+   "doc": "**秒**。雷达开机 / 关机后要等多久才能再切（实测 5.0）。7 行非 0，与 IsRadar 是同一批。"
+  },
+  "IsRadarStatic": {
+   "cn": "固定雷达",
+   "doc": "为 true（3 行）= 这是固定式雷达（架起来才能用、不能行进间开机）。样本：Radar SHORAD Static / Radar LongRange Static 这类。（推断：列名 + 那几行能力名。）"
+  },
+  "IsLaserDesignator": {
+   "cn": "激光指示",
+   "doc": "为 true（13 行）= 能给激光制导弹药打指示点（卡片图标「激光指示」，键 ui_infocard_ability_laser）。配套 LaserMaxRange / LaserUsableInMove；被指示的弹药那边看 Ammunitions.LaserGuided。"
+  },
+  "LaserMaxRange": {
+   "cn": "激光指示距离",
+   "doc": "**m**。指示点能打多远（1200 / 1500 / 2000）。13 行非 0，与 IsLaserDesignator 同一批。"
+  },
+  "LaserUsableInMove": {
+   "cn": "可移动中指示",
+   "doc": "为 true（11 行）= 行进间也能打激光指示点（其余要停车）。与 IsLaserDesignator 同一批 13 行里的 11 行。"
+  },
+  "IsInfantrySprint": {
+   "cn": "步兵冲刺",
+   "doc": "为 true（6 行）= 步兵班的冲刺能力（键 ui_infocard_ability_sprint「冲刺」，注解「短暂提高步兵的移动速度」）。配套 SprintDuration / SprintCooldown。⚠️ 步兵用到的 7 种能力里有 6 种带它 —— 但 Smoke Zombie x99 是 false，所以不能拿「是步兵能力」推「能冲刺」。"
+  },
+  "SprintDuration": {
+   "cn": "冲刺持续时间",
+   "doc": "**秒**（实测统一 10.0）。6 行非 0，与 IsInfantrySprint 同一批。"
+  },
+  "SprintCooldown": {
+   "cn": "冲刺冷却时间",
+   "doc": "**秒**（实测统一 30.0）。6 行非 0。卡片 / 提示里「冷却时间」（键 ui_infocard_cooldown）那一项读它。"
+  },
+  "IsSmoke": {
+   "cn": "烟幕",
+   "doc": "为 true（19 行）= 能发烟（键 ui_infocard_ability_smoke「烟雾弹」，注解「使用烟雾弹遮挡敌人视线」）。配套 SmokeAmmunitionId / SmokeAmmunitionQuantity / SmokeCooldown。⚠️ 卡片图标上的「x N」= 同一单位所有带烟幕的能力的 SmokeAmmunitionQuantity **求和**（unit_card.py::build_abilities 的 smoke_count）。"
+  },
+  "SmokeAmmunitionId": {
+   "cn": "烟幕弹种 ID",
+   "doc": "指向 Ammunitions.Id（error 级外键，原版命中率 1.0）。**0 = 不使用**（不是「指向 Id 0」）。实测只有 3 种取值：268 / 276 / 585。烟幕的半径与持续时间都写在那条弹药行上（SmokeRadius / SmokeDuration）。"
+  },
+  "SmokeAmmunitionQuantity": {
+   "cn": "烟幕弹发数",
+   "doc": "**发**。这个能力带几发烟幕弹（1 / 2 / 4 / 99 —— 99 是 Smoke Zombie x99）。卡片能力图标后那个「x N」就是各单位烟幕发数的和。19 行非默认。"
+  },
+  "SmokeCooldown": {
+   "cn": "烟幕冷却时间",
+   "doc": "**秒**。打完一发烟幕要等多久（5.0 是常见值，0.1 是僵尸那类）。19 行非默认。"
+  },
+  "IsAPS": {
+   "cn": "主动防护系统",
+   "doc": "为 true（10 行）= 有 APS（键 ui_infocard_ability_aps「主动防护系统」，注解「拦截导弹并阻止其命中目标」）。配套 APSHitboxProportion / APSQuantity / APSCooldown / APSSupplyCost / APSResupplyTime。能不能被它拦，看弹药侧的 CanBeIntercepted。"
+  },
+  "APSHitboxProportion": {
+   "cn": "APS 拦截判定比例",
+   "doc": "**比例**（实测只有 0.0 / 2.0 两种）。拦截判定用的命中盒比例。（推断：列名 + 取值分布；2.0 这种大于 1 的值说明它不是单纯的百分比。）10 行非默认。"
+  },
+  "APSQuantity": {
+   "cn": "APS 弹药数",
+   "doc": "**发**（2 / 4）。这套 APS 能拦几次，打完要等补给。10 行非默认。"
+  },
+  "APSCooldown": {
+   "cn": "APS 冷却时间",
+   "doc": "**秒**（实测统一 6.0）。两次拦截之间的最短间隔。10 行非默认。"
+  },
+  "APSSupplyCost": {
+   "cn": "APS 补给成本",
+   "doc": "**补给点数**（实测统一 200.0）。补满这套 APS 要花多少补给值。10 行非默认。"
+  },
+  "APSResupplyTime": {
+   "cn": "APS 补给时间",
+   "doc": "**秒**（实测统一 10.0）。补满这套 APS 要多久。10 行非默认。"
+  },
+  "IsDecoy": {
+   "cn": "诱饵干扰弹",
+   "doc": "为 true（28 行）= 能撒诱饵 / 干扰弹（键 ui_infocard_ability_decoys「诱饵干扰弹」，注解「每个诱饵都有机会诱导来袭的导弹」）。配套下面七列。实测全是直升机与飞机的 ECM 能力（ECM Heli xx Default 那批）。"
+  },
+  "DecoyFXPreset": {
+   "cn": "诱饵特效预设（占位）",
+   "doc": "⚠️ **全 78 行都是 null** —— 占位列。诱饵的特效由代码里那套通用 VFX 决定，不读这里。"
+  },
+  "DecoyQuantity": {
+   "cn": "诱饵数量",
+   "doc": "**发**（10 / 25 / 50）。这个能力带几发诱饵弹。28 行非默认。"
+  },
+  "DecoyAccuracyMultiplier": {
+   "cn": "诱饵精度倍率",
+   "doc": "**倍率**（0.85 / 0.9）。被诱饵骗到的来袭导弹精度乘数（越小越容易被骗偏）。28 行非默认。"
+  },
+  "DecoyDuration": {
+   "cn": "诱饵持续时间",
+   "doc": "**秒**（实测统一 2.0）。诱饵在空中有效多久。28 行非默认。"
+  },
+  "DecoyCooldown": {
+   "cn": "诱饵冷却时间",
+   "doc": "**秒**（0.6 / 1.0）。连撒诱饵之间的间隔。28 行非默认。"
+  },
+  "DecoySupplyCost": {
+   "cn": "诱饵补给成本",
+   "doc": "**补给点数**（实测统一 100.0）。28 行非默认。"
+  },
+  "DecoyResupplyTime": {
+   "cn": "诱饵补给时间",
+   "doc": "**秒**（实测统一 3.0）。28 行非默认。"
+  },
+  "IsResupplyAbility": {
+   "cn": "重新补给",
+   "doc": "为 true（10 行）= 能给别的单位补给 / 治疗（键 ui_infocard_ability_resupply「重新补给」，注解「可重新补给和/或治疗其他单位」）。配套 ResupplyRadius / ResupplyPoints / CanHeal / CanResupply / CanWorkOnMove。"
+  },
+  "ResupplyRadius": {
+   "cn": "补给半径",
+   "doc": "**m**（实测统一 50.0）。补给车 / 补给点的作用范围 —— 单位要开进这个圈子才吃到补给。10 行非 0。"
+  },
+  "CanHeal": {
+   "cn": "能治疗",
+   "doc": "为 true（10 行）= 能补步兵血（伤亡补员）。与 CanResupply 区分：一个管人、一个管弹药。"
+  },
+  "CanRepair": {
+   "cn": "能维修（占位）",
+   "doc": "⚠️ **全 78 行都是 false** —— 占位列。这版数据里没有任何能力会修载具（游戏剧本里那句「机械师会逐步修复受损车辆」走的是别的机制，不是这张表）。"
+  },
+  "CanResupply": {
+   "cn": "能补给弹药",
+   "doc": "为 true（10 行）= 能把弹药补给给别的单位。与 CanHeal 是两个开关，都挂在 IsResupplyAbility 那一批上。"
+  },
+  "ResupplyPoints": {
+   "cn": "补给点数容量",
+   "doc": "**点**。这个补给源一次能带多少补给值（250 轻 / 400 中 / 800 重，与能力名 Supply Light / Med / Heavy 对得上）。10 行非 0，另有 0 的行。"
+  },
+  "CanSelfSupply": {
+   "cn": "能自我补给（占位）",
+   "doc": "⚠️ **全 78 行都是 false** —— 占位列。别拿它做「自己给自己补」的功能开关。"
+  },
+  "CanWorkOnMove": {
+   "cn": "可移动中作业",
+   "doc": "为 true（10 行）= 一边开一边补（不用停车）。与 IsResupplyAbility 同一批 10 行。"
+  },
+  "SupplyPointCost": {
+   "cn": "补给点成本（占位）",
+   "doc": "⚠️ **全 78 行都是 1.0** —— 占位列。真正的补给成本在 Ammunitions.SupplyCost（kg）与 Abilities.APSSupplyCost / DecoySupplyCost 上。"
+  },
+  "IsSneakAbility": {
+   "cn": "潜行（占位）",
+   "doc": "⚠️ **全 78 行都是 false** —— 占位列。⚠️ 但产品 build_abilities 与 UI 都留着「潜行」这个图标位（键 ui_infocard_ability_sneak「潜行」+ 提示「降低移动速度，更难被察觉」/ ui_hint_bind_sneak）—— 也就是说**游戏里有这个机制、数据里没有一行启用它**，做功能时别以为读这一列能出图标。"
+  },
+  "SneakCoverBonus": {
+   "cn": "潜行掩体加成（占位）",
+   "doc": "⚠️ **全 78 行都是 2.0** —— 占位列（潜行那一套四个字段全没启用）。"
+  },
+  "SneakVehicleSpeedMultiplier": {
+   "cn": "潜行载具速度倍率（占位）",
+   "doc": "⚠️ **全 78 行都是 1.0** —— 占位列。"
+  },
+  "IsArtilleryAutoFire": {
+   "cn": "自动开火（占位）",
+   "doc": "⚠️ **全 78 行都是 false** —— 占位列。⚠️ 同 IsSneakAbility：产品与游戏本地化里都有这个图标位（键 ui_infocard_ability_autofire「自动开火」+ 提示「自动向射程内被侦测到的群集敌人开火」），但**这一版数据里没有任何一行启用它**。"
+  }
+ },
+ "Ammunitions": {
+  "Id": {
+   "cn": "弹药 ID（主键）",
+   "doc": "主键，630 行、最大 924。被 WeaponAmmunitions 与 Abilities.SmokeAmmunitionId 引用。"
+  },
+  "Name": {
+   "cn": "弹药内部名",
+   "doc": "开发用名，带口径 / 型号 / 特效后缀（Bomb 454kg JSOW Smart Cluster VFX）。界面显示优先 HUDName。⚠️ 名字里带 clus 的会被判定成集束弹（dump.cs 里的 AMMO_CLUSTER_NAME_SUBSTRING = clus，unit_card.py::_is_bomb），所以改名会影响「射程那一行发不发」。"
+  },
+  "HUDName": {
+   "cn": "弹种名",
+   "doc": "卡片弹种行上写的那个名字（7.62x51mm / 5.56x45mm）。626/630 非空（354 种写法），为空退回 Name。同一门武器的多个弹种就是靠它区分的（AP / HE / SMK）。"
+  },
+  "HUDIcon": {
+   "cn": "弹种图标键",
+   "doc": "弹种行那个小图标（catalog 命中率 1.00，走 ammoicons 那组 bundle）。625/630 有值、127 种写法。产品已接。"
+  },
+  "HUDMultiplier": {
+   "cn": "显示倍数",
+   "doc": "⚠️ **弹量与射速都要乘它**，不是只乘一个：卡片携弹量 = WeaponAmmunitions.Quantity x 本列（7.62x54mm 那门机枪 400 x 5 = 显示 2000）；武器「射速」那一行 = RateOfFire(weapon) x 首个弹种的 HUDMultiplier（AK 是 3）。10 种取值（1 / 2 / 3 / 4 / 5 / 8 / 10 / 12 / 15 / 20），513 行是 1。"
+  },
+  "ModelFileName": {
+   "cn": "弹药模型键",
+   "doc": "弹药本体的模型（catalog 键，走 ammoprefabs 那组 bundle）。108 种取值。产品不做 3D。"
+  },
+  "AudioPreset": {
+   "cn": "弹药音效预设",
+   "doc": "命中 / 爆炸音的预设键（AmmunitionSoundsPreset_SFX_MISSILE-AT_Medium 这种）。产品不做音频。"
+  },
+  "FXPreset": {
+   "cn": "爆炸特效预设",
+   "doc": "命中特效的 VFX 预设键（AMMUNITION_VFX_PRESET_SHELL_152-155mm_HE）。162 种取值、601 行非默认。产品不做 VFX。"
+  },
+  "VfxCountPerShot": {
+   "cn": "每发特效数量（下限）",
+   "doc": "打一发同时生成几个 VFX 实例（1 / 3 / 10 / 17 / 30）。⚠️ 只有 5 行非默认 —— 绝大多数弹药不写这一列。它与 VfxCountPerShotMax 描述同一件事的两端。"
+  },
+  "VfxCountPerShotMax": {
+   "cn": "每发特效数量（上限）",
+   "doc": "同上，上限那一端（0 / 1 / 5 / 6 / 10 / 20）。189 行非默认、比下限那列用得多。两个都为 0 时按 1 个处理（推断）。"
+  },
+  "Airburst": {
+   "cn": "空爆",
+   "doc": "为 true（37 行）= 在目标上方引爆、破片向下覆盖，对掩体后的步兵更有效。实测全是集束 / 空炸弹药（ATACMS Cluster、30mm HE T3、120 集束、57mm AAG HE）。"
+  },
+  "SupplyCost": {
+   "cn": "补给值",
+   "doc": "**kg**。卡片「补给值」那一行直接打「本列 kg」（unit_card.py::ammo_detail_rows）。⚠️ 它同时是「补给消耗」的输入：补给消耗 = 本列 x SupplyConfig.GetAmmoResupplyMultiplier()（0.04）→ 打 pts，便宜的弹（0.1 kg）会显示成 0 pts，精确值放 tooltip。65 种取值、558 行非默认。"
+  },
+  "ResupplyTime": {
+   "cn": "补给时间",
+   "doc": "**秒**。装填这个弹种要多久。⚠️ 卡片上**只有 > 1.0 才发这一行**（0.05 这种小口径弹不发）。它也是撤回时间公式里 maxResupplyTime 的输入（quantity x 本列 取 max）。54 种取值、520 行非默认。"
+  },
+  "Damage": {
+   "cn": "伤害",
+   "doc": "**每发**的基础伤害。卡片「伤害」那一行 = RoundToNearestMultiple(本列, 0.05)（unit_card.py::round_to_multiple）。⚠️ 它与「每秒伤害」**互斥**：白名单武器类型（步枪 / 机枪 / 机关炮 / 航炮等）显示的是 每秒伤害 = 射速 x 本列 再按 0.05 取整，其余武器才显示本列。"
+  },
+  "StressDamage": {
+   "cn": "压制伤害",
+   "doc": "打**压力条**（Units.MaxStress）而不是血量的那一份伤害（668 / 30 / 125 这种量级，比 Damage 大得多）。84 种取值、565 行非默认。⚠️ 目前**还没进卡片**（游戏里也没有对应的显示行），但它是压制机制的实际输入 —— 编辑器里应当展示，标注「不显示在卡片上」。"
+  },
+  "DamageOverTimeDuration": {
+   "cn": "持续伤害时长",
+   "doc": "**秒**。命中后继续烧多久（燃烧弹 / 核弹）。实测 Mk77 Napalm 40s、ZB500 Napalm 40s、Grad 燃烧弹 8s、B61 核弹 5s —— 12 行非默认，与 Airburst 是两回事。卡片上对应「燃烧弹」那条提示（键 ui_infocard_ammo_napalm）。（推断：列名 + 那几行弹名。）"
+  },
+  "IgnoreCover": {
+   "cn": "无视掩体",
+   "doc": "**0..1 的比例**。卡片「无视掩体」那一行 = 本列 x 100 + %，**> 0 才发**（unit_card.py::ammo_detail_rows，VA 0x1861AADF8 = 100.0）。实测 137 行非 0：0.08 / 0.1 / 0.12 / 0.15 / 0.2 / 0.25 / 0.3 / 0.4 / 0.5 / 1.0（1.0 = 完全无视掩体）。这就是映射文档里那句「未解那一行」的答案。"
+  },
+  "PenetrationAtMinRange": {
+   "cn": "最小射程穿深",
+   "doc": "**mm**。在 MinimalRange 那个距离上的穿甲厚度。卡片「穿深」那一格：与 PenetrationAtGroundRange 不同时打「地面 - 最小」区间，相同就只打一个数（unit_card.py::ammo_detail_rows）。71 种取值、589 行非默认。"
+  },
+  "PenetrationAtGroundRange": {
+   "cn": "地面射程穿深",
+   "doc": "**mm**。在 GroundRange 上的穿甲厚度 —— 卡片「穿深」那一格的**主值**。⚠️ 动能 / 爆炸那两个字后缀不是单独的行，来自 ArmorTargeted（1 = 动能伤害、其余 = 爆炸伤害）。"
+  },
+  "NoDamageFalloff": {
+   "cn": "伤害不衰减",
+   "doc": "为 true（50 行）= 伤害不随距离 / 飞行时间衰减。爆炸类与近战类弹药常见。（推断：列名 + 取值分布。）"
+  },
+  "TopArmorAttack": {
+   "cn": "攻顶",
+   "doc": "为 true（61 行）= 从上方攻击，命中判定走**顶部装甲**。卡片上对应「攻顶」那个 trait（键 ui_infocard_ammo_top_attack）。⚠️ 弹药表里有**两个**长得一样的列：本列与 IsTopArmorArmorAttack。61 行两个都为 true、另有 13 行只有 IsTopArmorArmorAttack 为 true（Javelin / Hellfire Longbow / Hellfire UAV / SokolV）—— 所以判「是不是攻顶弹」必须两列取或。"
+  },
+  "HealthAOERadius": {
+   "cn": "爆炸半径",
+   "doc": "**m**。卡片「爆炸半径」那一行 = 本列 x 2（InfocardConfig.EffectiveRangeMultiplier）+ m，> 0 才发（unit_card.py::ammo_detail_rows）。48 种取值、406 行非默认（0 有 224 行 = 不是爆炸弹）。⚠️ 与 StressAOERadius 是两份半径，别混。"
+  },
+  "StressAOERadius": {
+   "cn": "压制伤害半径",
+   "doc": "**m**。StressDamage 的作用半径 —— 打压力条的那一圈比爆炸半径大得多（同一发弹常见 2 / 5 vs 15）。56 种取值、524 行非默认。⚠️ 卡片上**没有**这一行（只显示 HealthAOERadius 那个爆炸半径），编辑器里应标注「不显示在卡片上，但影响压制」。"
+  },
+  "OverpressureRadius": {
+   "cn": "超压半径",
+   "doc": "**m**。爆炸超压（对建筑物内 / 敞篷目标的额外杀伤）的作用半径。18 种取值、121 行非默认。卡片上没有对应行。（推断：列名 + 取值分布。）"
+  },
+  "RadioFuseDistance": {
+   "cn": "无线电引信距离",
+   "doc": "**m**。与弹种尺寸**正相关**的一个距离：步兵弹 5.0、30~35mm 2~3、坦克 HE/HEAT 7~9.5、防空导弹 12~32、舰炮 100。18 种取值、118 行非默认。⚠️ 列名直译是「无线电引信距离」，但**连 5.45x39 的步枪弹都写着 5.0** —— 所以它多半不是纯无线电近炸引信，具体语义**没解**，只确认它与弹种尺寸正相关，别拿它当「近炸引信作用距离」写进 UI 文案。（推断：取值分布。）"
+  },
+  "CriticMultiplier": {
+   "cn": "暴击倍率",
+   "doc": "**倍率**，1.0 = 无加成（468/630）。分布是：0.0（烟雾 / 燃烧弹，10 行）、0.33（7）、0.5（7）、2.0（24，温压弹）、3.0（11）、5.0（44，穿甲弹）、10.0（4，反器材狙）、98（19，HEAT 火箭）、99（14，集束 / 核）、199（13，制导集束）、202（9，弹道 / 巡航集束）。⚠️ **大数那一组（98 / 99 / 199 / 202，共 55 行）语义没解** —— 它可能是暴击倍率、也可能是集束子弹的别的判定阈值，而且**不进卡片**（研究文档 §9.4 那批「还没排除」的候选之一）。别把它当「伤害倍数」用。（推断：取值分布。）"
+  },
+  "CanBeIntercepted": {
+   "cn": "可被主动防御系统拦截",
+   "doc": "⚠️ **这是 bool 列，必须用 Rows.b() 读** —— 用 i() 会一律拿到 0，症状是这一行永远不显示（实测踩过：全库 103 条可拦截弹药一条都没画出来）。为 true 时卡片发一行，**值就是 +**（unit_card.py::ammo_detail_rows，ISIL 1113 起）。103/630 为 true。"
+  },
+  "CanBeTargeted": {
+   "cn": "可被瞄准拦截",
+   "doc": "为 true（35 行）= 这个弹药本身可以被敌方防空 / 反导系统锁定并拦截。样本全是弹道导弹（ATACMS / IskanderM）、巡航导弹（TOMAHAWK / IskanderK）与反辐射导弹（Kh31 / AGM88 HARM）。与 CanBeIntercepted（能不能被 APS 拦）是两套拦截机制。（推断：列名 + 那几行弹名。）"
+  },
+  "MinimalRange": {
+   "cn": "最小射程",
+   "doc": "**m**。⚠️ **> 0 时射程那一行会变成区间**「最小 x2 - 地面 x2 m」（unit_card.py::_range_rows）。24 种取值、343 行非默认（0 有 287 行）。它也是「有效射程」那一行前缀的来源。"
+  },
+  "GroundRange": {
+   "cn": "地面射程",
+   "doc": "**m**。对地面目标的最大射程，显示时 **x 2**（EffectiveRangeMultiplier，配置项不是硬编码）。⚠️ 能打空中（TargetType 的直升机 / 固定翼位）且地面 / 低空 / 高空三个值不全相等时，卡片会拆成「地面 / 低空 / 高空」三行；否则只发一条「有效射程」。47 种取值、552 行非默认。"
+  },
+  "LowAltRange": {
+   "cn": "低空射程",
+   "doc": "**m**（显示 x2）。对直升机类低空目标的射程。⚠️ 归一化规则：本列为 0 时**当成地面射程**（ISIL 3303-3315），不是「打不到」。28 种取值、152 行非默认。"
+  },
+  "HighAltRange": {
+   "cn": "高空射程",
+   "doc": "**m**（显示 x2）。对固定翼类高空目标的射程。⚠️ 同样：为 0 时当成地面射程；而且 52085 里这一列**有 35 行是负数**（-1.0 那种）—— 判「没有这一档」要用 <= 0，不能写 == 0。22 种取值、118 行非默认。"
+  },
+  "NonSeadProjectileRangeOverride": {
+   "cn": "非反辐射弹射程覆盖（占位）",
+   "doc": "⚠️ **全 630 行都是 0.0** —— 占位列。与 SeadProjectileRangeOverride 配对存在，但这一边从来没被写过。别拿它当「普通弹的射程覆盖」。"
+  },
+  "SeadProjectileRangeOverride": {
+   "cn": "反辐射弹射程覆盖",
+   "doc": "**m**。给反辐射（SEAD）弹单独覆盖一个射程（实测只有 1 行非 0：1100.0），其余全是 0.0 = 不覆盖。0 是「不使用」不是「射程 0」。（推断：列名 + 那一行样本。）"
+  },
+  "MuzzleVelocity": {
+   "cn": "炮口初速",
+   "doc": "**m/s**。出膛速度，决定弹道平直程度与飞行时间。500/630 行非 0（0 = 不适用，比如投放的炸弹）。24 种取值。（推断：列名 + 取值分布。）"
+  },
+  "MaxSpeed": {
+   "cn": "最大速度",
+   "doc": "**m/s**。卡片「最大速度」那一行读它（本地化键 ui_infocard_ammo_max_speed「最大速度」）—— 那一行在游戏里已实现、产品还没接（列入 PENDING_DETAIL_ROWS）。184 行非 0，与 Acceleration / BurnTime 是同一批 184 行（有动力段的火箭 / 导弹）。"
+  },
+  "Acceleration": {
+   "cn": "加速度",
+   "doc": "**m/s²**。发动机推力带来的加速度。同样是那 184 行有值，与 MaxSpeed、BurnTime 一起描述动力段。28 种取值。（推断：列名 + 取值分布。）"
+  },
+  "DispersionHorizontalRadius": {
+   "cn": "武器散布（水平）",
+   "doc": "**m**。卡片「武器散布」那一行 = 「V: {垂直 x2}m / H: {水平 x2} m」（unit_card.py::ammo_detail_rows）。实机样本逐字命中：AK-74RMO 的 5.45x39mm 是 (1.0, 4.5) → 实机写 V: 2m / H: 9 m。35 种取值、476 行非默认。"
+  },
+  "DispersionVerticalRadius": {
+   "cn": "武器散布（垂直）",
+   "doc": "**m**，同样显示 x2。⚠️ 载入时散布那两列**不会被改**（LoadWeapon 只做 Clone + 俯仰角取负 + 灌弹药），所以库里读到的就是公式用的值。37 种取值、492 行非默认。"
+  },
+  "DispersionMinimal": {
+   "cn": "散布下限",
+   "doc": "**m**。连射时散布不会小于这个值（0 / 0.5 / 1.0 三种，52 行非默认 —— 只有火箭炮、巡航 / 弹道导弹这类在用）。⚠️ 是**下限**不是基数。（推断：列名 + 取值分布。）"
+  },
+  "LaunchMarginAngle": {
+   "cn": "发射余隙角",
+   "doc": "**度**。目标偏离发射管轴线多少度以内仍可发射（0 / 30 / 85 / 180）。16 种取值、221 行非默认。180 意味着全向可发射（垂发 / 攻顶弹）。（推断：列名 + 取值分布。）"
+  },
+  "LoftHeight": {
+   "cn": "抛射高度",
+   "doc": "**m**。抛射 / 越顶弹道爬升到多高（1 / 100 / 1994 / 2506）。⚠️ 5 种取值里 1994 与 2506 明显是**米**、而 0 / 1 是「不抛射」的档位 —— 量纲不统一，用之前先看那一行是哪种弹（LoftAngle 已归枚举词典）。14 行非默认。（推断：列名 + 取值分布。）"
+  },
+  "AimTimeMinOverride": {
+   "cn": "瞄准时间覆盖（下限）",
+   "doc": "**秒**。⚠️ **非 0 时盖掉武器的 Weapons.AimTimeMin**（0 = 不覆盖）。实测 15 条弹药在用（Arkan / AK130 AAG / Invar / Akatsiya HE 这类）。这是映射文档里那句「覆盖那支还没跟」的两列之一。"
+  },
+  "AimTimeMaxOverride": {
+   "cn": "瞄准时间覆盖（上限）",
+   "doc": "**秒**。同上，非 0 时盖掉 Weapons.AimTimeMax。也是 15 条。卡片「瞄准时间」那一行的 min == max 判定要用**覆盖之后**的值。"
+  },
+  "GenerateSmoke": {
+   "cn": "产生烟幕",
+   "doc": "为 true（19 行）= 命中 / 落点生成烟幕（Smoke 弹）。配套 SmokeRadius / SmokeDuration / SmokeFadeDuration。游戏里有「烟雾弹」那条 trait（键 ui_infocard_ammo_smoke），产品还没接这一行。"
+  },
+  "SmokeRadius": {
+   "cn": "烟幕半径",
+   "doc": "**m**。实测 SMK 弹都是 30 / 50 m（M121 SMK 50、Grad SMK 30）。5 种取值、19 行非默认 —— 与 GenerateSmoke 同一批。"
+  },
+  "SmokeDuration": {
+   "cn": "烟幕持续时间",
+   "doc": "**秒**。实测全是 60.0（4 种取值里有 30 / 60）。与 GenerateSmoke 同一批 19 行。"
+  },
+  "SmokeFadeDuration": {
+   "cn": "烟幕消散时间",
+   "doc": "**秒**。烟幕从开始消散到消失用多久（1 / 3 这种）。18 行非默认 —— 比 SmokeDuration 少一行。（推断：列名 + 取值分布。）"
+  },
+  "LaserGuided": {
+   "cn": "激光制导",
+   "doc": "为 true（57 行）= 可以被激光指示点引导（本地化键 ui_infocard_ammo_laser「激光制导」）。实测与 Seeker 不是一回事：45 行 Seeker == 0 但本列为 true（227mm 制导火箭、APKWS、Kh29ML）—— 所以判定「能不能激光制导」只能看这一列。"
+  },
+  "SeekerAngle": {
+   "cn": "导引头视场角",
+   "doc": "**度**。导引头能看多宽（0 / 30 / 90 这类）。9 种取值、180 行非默认。与 MaxSeekerDistance 同批。（推断：列名 + 取值分布。）"
+  },
+  "MaxSeekerDistance": {
+   "cn": "导引头最大距离",
+   "doc": "**m**。导引头能锁多远（300 / 700 这类）。28 种取值、180 行非默认 —— 与 SeekerAngle 是同一批 180 行。（推断：列名 + 取值分布。）"
+  },
+  "CanReaquire": {
+   "cn": "可重新捕获",
+   "doc": "为 true（145 行）= 丢失目标后导引头可以再锁一次（打干扰弹后仍可能命中）。与「发射后不管」的提示（ui_infocard_fire_and_forget_hint_text）相关。（推断：列名 + 取值分布。）"
+  },
+  "AimStartDelay": {
+   "cn": "开始瞄准延迟",
+   "doc": "**秒**。从按下开火到导引头开始工作之间的延迟（0.5 / 2.0 这类）。6 种取值、42 行非默认，集中在导弹上。（推断：列名 + 取值分布。）"
+  },
+  "MainEngineIgnitionDelay": {
+   "cn": "主发动机点火延迟",
+   "doc": "**秒**。发射后隔多久主发动机才点火（0.5 / 1.0 这类）。5 种取值、43 行非默认。与 PreEgnitionRotationSpeed 配套描述发射瞬间的姿态。（推断：列名 + 取值分布。）"
+  },
+  "RotationSpeed": {
+   "cn": "弹体旋转速度",
+   "doc": "**度 / 秒**。飞行中弹体的滚转 / 自旋速度（90 / 60 这类，旋转稳定弹用）。12 种取值、198 行非默认。（推断：列名 + 取值分布。）"
+  },
+  "BurnTime": {
+   "cn": "发动机燃烧时间",
+   "doc": "**秒**。火箭 / 导弹发动机烧多久（2 / 4 / 20 这类）—— 与 MaxSpeed、Acceleration 是同一批 184 行（有动力段的弹药）。0 = 无动力（炮弹、炸弹）。"
+  },
+  "PreEgnitionRotationSpeed": {
+   "cn": "点火前转速",
+   "doc": "**度 / 秒**（列名里的 Egnition 是游戏自己拼错的 Ignition）。发射瞬间由发射管 / 挂架赋予的初始转速（150 / 600 这类）。6 种取值、19 行非默认。（推断：列名 + 取值分布。）"
+  },
+  "PreventReloadWhileTracked": {
+   "cn": "被跟踪时不能装填",
+   "doc": "为 true（36 行）= 只要这门武器的目标还在被己方跟踪 / 制导中，就不能切换或装填别的弹种。实测全是需要持续制导的 ATGM（TOW2A / TOW2B / Hellfire Longbow / Hellfire UAV）。（推断：列名 + 那几行弹名。）"
+  },
+  "StripingIgnore": {
+   "cn": "忽略曳光条纹",
+   "doc": "⚠️ **全库只有 1 行为 true**：'Supply Explosion Reference'（补给爆炸的参考弹药）。所以它在这版数据里等于没用；「striping 具体指曳光 / 弹迹的哪一层」也没解。（推断：列名 + 那一行样本。）"
+  },
+  "IsTopArmorArmorAttack": {
+   "cn": "攻顶（穿甲判定）",
+   "doc": "为 true（74 行）= 穿甲计算走顶部装甲。⚠️ 与 TopArmorAttack **不是同一列**：61 行两列同为 true，另有 13 行只有本列为 true —— 那 13 行正是真攻顶弹（Javelin / Hellfire Longbow / Hellfire UAV / SokolV）。判「是不是攻顶弹」要**两列取或**；判「哪个字段驱动哪一段逻辑」还没分开。（推断：取值交叉 + 弹名。）"
+  }
+ },
+ "Armors": {
+  "Id": {
+   "cn": "装甲行 ID（主键）",
+   "doc": "主键，319 行、最大 506。被 UnitArmors.ArmorId 与 Options.ArmorId 引用 —— 它是**共享模板行**（均 2.23 个单位共用、最多 27），改它等于改所有引用者。"
+  },
+  "IsDefault": {
+   "cn": "是否默认",
+   "doc": "这一条**是不是默认的那一套**（217/319 为 true）。判「默认」要连着单位那一边看：error 级规则 req.UnitArmors.IsDefault 要求**每个单位至少有一条 UnitArmors 指向 IsDefault=true 的装甲行**（原版 540/540 成立）。装甲是**共享模板**，就地改会一起改到用它的那些单位。"
+  },
+  "Name": {
+   "cn": "装甲名",
+   "doc": "装甲套装名（Armor BTR80 Base / Armor Infantry Elite 4Men）。步兵那套的名字里 NMen 就是班人数，且 MaxHealthPoints = 5 x NMen（原版 188/193 相符，5 个例外全是 ZOM 系列）。⚠️ **19 行名字带首尾空格**（Armor T72B 后面有空格）—— 比对前要 strip，保存时原样写回、别顺手修掉。"
+  },
+  "ModelFileName": {
+   "cn": "装甲模型键",
+   "doc": "附加装甲的模型节点名（K1 / Shtora 这种，是预制体里的节点名而不是 catalog 键）。⚠️ 步兵护甲全是 null —— 步兵护甲只有数值、没有模型。"
+  },
+  "ArmorValue": {
+   "cn": "装甲值",
+   "doc": "卡片上「装甲值」那一格（不是六个面的厚度）。当装甲值高于来袭弹药的穿深时伤害降低。实测：319 套装甲里 253 套是 0；**载具（Type=4）引用的那 212 套装甲全是 0**（所以载具压根没有这一格，改看下面的六面装甲图）；步兵 6/8/10、直升机 10/20/30、飞机 0/30、舰船 60/100。unit_card.py::_t_armor 里「> 0 才有这一格」的判据就是它。"
+  },
+  "MaxHealthPoints": {
+   "cn": "生命值",
+   "doc": "卡片上「生命值」那一格的**真正来源**（unit_card.py::_t_health）。挂在装甲行上、不在单位行上，所以**换装甲 = 血量一起变**。步兵 = 5 x 班人数（原版 193/193 相符）。⚠️ 它是**共享行**（均 2.23 个单位共用、最多 27），就地改会一起改到别人 —— 要么接受，要么「另存为新模板」。"
+  },
+  "HeatArmorFront": {
+   "cn": "正面抗破",
+   "doc": "**mm**。正面（车体前向）抵抗破甲 / 爆炸伤害的等效厚度，画在装甲图四角中的「正面」。同组还有 Rear / Sides / Top。空袭顶攻打的是 Top 那一面。"
+  },
+  "HeatArmorRear": {
+   "cn": "背面抗破",
+   "doc": "**mm**。背面抗破甲 / 爆炸等效厚度（实机卡上四角是「上排 顶部|背面，下排 正面|侧面」）。"
+  },
+  "HeatArmorSides": {
+   "cn": "侧面抗破",
+   "doc": "**mm**。⚠️ 列名是**复数 Sides**，而本地化键是单数 ui_infocard_armor_side（中文「侧面」）—— 两边写法不一样，别照着一边改另一边。"
+  },
+  "HeatArmorTop": {
+   "cn": "顶部抗破",
+   "doc": "**mm**。顶部抗破甲 / 爆炸等效厚度 —— 攻顶弹药（弹药侧 TopArmorAttack / IsTopArmorArmorAttack）打的就是这一面。"
+  },
+  "KinArmorFront": {
+   "cn": "正面抗穿",
+   "doc": "**mm**。正面抵抗动能弹（穿甲弹）的等效厚度。与 HeatArmorFront 配对画在同一格上（实机只有颜色区分，名字在 tooltip 里：抗穿性能 / 抗破性能）。"
+  },
+  "KinArmorRear": {
+   "cn": "背面抗穿",
+   "doc": "**mm**。背面抗动能等效厚度，与 HeatArmorRear 配对画在装甲图的「背面」那一角。"
+  },
+  "KinArmorSides": {
+   "cn": "侧面抗穿",
+   "doc": "**mm**。侧面抗动能等效厚度（同样注意 Sides 复数 vs 本地化键单数）。"
+  },
+  "KinArmorTop": {
+   "cn": "顶部抗穿",
+   "doc": "**mm**。顶部抗动能等效厚度，与 HeatArmorTop 配对；攻顶弹药（弹药侧 TopArmorAttack）打的就是这一面。"
+  }
+ },
+ "Countries": {
+  "Id": {
+   "cn": "阵营 ID（主键）",
+   "doc": "1 = RUS、2 = USA、3 = Editor。被 Units.CountryId 引用（error 级外键，命中率 1.0）。"
+  },
+  "Name": {
+   "cn": "阵营机读名",
+   "doc": "Russia / USA / Editor。程序里比对 / 写回用这一列。"
+  },
+  "UIName": {
+   "cn": "阵营显示名",
+   "doc": "界面显示名（实测与 Name 逐字相同）。armory.py::CountryInfo.display_name = UIName or Name or 阵营 {id}。军械库里那个阵营 chip 就是它 + FlagFileName。"
+  },
+  "FlagFileName": {
+   "cn": "国旗图键",
+   "doc": "国旗图标的 catalog 键 —— ⚠️ 值是 **rus flag / usa flag** 这种**带空格的小写**写法，不是路径也不是文件名风格。2/3 非空（Editor 是 null）。catalog 命中率 1.00，走 nations&specs 那组 bundle。"
+  },
+  "MaxPoints": {
+   "cn": "阵营点数上限",
+   "doc": "**点**。这个阵营在遭遇战里的总预算上限（RUS / USA 都是 10000，Editor = 800000 那个「编辑器」档）。它是与 Specializations 的点数预算（ReconPoints 那 7 列）**两套不同的东西**：一个管整局、一个管卡组。（推断：列名 + 两个档位。）"
+  },
+  "Hidden": {
+   "cn": "隐藏",
+   "doc": "为 true（只有 Editor 那一行）= 界面上不列出来（编辑器专用阵营）。armory.py::list_countries 照常返回它，藏不藏由界面决定。"
+  },
+  "ContentMembership": {
+   "cn": "内容归属（DLC）",
+   "doc": "**枚举**：-1 = Vanilla（原版）、0 = Internal、1..5 = DLC1..DLC5（dump.cs 的 ContentMembership）。⚠️ 阵营这 3 行**全是 -1** —— 阵营不分 DLC。真正按 DLC 分的是 Units / Specializations 上同名的这一列。（枚举名我列在这儿是为了说明「全 -1」的含义；取值表以《字段词典-枚举与掩码》为准。）"
+  }
+ },
+ "Mobility": {
+  "FlyPreset": {
+   "cn": "飞行预设（占位）",
+   "doc": "⚠️ **全 266 行都是 null** —— 占位列（运行时那个对象引用不进 JSON）。真正的飞行包线指针是 **FlyPresetId**。"
+  },
+  "Id": {
+   "cn": "机动行 ID（主键）",
+   "doc": "主键，266 行、最大 403。被 UnitPropulsions.MobilityId 与 Options.MobilityId 引用。"
+  },
+  "Name": {
+   "cn": "机动名",
+   "doc": "模板名，写法是「行走方式 + 底盘 + 速度」（Tracks M1A2 Abrams 70kph / Wheels BTR82A NonAir）。步兵只用到 5 种（Infantry 18kmh / 18kmh Airdrop / Airdrop Amphibious / 15ms / 36ms）。"
+  },
+  "ModelFileName": {
+   "cn": "机动模型节点名",
+   "doc": "引擎 / 履带模型的节点名（Engine / T72BA / K1 这类，是预制体里的节点名不是 catalog 键）。只有 6 行有值（5 种写法），步兵机动全是 null。产品不做 3D。"
+  },
+  "IsDefault": {
+   "cn": "是否默认",
+   "doc": "语义同 Armors.IsDefault（软标志，214/266 为 true）。机动是**共享模板**：均 2.43 个单位共用、最多的一个被 100 个单位用（Infantry 18kmh）—— 就地改速度会一起改到那 100 个单位。"
+  },
+  "IsAmphibious": {
+   "cn": "两栖",
+   "doc": "为 true（37 行）= 能浮渡。⚠️ **卡片右上那个「两栖」能力图标读的是这一列，不是 Abilities 表**（unit_card.py::build_abilities 里那一句 any_ability 之外的 has_mobility and IsAmphibious）—— 而且 Mobility 会被 Options.MobilityId 覆盖，所以判两栖必须用**选完选项之后**的那套机动。本地化键 ui_infocard_ability_amphibious「两栖」。"
+  },
+  "IsAirDroppable": {
+   "cn": "可空投",
+   "doc": "为 true（33 行）= 能由运输机空投（BMD 系列、空降步兵那批）。同样被卡片能力图标读（键 ui_infocard_ability_airdropable「可空投」），也同样受 Options.MobilityId 覆盖影响。"
+  },
+  "Weight": {
+   "cn": "机动自带重量",
+   "doc": "**kg**。⚠️ 全库只有 **4 行非 0**（1000 / 1500 / 4000，是 BRDM Bekas / Tigr / M8 AGS / MTV Brutus 这几个底盘），其余 262 行是 0。**它不是单位重量** —— 单位重量在 Units.Weight（步兵还要自己算 125 x 人数）。这一列的用途没解，别拿来显示「车辆重量」。（推断：取值分布。）"
+  },
+  "HeavyLiftWeight": {
+   "cn": "载重量",
+   "doc": "**kg**，运输机 / 直升机那类单位一次能吊运多重的货。卡片上「载重量」那一格 = 本列，**> 0 才发**（unit_card.py::_t_heavy_lift；本地化注解「该单位可承载的最大重量」）。50 行非 0（0 / 1000 / 2000 / 4000 … 30000）。"
+  },
+  "TurnRate": {
+   "cn": "转向速度",
+   "doc": "**度 / 秒**，车体原地转向或空中转向的角速度（60 / 80 / 100 这类）。260 行非 0（履带 60、轮式 80 这种规律）。⚠️ 它**不是**卡片上某一格的直接来源（固定翼第 6 格是回转半径，算的是 PlaneFlyPresets.MaxSpeedYaw）—— 研究文档 §9.10 记过这个误读。"
+  },
+  "Acceleration": {
+   "cn": "加速度",
+   "doc": "**m/s²** 量级的加速能力（0 / 10 / 16）。7 种取值、93 行非默认。影响起步与爬坡。（推断：列名 + 取值分布。）"
+  },
+  "MaxCrossCountrySpeed": {
+   "cn": "越野时速",
+   "doc": "**km/h**，离开道路时的速度。193 行非 0。游戏本地化里它就是「越野时速」（键 ui_infocard_offroad_speed）—— 卡片上作为**前进速度那一格的 tooltip**出现，条件是它与 MaxSpeedRoad 不相等（研究 §3.3）。"
+  },
+  "MaxSpeedRoad": {
+   "cn": "前进速度",
+   "doc": "**km/h**。卡片「前进速度」那一格的来源，步兵 / 载具 / 直升机**都读它**（unit_card.py::_t_speed_forward）。⚠️ 两个例外：固定翼 Type=16 读 PlaneFlyPresets.MaxSpeed x 3.6 取整；舰船 Type=32 读 MaxSpeedWater（强假设，没截图）。237 行非默认。"
+  },
+  "MaxSpeedReverse": {
+   "cn": "倒车速度",
+   "doc": "**km/h**。⚠️ **只对 Type == 4（载具）发射**那一格 —— 固定翼的第 6 格是回转半径、不是倒车（研究 §3.4 记过这个误读）。160 行非 0。"
+  },
+  "MaxSpeedWater": {
+   "cn": "水面速度",
+   "doc": "**km/h**。舰船在水上的速度（166 行非 0，很多两栖车也有值）。⚠️ **强假设**：反编译里前进那一格读的是 MaxSpeedRoad(0x40)，而舰船的水面速度在同表的这一列(0x48)；全库舰船只 5 个、拿不到对照，所以产品先用本列并标成强假设（研究 §9.10）。"
+  },
+  "Agility": {
+   "cn": "敏捷",
+   "doc": "直升机那一格的敏捷值（Mi-8 100 / AH-64D 150 / MH-6 250）。**只有 Type == 8 发射这一格**（unit_card.py::_t_agility；本地化键 ui_infocard_agility「敏捷」）。只有 28 行非 0 —— 正好是那批直升机机动模板。"
+  },
+  "ClimbRate": {
+   "cn": "爬升率",
+   "doc": "**m/s**（15.0 是直升机的统一值）。28 行非 0，与 Agility 是同一批直升机模板。⚠️ 卡片上没有这一格。（推断：列名 + 取值分布。）"
+  },
+  "IsChangeAltitude": {
+   "cn": "可改变高度",
+   "doc": "为 true（54 行）= 这个单位能在飞行中升降高度（飞机 / 直升机）。游戏里对应「更改飞机或直升机飞行高度」那条操作提示（键 ui_hint_bind_altitude_change）。（推断：列名 + 提示键。）"
+  },
+  "LoiteringTime": {
+   "cn": "滞空时间",
+   "doc": "**秒**。飞机燃油耗尽前能飞多久。卡片「燃油」那一格 = 本列（**只对 Type == 16 发射**，unit_card.py::_t_fuel），本地化注解「飞机在燃油耗尽之前的滞空时间」。71 行非 0（900 / 360 这类）。"
+  },
+  "IsAfterburner": {
+   "cn": "有加力燃烧",
+   "doc": "为 true（34 行）= 这架飞机有加力（开加力提速但更费油，键 ui_hint_ability_afterburner「提高飞行速度但会消耗更多燃油」）。配套 AfterBurningLoiteringTime。（推断：列名 + 提示键。）"
+  },
+  "AfterBurningLoiteringTime": {
+   "cn": "加力滞空时间",
+   "doc": "**秒**。全程开加力时的滞空时间（比 LoiteringTime 短得多，如 300 vs 900）。71 行非默认，与 LoiteringTime 同一批。（推断：列名 + 取值分布。）"
+  },
+  "FlyPresetId": {
+   "cn": "飞行包线 ID",
+   "doc": "指向 PlaneFlyPresets.Id。**0 = 地面单位**（error 级规则的 note 专门写了这条：「列名不含表名，靠数值判定；0 = 地面单位」）。71 行非 0。固定翼的前进速度与回转半径全靠它（unit_card.py::fly_preset，并且这一步要传 selected —— 换发动机的选项会改 Mobility）。"
+  }
+ },
+ "Modifications": {
+  "Id": {
+   "cn": "改装槽 ID（主键）",
+   "doc": "主键，615 行、最大 811。被 Options.ModificationId 引用 —— 删一个槽要连它下面的选项一起处理。"
+  },
+  "UnitId": {
+   "cn": "所属单位 ID",
+   "doc": "指向 Units.Id（error 级外键）。一个单位有 1..5 个槽（实测 178 个单位 1 个、108 个 2 个、3/4/5 个的依次递减）。⚠️ 变体单位的槽可能**不在自己身上** —— 645 VDV Dsh 2 自己 0 条 Modification，槽来自单位 108 的 Modification 743，由 Options.ReplaceUnitId 换出来（unit_card.py::option_groups 两条来源）。"
+  },
+  "Name": {
+   "cn": "改装槽名",
+   "doc": "内部名（Weapons Patriot PAC3 MG / Armor StrykerICV）。自然键 = UnitId + Name（实测唯一）；一个单位最多 5 个槽。"
+  },
+  "UIName": {
+   "cn": "改装槽界面名",
+   "doc": "界面显示名，**既可能是本地化键也可能是明文**（Custom_Slot_Squad_loadout 是键、中文「小队装备配置」）。规则：先查本地化表，查不到就用原文（unit_card.py::display_name）。键在本地化表里是小写的（custom_slot_armor），比对要注意大小写。"
+  },
+  "ThumbnailFileName": {
+   "cn": "改装槽缩略图键（占位）",
+   "doc": "⚠️ 612 行是 null、3 行是空串 —— 全库等于没用，别指望它出图。改装件那一排的图来自 Options.OptionPicture。"
+  },
+  "Order": {
+   "cn": "改装槽顺序",
+   "doc": "底部「自定义选项」那一排小组的先后（0 占 493/615，最多到 4）。⚠️ 缺省项怎么定跟它有关：GetDefaultOptions = 第一个 IsDefault 的选项，**一个都没有时退化成 Order == 0** —— 实测 436/615 个槽一个 IsDefault 都没有，所以「退化为 Order==0」才是常态。"
+  }
+ },
+ "Options": {
+  "Id": {
+   "cn": "选项 ID（主键）",
+   "doc": "主键，2046 行、最大 3341。改它要同步引用它的地方（SquadMembers / WeaponAmmunitions 之类不引它，只有 Modifications 的容器关系与界面状态引）。"
+  },
+  "IsDefault": {
+   "cn": "是否默认",
+   "doc": "这个槽默认选中的那一个（182/2046 为 true）。⚠️ **不是选中项的唯一判据**：GetDefaultOptions = 第一个 IsDefault 的选项，**一个都没有时退化成 Order == 0**；实测 436/615 个改装槽一个 IsDefault 都没有，所以「Order==0 兜底」才是常态（unit_card.py::default_option）。"
+  },
+  "ModificationId": {
+   "cn": "所属改装槽 ID",
+   "doc": "指向 Modifications.Id（error 级外键）。615 个槽、2046 条选项，一个槽 2..11 条（自然键 = ModificationId + Name）。⚠️ 卡片上「当前选中的选项」必须与本列对得上，否则界面会把别的槽的选项算进来（selected_options 里那句校验）。"
+  },
+  "Name": {
+   "cn": "选项内部名",
+   "doc": "开发用名（Option Armor Base / Option MainTurret M2）。自然键 = ModificationId + Name（实测唯一），界面显示优先用 UIName。"
+  },
+  "Order": {
+   "cn": "选项在槽内的顺序",
+   "doc": "同一改装槽里选项的排列号（0 有 643 行、1 有 576 行）。它同时是**缺省项的兜底判据**（没有 IsDefault 时取 Order==0）。⚠️ 同一个槽内 Order **可以重复**（实测 39 个槽有重复），所以排序还要看 Id 才能稳定。"
+  },
+  "UIName": {
+   "cn": "选项界面名",
+   "doc": "界面显示名。**既可能是本地化键（416 条，如 Custom_Option_PKP）也可能是字面文本（272 条，如 M-SHORAD, Stingers）** —— 规则：先查本地化表，查不到就用原文（unit_card.py::display_name）。"
+  },
+  "ConcatenateWithUnitName": {
+   "cn": "拼接到单位名后面",
+   "doc": "选中后**原样拼**在卡片抬头后面（值里带不带空格就是游戏里的样子：' Javelin' / ' Trophy' vs 'A1' / '1'，别自己插分隔符）。实测 143 条非空。与 ReplaceUnitName **互斥**（全库 0 行同时非空）。样本：PT-76 的缺省项拼 'B' → PT-76B，换 AU-220M 后拼 '-57' → PT-76-57。"
+  },
+  "ReplaceUnitName": {
+   "cn": "替换单位名",
+   "doc": "选中后**整个换掉**卡片抬头（173 条非空）。样本：BTR-82 的缺省项 501 换成 'BTR-82A' —— 所以实机卡片写的是 BTR-82A。与 ConcatenateWithUnitName 互斥。"
+  },
+  "ReplaceUnitId": {
+   "cn": "替换成另一个单位",
+   "doc": "指向 Units.Id（error 级外键）—— 143 条非零，语义是「换上它 = 变成另一个完整单位」（变体）。⚠️ 变体单位的牌面数据来自**自己的行**，但它的改装槽可能挂在原单位上：645 VDV Dsh 2 自己 0 条 Modification，卡片上的「小队装备配置」来自单位 108 的槽 743，就是被这个字段换出来的（unit_card.py::variant_options / option_groups 的第二条来源）。"
+  },
+  "Cost": {
+   "cn": "改装费用（相对值）",
+   "doc": "**加多少钱，不是改成多少钱**。卡片成本 = Units.Cost + 所有已选选项的 Cost 之和（unit_card.py::card_cost）。实测：宿主.Cost + 选项.Cost == 目标.Cost 的有 131 条，而「选项.Cost 就是目标价」的有 0 条 —— 相对性由此钉死。1462/2046 非零（0 = 免费），最大 1200，无负数。"
+  },
+  "TimeModifierRefund": {
+   "cn": "撤回时间修正（选项）",
+   "doc": "**秒**，叠加到 Units.TimeModifierRefund 上（非阵亡分支）。⚠️ 这一列在库里是 **float**，读它必须用 f() —— 用 i() 会一律拿到 0，症状是「换了选项撤回时间不变」（实测 12 条会被静默丢掉）。值可以是很大的正数（2000.0 / 1400.0）。"
+  },
+  "TimeModifierResurrect": {
+   "cn": "复活时间修正（选项）",
+   "doc": "**秒**，叠加到 Units.TimeModifierResurrect 上（阵亡分支：1.5 x Cost + 420 + 两者之和）。⚠️ 同样是 **float，必须用 f() 读**（7 条）。实测有 -4140.0 这种大负数（三连装）。"
+  },
+  "OptionPicture": {
+   "cn": "选项图标键",
+   "doc": "改装件那一排的图（catalog 命中率 1.00，走 unitmodifications 那组 bundle）。⚠️ 空值不用 0 表示而是空串 / EMPTY 这种字面量；全库没有一行是空的。"
+  },
+  "ThumbnailOverride": {
+   "cn": "缩略图覆盖",
+   "doc": "换掉卡片墙那张小图（224 条非空）。⚠️ **缺省也要走这条覆盖**（不是只有玩家换过才生效）：实测 17 个单位的缺省缩略图就被它改掉了（23 / 72 / 108 / 129…）；其中 131 条**不换单位**（ReplaceUnitId == 0）。取「选中选项里第一个非空」（unit_card.py::unit_thumbnail_key）。"
+  },
+  "PortraitOverride": {
+   "cn": "立绘覆盖",
+   "doc": "换掉右侧那张通栏立绘（23 条非空，**全部都带 ReplaceUnitId**）。与缩略图同一套纪律：第一个非空优先、为空才回落 Units.PortraitFileName。目前它不改任何一张图（那些值恰好等于原列），但路已经铺对（unit_card.py::unit_portrait_key）。"
+  },
+  "AudioPresetOverride": {
+   "cn": "语音覆盖",
+   "doc": "换掉单位的语音 / 引擎音预设（15 条非空，如 UNIT_SOUND_PRESET_MIG-29_CruiseMissile）。产品不做音频，只存不播。"
+  },
+  "ArmorId": {
+   "cn": "换成这套装甲",
+   "doc": "指向 Armors.Id（error 级外键）。**317 条非零 —— 用得最多的覆盖列**。语义是**赋值不是追加**：ApplyCurrentMods 里 unit.CurrentArmor = 选中选项里第一个带 ArmorId 的那一行的装甲，基础表（UnitArmors）整个被丢掉。所以卡片上的装甲值与生命值都要按它重算（unit_card.py::CardData.armor）。"
+  },
+  "MobilityId": {
+   "cn": "换成这套机动",
+   "doc": "指向 Mobility.Id（error 级外键），297 条非零。同 Armor 一样是**赋值**：unit.CurrentMobility = 第一个带 MobilityId 的选项所指那套。速度 / 倒车 / 敏捷 / 载重 / 两栖全部由它派生（unit_card.py::CardData.mobility），换履带、换发动机走的就是这里。"
+  },
+  "MainSensorId": {
+   "cn": "换成这套观瞄（主）",
+   "doc": "指向 Sensors.Id（error 级外键），184 条非零、覆盖 69 个单位。⚠️ **是替换不是追加**：unit.Sensors = [这一套] —— 基础表被整个丢掉。这就是 BMD-2 显示 1200（选项 183 指 Sensors#2，地面 600 x2）而不是 Max(600,700)x2 = 1400 的原因（unit_card.py::effective_sensors）。"
+  },
+  "ExtraSensorId": {
+   "cn": "再追加一套观瞄",
+   "doc": "指向 Sensors.Id（error 级外键）。**全库只有 1 条非零**（option 236 'Option Optics Medium'，单位 79）。语义：在主观瞄之外**再 Add 一套**（Id 重复时不加）。所以它是「替换 + 追加」里的那个追加。"
+  },
+  "StealthOverride": {
+   "cn": "隐蔽覆盖",
+   "doc": "**系数**（不是 1/系数）。20 条非零，取值只有 1.0 / 0.666 / 0.4。语义同 Armor：选中选项里第一个非 0 的值**盖掉** Units.CurrentStealth。⚠️ 漏了它会显示错：Stryker RV 0.8 被盖成 0.666 → 卡片应是 1.5 而不是 1.25；Green Berets 0.333→0.4 应是 2.5 而不是 3（unit_card.py::stealth_override）。"
+  },
+  "IsDynamicTurretOption": {
+   "cn": "动态炮塔选项",
+   "doc": "这个选项挂的炮塔是「动态炮塔」（自己不直接开火的载体）。只有 10 条为 true：T-72B3 / T-72B3M / T-72B3A 系列与 Uran-9 那批。与 Turrets.IsDynamicTurret 配套（那 6 行是 CupolaTurret 与 NestedTurret）—— 判定是递归的：自带标志、或武器列表为空、或任一子炮塔是动态的。"
+  },
+  "Ability1Id": {
+   "cn": "能力 1",
+   "doc": "指向 Abilities.Id（error 级外键），289 条非零。这是**能力图标那一排的第二个来源**（第一个是 UnitAbilities 关联行）—— 换上带能力的选项，右上角那排图标要跟着变（unit_card.py::build_abilities 目前只读 UnitAbilities，接选项时按这列走）。"
+  },
+  "Ability2Id": {
+   "cn": "能力 2",
+   "doc": "指向 Abilities.Id（error 级外键），142 条非零。与 Ability1Id 同义，第二个能力槽。"
+  },
+  "Ability3Id": {
+   "cn": "能力 3",
+   "doc": "指向 Abilities.Id（error 级外键），33 条非零。第三个（也是最后一个）能力槽。"
+  },
+  "Turret0Id": {
+   "cn": "炮塔挂载槽 0",
+   "doc": "指向 Turrets.Id（error 级外键）。**炮塔槽是一串 21 个（0..20）**，装上这个选项以后逐槽覆盖单位原有的炮塔：card_turrets 里 slot < 现有炮塔数就**替换**那一位，超出就**追加**（unit_card.py::card_turrets）。641 条非零 —— 全库用得最多的槽。⚠️ Options 不带 UnitId，它的炮塔必须落在该单位 TurretUnits 池里（实测 1554/1555 如是）。"
+  },
+  "Turret1Id": {
+   "cn": "炮塔挂载槽 1",
+   "doc": "指向 Turrets.Id（error 级外键），470 条非零。语义与 Turret0Id 完全一样 —— 第 1 个挂载槽。同一选项可以同时占多个槽（左右各一个挂架就是两条同一个 TurretId）。越靠后的槽用得越少（19 槽只剩 15 条），因为大多数单位用不到那么多挂架。"
+  },
+  "Turret2Id": {
+   "cn": "炮塔挂载槽 2",
+   "doc": "指向 Turrets.Id（error 级外键），356 条非零。语义与 Turret0Id 完全一样 —— 第 2 个挂载槽。同一选项可以同时占多个槽（左右各一个挂架就是两条同一个 TurretId）。越靠后的槽用得越少（19 槽只剩 15 条），因为大多数单位用不到那么多挂架。"
+  },
+  "Turret3Id": {
+   "cn": "炮塔挂载槽 3",
+   "doc": "指向 Turrets.Id（error 级外键），351 条非零。语义与 Turret0Id 完全一样 —— 第 3 个挂载槽。同一选项可以同时占多个槽（左右各一个挂架就是两条同一个 TurretId）。越靠后的槽用得越少（19 槽只剩 15 条），因为大多数单位用不到那么多挂架。"
+  },
+  "Turret4Id": {
+   "cn": "炮塔挂载槽 4",
+   "doc": "指向 Turrets.Id（error 级外键），321 条非零。语义与 Turret0Id 完全一样 —— 第 4 个挂载槽。同一选项可以同时占多个槽（左右各一个挂架就是两条同一个 TurretId）。越靠后的槽用得越少（19 槽只剩 15 条），因为大多数单位用不到那么多挂架。"
+  },
+  "Turret5Id": {
+   "cn": "炮塔挂载槽 5",
+   "doc": "指向 Turrets.Id（error 级外键），213 条非零。语义与 Turret0Id 完全一样 —— 第 5 个挂载槽。同一选项可以同时占多个槽（左右各一个挂架就是两条同一个 TurretId）。越靠后的槽用得越少（19 槽只剩 15 条），因为大多数单位用不到那么多挂架。"
+  },
+  "Turret6Id": {
+   "cn": "炮塔挂载槽 6",
+   "doc": "指向 Turrets.Id（error 级外键），189 条非零。语义与 Turret0Id 完全一样 —— 第 6 个挂载槽。同一选项可以同时占多个槽（左右各一个挂架就是两条同一个 TurretId）。越靠后的槽用得越少（19 槽只剩 15 条），因为大多数单位用不到那么多挂架。"
+  },
+  "Turret7Id": {
+   "cn": "炮塔挂载槽 7",
+   "doc": "指向 Turrets.Id（error 级外键），156 条非零。语义与 Turret0Id 完全一样 —— 第 7 个挂载槽。同一选项可以同时占多个槽（左右各一个挂架就是两条同一个 TurretId）。越靠后的槽用得越少（19 槽只剩 15 条），因为大多数单位用不到那么多挂架。"
+  },
+  "Turret8Id": {
+   "cn": "炮塔挂载槽 8",
+   "doc": "指向 Turrets.Id（error 级外键），144 条非零。语义与 Turret0Id 完全一样 —— 第 8 个挂载槽。同一选项可以同时占多个槽（左右各一个挂架就是两条同一个 TurretId）。越靠后的槽用得越少（19 槽只剩 15 条），因为大多数单位用不到那么多挂架。"
+  },
+  "Turret9Id": {
+   "cn": "炮塔挂载槽 9",
+   "doc": "指向 Turrets.Id（error 级外键），93 条非零。语义与 Turret0Id 完全一样 —— 第 9 个挂载槽。同一选项可以同时占多个槽（左右各一个挂架就是两条同一个 TurretId）。越靠后的槽用得越少（19 槽只剩 15 条），因为大多数单位用不到那么多挂架。"
+  },
+  "Turret10Id": {
+   "cn": "炮塔挂载槽 10",
+   "doc": "指向 Turrets.Id（error 级外键），79 条非零。语义与 Turret0Id 完全一样 —— 第 10 个挂载槽。同一选项可以同时占多个槽（左右各一个挂架就是两条同一个 TurretId）。越靠后的槽用得越少（19 槽只剩 15 条），因为大多数单位用不到那么多挂架。"
+  },
+  "Turret11Id": {
+   "cn": "炮塔挂载槽 11",
+   "doc": "指向 Turrets.Id（error 级外键），66 条非零。语义与 Turret0Id 完全一样 —— 第 11 个挂载槽。同一选项可以同时占多个槽（左右各一个挂架就是两条同一个 TurretId）。越靠后的槽用得越少（19 槽只剩 15 条），因为大多数单位用不到那么多挂架。"
+  },
+  "Turret12Id": {
+   "cn": "炮塔挂载槽 12",
+   "doc": "指向 Turrets.Id（error 级外键），53 条非零。语义与 Turret0Id 完全一样 —— 第 12 个挂载槽。同一选项可以同时占多个槽（左右各一个挂架就是两条同一个 TurretId）。越靠后的槽用得越少（19 槽只剩 15 条），因为大多数单位用不到那么多挂架。"
+  },
+  "Turret13Id": {
+   "cn": "炮塔挂载槽 13",
+   "doc": "指向 Turrets.Id（error 级外键），16 条非零。语义与 Turret0Id 完全一样 —— 第 13 个挂载槽。同一选项可以同时占多个槽（左右各一个挂架就是两条同一个 TurretId）。越靠后的槽用得越少（19 槽只剩 15 条），因为大多数单位用不到那么多挂架。"
+  },
+  "Turret14Id": {
+   "cn": "炮塔挂载槽 14",
+   "doc": "指向 Turrets.Id（error 级外键），16 条非零。语义与 Turret0Id 完全一样 —— 第 14 个挂载槽。同一选项可以同时占多个槽（左右各一个挂架就是两条同一个 TurretId）。越靠后的槽用得越少（19 槽只剩 15 条），因为大多数单位用不到那么多挂架。"
+  },
+  "Turret15Id": {
+   "cn": "炮塔挂载槽 15",
+   "doc": "指向 Turrets.Id（error 级外键），16 条非零。语义与 Turret0Id 完全一样 —— 第 15 个挂载槽。同一选项可以同时占多个槽（左右各一个挂架就是两条同一个 TurretId）。越靠后的槽用得越少（19 槽只剩 15 条），因为大多数单位用不到那么多挂架。"
+  },
+  "Turret16Id": {
+   "cn": "炮塔挂载槽 16",
+   "doc": "指向 Turrets.Id（error 级外键），16 条非零。语义与 Turret0Id 完全一样 —— 第 16 个挂载槽。同一选项可以同时占多个槽（左右各一个挂架就是两条同一个 TurretId）。越靠后的槽用得越少（19 槽只剩 15 条），因为大多数单位用不到那么多挂架。"
+  },
+  "Turret17Id": {
+   "cn": "炮塔挂载槽 17",
+   "doc": "指向 Turrets.Id（error 级外键），16 条非零。语义与 Turret0Id 完全一样 —— 第 17 个挂载槽。同一选项可以同时占多个槽（左右各一个挂架就是两条同一个 TurretId）。越靠后的槽用得越少（19 槽只剩 15 条），因为大多数单位用不到那么多挂架。"
+  },
+  "Turret18Id": {
+   "cn": "炮塔挂载槽 18",
+   "doc": "指向 Turrets.Id（error 级外键），16 条非零。语义与 Turret0Id 完全一样 —— 第 18 个挂载槽。同一选项可以同时占多个槽（左右各一个挂架就是两条同一个 TurretId）。越靠后的槽用得越少（19 槽只剩 15 条），因为大多数单位用不到那么多挂架。"
+  },
+  "Turret19Id": {
+   "cn": "炮塔挂载槽 19",
+   "doc": "指向 Turrets.Id（error 级外键），15 条非零。语义与 Turret0Id 完全一样 —— 第 19 个挂载槽。同一选项可以同时占多个槽（左右各一个挂架就是两条同一个 TurretId）。越靠后的槽用得越少（19 槽只剩 15 条），因为大多数单位用不到那么多挂架。"
+  },
+  "Turret20Id": {
+   "cn": "炮塔挂载槽 20（占位）",
+   "doc": "⚠️ **全 2046 行都是 0** —— 第 21 个槽在原版数据里从没用过（error 级规则 fk.Options.Turret20Id 的命中率是 0.0）。别拿它当「第 21 个炮塔槽」去做新功能，界面上也不该给这个槽留位置。"
+  }
+ },
+ "PlaneFlyPresets": {
+  "Id": {
+   "cn": "飞行包线 ID（主键）",
+   "doc": "主键，23 行、Id 正好 1..23。被 Mobility.FlyPresetId 引用（0 = 地面单位）。"
+  },
+  "Name": {
+   "cn": "飞行包线名",
+   "doc": "按「体型 + 机型」命名：AC130 / BigFast B1B / BigFast MiG31。同一个预设可能被多个单位共用（均 2.74，最多 11）。"
+  },
+  "LowAltitudeIsDefault": {
+   "cn": "默认低空",
+   "doc": "为 true（7 行）= 这个机型一进场就在低空，不用手动压高度。（推断：列名 + OverrideAltitude 的成对取值。）"
+  },
+  "OverrideAltitude": {
+   "cn": "强制高度",
+   "doc": "为 true（8 行）= 忽略玩家设的高度、按下面的比例定死飞行高度。（推断：列名 + 成对取值。）"
+  },
+  "OverrideAltitideRatio": {
+   "cn": "强制高度比例",
+   "doc": "**0..1 的比例**（0.5 / 0.65 / 1.0）—— 在最低与最高高度之间取哪一档。⚠️ 列名里的 **Altitide 是游戏自己拼错的**（应为 Altitude），别照着「正确拼写」去改列名。9 行非默认。（推断：列名 + 取值分布。）"
+  },
+  "MinSpeed": {
+   "cn": "最低速度",
+   "doc": "**m/s**（全表 1..195 —— 1.0 那种是占位档）。失速线：低于它飞机会掉高度。11 种取值、18 行非默认。（推断：与 MaxSpeed 同一套单位 —— MaxSpeed x 3.6 正是卡片上那个 km/h。）"
+  },
+  "CornerSpeed": {
+   "cn": "角点速度",
+   "doc": "**m/s**。盘旋性能最好的那个速度（12 种取值、19 行非默认）。它被目标机动的 AI 用来挑进入角。（推断：列名 + 取值分布。）"
+  },
+  "MaxSpeed": {
+   "cn": "最大速度",
+   "doc": "**m/s**。⚠️ **卡片上「前进速度」那一格对固定翼读的就是它** —— 而且要 Round5(Round(MaxSpeed x 3.6))，实测 Su-25T = 150 → 540 km/h 逐字命中（unit_card.py::_t_speed_forward）。11 种取值、18 行非默认。"
+  },
+  "AfterburnSpeed": {
+   "cn": "加力最大速度",
+   "doc": "**m/s**。开加力时能到多少（比 MaxSpeed 高，如 125 vs 280）。12 种取值、18 行非默认。与 Mobility.IsAfterburner 配套。"
+  },
+  "AfterburnCornerSpeed": {
+   "cn": "加力角点速度",
+   "doc": "**m/s**。开加力状态下的最佳盘旋速度。13 种取值、19 行非默认。"
+  },
+  "Acceleration": {
+   "cn": "加速度",
+   "doc": "**m/s²**（5.0 是常见值）。速度轴上的加减速 —— ⚠️ 与下面两个角速度列不是一套单位，别混。5 种取值、12 行非默认。"
+  },
+  "AfterburnerAcceleration": {
+   "cn": "加力加速度",
+   "doc": "**m/s²**。开加力时的加速度。6 种取值、16 行非默认。"
+  },
+  "Deceleration": {
+   "cn": "减速度",
+   "doc": "**m/s²**。收油门 / 减速板时的减速度。6 种取值、16 行非默认。"
+  },
+  "AfterburnerDeceleration": {
+   "cn": "加力减速度",
+   "doc": "**m/s²**。加力状态下的减速度。6 种取值、16 行非默认。"
+  },
+  "MinSpeedYaw": {
+   "cn": "最低速度偏航角速度",
+   "doc": "**度 / 秒**。在最低速度上能转多快（偏航 = 左右转向）。4 种取值、9 行非默认。⚠️ 全表这一组 Yaw / Pitch 都是角速度，不是角度。"
+  },
+  "MaxSpeedYaw": {
+   "cn": "最大速度偏航角速度",
+   "doc": "**度 / 秒**。⚠️ 卡片上固定翼第 6 格「回转半径」用的**就是这一列**：theta = 本列 x pi / 180，半径 = v x (tan theta + 1) / tan theta，再 x2 取 5 的倍数（unit_card.py::_t_turn_radius）。实测 Su-25T MaxSpeedYaw = 55 → 255 → x2 = 510 ✅。7 种取值、13 行非默认。"
+  },
+  "AfterburnYaw": {
+   "cn": "加力偏航角速度",
+   "doc": "**度 / 秒**。开加力时的左右转向速度。7 种取值、13 行非默认。"
+  },
+  "CornerSpeedYaw": {
+   "cn": "角点速度偏航角速度",
+   "doc": "**度 / 秒**。角点速度上的转向能力（取值带小数，如 30.0666656 —— 是 float 不要取整）。16 种取值、16 行非默认。"
+  },
+  "CornerAfterburnSpeedYaw": {
+   "cn": "加力角点偏航角速度",
+   "doc": "**度 / 秒**。开加力 + 角点速度时的转向能力。7 种取值、13 行非默认。"
+  },
+  "MinSpeedPitch": {
+   "cn": "最低速度俯仰角速度",
+   "doc": "**度 / 秒**。在最低速度上抬头 / 低头的速度（俯仰 = 上下）。3 种取值、5 行非默认。"
+  },
+  "MaxSpeedPitch": {
+   "cn": "最大速度俯仰角速度",
+   "doc": "**度 / 秒**。3 种取值、5 行非默认。"
+  },
+  "AfterburnPitch": {
+   "cn": "加力俯仰角速度",
+   "doc": "**度 / 秒**。3 种取值、5 行非默认。"
+  },
+  "MaxRoll": {
+   "cn": "最大滚转角",
+   "doc": "**度**。机体能滚转到多少（45 / 60 / 80）—— 这一列是**角度**不是角速度（这一组里唯一的例外）。5 种取值、15 行非默认。"
+  },
+  "NoiseSpeed": {
+   "cn": "镜头噪点速度",
+   "doc": "**倍率 / 频率**（0.1 / 0.3 / 1.0）。飞行时镜头抖动噪声的快慢 —— 纯观感。3 种取值、13 行非默认。（推断：列名 + 与下面三个同组。）"
+  },
+  "NoiseSize": {
+   "cn": "镜头噪点幅度",
+   "doc": "**倍率**（1.0 / 5.0 / 10.0）。抖动噪声的幅度。3 种取值、5 行非默认。（推断：列名。）"
+  },
+  "LocalShakingDepth": {
+   "cn": "机体抖动幅度",
+   "doc": "**倍率**（0.1 / 0.2 / 0.4）。飞机模型自身的抖动幅度。3 种取值、12 行非默认。（推断：列名。）"
+  },
+  "LocalShakingSpeed": {
+   "cn": "机体抖动速度",
+   "doc": "**倍率**（0.5 / 1.0）。抖动频率。2 种取值、8 行非默认。（推断：列名。）"
+  },
+  "NoseLiftStartSpeed": {
+   "cn": "抬头起始速度",
+   "doc": "**m/s**。起飞 / 加速到这个速度机头开始抬起（100 / 200）。2 种取值、4 行非默认。（推断：列名 + 取值分布。）"
+  },
+  "NoseLiftAngle": {
+   "cn": "抬头角度",
+   "doc": "**度**（0 / 10 / 30）。抬头抬到多少。4 种取值、15 行非默认。（推断：列名 + 取值分布。）"
+  },
+  "ForceCounterClockwise": {
+   "cn": "强制逆时针盘旋",
+   "doc": "⚠️ 只有 **1 行为 true**（其余 22 行 false）。强制这个机型按逆时针方向绕圈 —— 大多是设计上的盘旋偏好。改动它影响 AI 的绕圈方向。（推断：列名 + 取值分布。）"
+  },
+  "TargetAheadFactor": {
+   "cn": "提前量系数",
+   "doc": "**倍率**（0.5 / 1.0 / 2.0）。AI 机炮 / 火箭扫射时往目标前方瞄多少（打提前量）。4 种取值、10 行非默认。（推断：列名 + 取值分布。）"
+  },
+  "StrafeDiveAngle": {
+   "cn": "扫射俯冲角",
+   "doc": "**度**（15 / 20）。对地扫射时俯冲的角度。2 种取值、9 行非默认。与 StrafeSpeedRatio 配套。（推断：列名 + 用户口径「扫射」那条操作。）"
+  },
+  "StrafeSpeedRatio": {
+   "cn": "扫射速度比例",
+   "doc": "**0..1 的比例**（0.4 / 0.5 / 1.0）。扫射时用最大速度的百分之多少进场。3 种取值、9 行非默认。（推断：列名 + 取值分布。）"
+  }
+ },
+ "SensorUnits": {
+  "Id": {
+   "cn": "行 ID（主键）",
+   "doc": "主键，609 行、最大 1422。行本身 = 这个单位装这个传感器。"
+  },
+  "UnitId": {
+   "cn": "单位 ID",
+   "doc": "指向 Units.Id（error 级外键）。539/540 个单位有传感器行（只有 1 个单位没有）。一个单位可以有几行 —— 卡片视野取的是**全部行的 Max**。"
+  },
+  "SensorId": {
+   "cn": "传感器 ID",
+   "doc": "指向 Sensors.Id（error 级外键）。⚠️ 这一列只在「选项没盖」的时候说了算：选中选项里第一个带 Options.MainSensorId 的会**把整张基础表替换掉**，ExtraSensorId 再追加一个（unit_card.py::CardData.base_sensors / effective_sensors）。"
+  }
+ },
+ "Sensors": {
+  "Id": {
+   "cn": "传感器行 ID（主键）",
+   "doc": "主键，只有 36 行。被 SensorUnits.SensorId 与 Options.MainSensorId / ExtraSensorId 引用 —— 它是**共享度最高的一张表**（均 16.92 个单位共用、最多 142）。"
+  },
+  "Name": {
+   "cn": "观瞄名",
+   "doc": "观瞄 / 雷达模板名（Good Optics / Medium Optics / Optics Plane Air Super）。35/36 各不相同（只有一行重复）。"
+  },
+  "IsDefault": {
+   "cn": "是否默认",
+   "doc": "语义同 Armors.IsDefault（软标志，23/36 为 true）。⚠️ 但**卡片上的视野不按它筛** —— 视野是「把该单位在 SensorUnits 里的传感器全取进来，再按选项改写，最后取 Max」。"
+  },
+  "OpticsGround": {
+   "cn": "地面视野",
+   "doc": "**m**。对地面目标的观瞄距离。卡片上「视野」那一格 = 改写后传感器列表里本列的 Max，**再乘 2**（InfocardConfig.EffectiveRangeMultiplier，是配置项不是硬编码）。⚠️ 取 Max 之前会先被选项改写：Options.MainSensorId 是**整个替换**基础表（不是追加），Options.ExtraSensorId 再追加一个 —— 实测 BMD-2 因此显示 1200 而不是 1400。"
+  },
+  "OpticsHighAltitude": {
+   "cn": "高空视野",
+   "doc": "**m**。对高空（飞机）目标的观瞄距离，显示同样 x2。CategoryType = 6（Aircrafts）的单位，卡片表头取的是**高空**这一列而不是地面。"
+  },
+  "OpticsLowAltitude": {
+   "cn": "低空视野",
+   "doc": "**m**。对直升机等低空目标的观瞄距离（1..2000，显示 x2）。只出现在视野那一格的鼠标悬浮提示里（三条：地面 / 低空 / 高空），表头不显示它。"
+  },
+  "ModelFileName": {
+   "cn": "观瞄模型节点名",
+   "doc": "观瞄设备的模型节点名（Optics / Optic），是预制体里的节点名不是 catalog 键。36 行里只有 9 行有值（4 种写法）。"
+  }
+ },
+ "SpecializationAvailabilities": {
+  "Id": {
+   "cn": "行 ID（主键）",
+   "doc": "主键，338 行、最大 1227。被 TransportAvailabilities.SpecializationAvailabilityId 引用（error 级外键）。"
+  },
+  "SpecializationId": {
+   "cn": "专精 ID",
+   "doc": "指向 Specializations.Id（error 级外键）。12 个专精有可用性行（13 个专精里 Id=11 Editor 那条没有）。自然键 = SpecializationId + UnitId（实测唯一）。"
+  },
+  "UnitId": {
+   "cn": "单位 ID",
+   "doc": "指向 Units.Id（error 级外键）。⚠️ 只有在这张表里出现过的单位才会进军械库 —— 338 行覆盖的单位比 540 少得多（没编入任何专精的单位显示在「未编入任何专精」那一栏）。"
+  },
+  "MaxAvailabilityXp0": {
+   "cn": "可用数上限（XP0 档）",
+   "doc": "**个**。这个单位在这个专精里一局能买几个（实测 1 / 2 / 3 / 4 / 6 / 8）。军械库卡片右下那个可用数徽章读它（armory.py::_availability_rows 把 (spec, unit, 本列) 抽出来）。⚠️ 名字里那个 XP0 是「经验等级档位」—— XP1..3 三列全 0，说明这一版只用了第一档。"
+  },
+  "MaxAvailabilityXp1": {
+   "cn": "可用数上限（XP1 档，占位）",
+   "doc": "⚠️ **全 338 行都是 0** —— 占位列。别拿它做「升级后能多买几个」的功能，这一版数据没有第二档。"
+  },
+  "MaxAvailabilityXp2": {
+   "cn": "可用数上限（XP2 档，占位）",
+   "doc": "⚠️ **全 338 行都是 0** —— 占位列。"
+  },
+  "MaxAvailabilityXp3": {
+   "cn": "可用数上限（XP3 档，占位）",
+   "doc": "⚠️ **全 338 行都是 0** —— 占位列。"
+  }
+ },
+ "Specializations": {
+  "Id": {
+   "cn": "专精 ID（主键）",
+   "doc": "主键，13 行（3..16，**Id 不连续**）。被 SpecializationAvailabilities.SpecializationId 引用。"
+  },
+  "CountryId": {
+   "cn": "阵营 ID",
+   "doc": "指向 Countries.Id（error 级外键）。决定这个专精出现在哪个阵营的机库列表里。"
+  },
+  "Name": {
+   "cn": "专精名",
+   "doc": "英文名（USMC / Armored Brigade / Airborne infantry）。⚠️ **界面显示用的是本地化键 UIName**，产品 armory.py 明确写了「宁可显示原文，也不要瞎翻一个中文名」。"
+  },
+  "UIName": {
+   "cn": "专精名（本地化键）",
+   "doc": "本地化键（ui_spec_usmc_name 这种），中文在 keys/chi 里（12/13 有条目，缺 Id=11 Editor）。"
+  },
+  "UIDescription": {
+   "cn": "专精说明（本地化键）",
+   "doc": "本地化键（ui_spec_usmc_description）。13/13 都有键 —— 与 UIName 不同，说明文字一个都没缺。"
+  },
+  "Icon": {
+   "cn": "专精图标键",
+   "doc": "小图标（SPEC_US_Marines 这种，走 nations&specs 那组 bundle，catalog 命中率 1.00）。军械库左栏 / 专精条上那个徽章。"
+  },
+  "Illustration": {
+   "cn": "专精插画键",
+   "doc": "大插画（US_SPEC_USMC）。专精选择界面的背景图，同样在 nations&specs 那组 bundle。"
+  },
+  "ShowInHangar": {
+   "cn": "在机库里显示",
+   "doc": "为 true（12/13）= 玩家真能选这个专精。唯一 false 的是 Id=11 Editor（armory.py::list_specializations 的 hangar_only 默认就按它筛）。"
+  },
+  "ContentMembership": {
+   "cn": "内容归属（DLC）",
+   "doc": "**枚举**：-1 = Vanilla、2 = DLC2、3 = DLC3（dump.cs 的 ContentMembership）。实测 13 行里 -1 有 11 行、2 与 3 各 1 行 —— 新专精跟着 DLC 走。取值表以《字段词典-枚举与掩码》为准。"
+  },
+  "ReconSlots": {
+   "cn": "侦察槽位数",
+   "doc": "**个**。这个专精的卡组里「侦察」这一行能放几张卡（2..7，Editor 那一行是 64）。军械库左栏的行就是按这 7 个类别分的。⚠️ 是**槽位数**不是点数 —— 点数是下面的 ReconPoints。"
+  },
+  "InfantrySlots": {
+   "cn": "步兵槽位数",
+   "doc": "**个**。卡组里「步兵」那一行能放几张卡（3..6，Editor 64）。"
+  },
+  "CombatSlots": {
+   "cn": "载具槽位数",
+   "doc": "**个**。卡组里「载具」那一行的槽位数（0..6，Editor 64）—— 注意列名是 Combat（战斗）而界面那一栏叫「载具」。"
+  },
+  "SupportSlots": {
+   "cn": "支援槽位数",
+   "doc": "**个**。卡组里「支援」那一行的槽位数（0 / 3 / 6 / 7 / 64）。"
+  },
+  "LogisticsSlots": {
+   "cn": "后勤槽位数",
+   "doc": "**个**。⚠️ 实测只有两种取值：**12 个专精全是 0**、只有 Editor 是 64 —— 也就是这一栏在原版里没启用（与军械库「未分类」那一栏对得上）。"
+  },
+  "HelicoptersSlots": {
+   "cn": "直升机槽位数",
+   "doc": "**个**。卡组里「直升机」那一行的槽位数（0..7，Editor 64）。"
+  },
+  "AirSlots": {
+   "cn": "战机槽位数",
+   "doc": "**个**。卡组里「战机」那一行的槽位数（0 / 2 / 4 / 6 / 7，Editor 64）。"
+  },
+  "MaxSlots": {
+   "cn": "卡组总槽位上限",
+   "doc": "**个**。整套卡组一共能放几张卡（20..33，Editor 是 448）。⚠️ 实测 13 行**全部等于**上面那 7 个槽位数之和（USMC 3+5+4+7+0+6+7 = 32、Armored Brigade 4+4+3+3+0+3+4 = 21、Editor 448）—— 它是个**冗余字段**，改任何一个槽位都必须同步改它，否则卡组槽位数自相矛盾。"
+  },
+  "ReconPoints": {
+   "cn": "侦察点数预算",
+   "doc": "**点**。这个专精在「侦察」这一类里能花的点数（250..1250，Editor 是 100000）。与槽位数是**两个独立的限制**：放得下还要买得起。"
+  },
+  "InfantryPoints": {
+   "cn": "步兵点数预算",
+   "doc": "**点**（750 / 1000 / 1250 / 1750，Editor 100000）。"
+  },
+  "CombatPoints": {
+   "cn": "载具点数预算",
+   "doc": "**点**（0 / 500 / 750 / 1000 / 1250 / 1750，Editor 100000）。⚠️ 0 是「这一类不给点数」——真的不能带载具，不是「不限」。"
+  },
+  "SupportPoints": {
+   "cn": "支援点数预算",
+   "doc": "**点**（250..1250，Editor 100000）。"
+  },
+  "LogisticsPoints": {
+   "cn": "后勤点数预算",
+   "doc": "**点**。⚠️ 同 LogisticsSlots：12 个专精全是 0、只有 Editor 是 100000 —— 原版没启用。⚠️ 100000 那种大数是「编辑器档」的「随便花」，不要当成真实预算。"
+  },
+  "HelicoptersPoints": {
+   "cn": "直升机点数预算",
+   "doc": "**点**（0..1000，Editor 100000）。"
+  },
+  "AirPoints": {
+   "cn": "战机点数预算",
+   "doc": "**点**（0 / 250 / 500 / 750 / 1000 / 1250 / 1500，Editor 100000）。"
+  }
+ },
+ "SquadMembers": {
+  "Id": {
+   "cn": "成员行 ID（主键）",
+   "doc": "主键，1134 行、最大 1644。加人取空号即可。"
+  },
+  "UnitId": {
+   "cn": "所属单位 ID",
+   "doc": "指向 Units.Id（error 级外键）。1134 行覆盖 **194 个单位，全部是步兵** —— 载具 / 飞机没有这张表（LoadSquads 只对 Type=2 走）。"
+  },
+  "ModelFileName": {
+   "cn": "士兵模型键",
+   "doc": "**步兵真正的模型在这一列**（286 种，如 RU_Motostrelki_rifle），不是 Units.ModelFileName。一人一行，所以同一个班可以有 3 个不同兵种外观（rifle1 / rifle2）。"
+  },
+  "PrimaryWeaponId": {
+   "cn": "主武器 ID",
+   "doc": "指向 Weapons.Id（error 级外键）。1134/1134 **全部非 0 —— 必填**。改了它，这件武器必须同时出现在同单位的 SquadWeapons 里，否则 error（原版 0 例外）。"
+  },
+  "SpecialWeaponId": {
+   "cn": "副武器 ID",
+   "doc": "指向 Weapons.Id（error 级外键）。**460/1134 非 0**，其余 0 = 这名士兵没有副武器（0 = 不使用，不是「指向 Id 0」）。"
+  },
+  "DeathPriority": {
+   "cn": "阵亡波次",
+   "doc": "**不是序号，是波次**：数值越大越先阵亡（用户实证），该士兵的武器随之丢失。实测分布 {0: 50, 1: 192, 2: 419, 3: 330, 4: 137, 5: 6}，176/194 个班里有重复值 —— 同值的一起死。改它不连动任何别的表，只影响战斗中的减员顺序。"
+  }
+ },
+ "SquadWeapons": {
+  "Id": {
+   "cn": "行 ID（主键）",
+   "doc": "主键，706 行、最大 1409。行本身 = 这个班有这件武器。"
+  },
+  "WeaponId": {
+   "cn": "武器 ID",
+   "doc": "指向 Weapons.Id（error 级外键）。246 种不同武器。⚠️ 清单里有、但没人携带的武器是**合法**的（52 个单位共多出 62 种，同族变体 / 附件），反向不要求。"
+  },
+  "Order": {
+   "cn": "清单顺序",
+   "doc": "这个班武器清单里的排列号（0 占 557/706）。它决定 HUD 上那排武器的先后；自然键 = UnitId + WeaponId + Order（实测唯一）。"
+  },
+  "UnitId": {
+   "cn": "单位 ID",
+   "doc": "指向 Units.Id（error 级外键）。706 行覆盖 194 个单位 —— 与 SquadMembers 覆盖的单位**完全同一批**（都是步兵）。⚠️ **单向包含（error 级）**：SquadMembers 里用到的每一门枪都必须出现在本表里（原版 1134/1134 + 460/460，0 例外）；成员有、清单没有 → 实机 HUD 不显示这件武器。"
+  }
+ },
+ "TransportAvailabilities": {
+  "Id": {
+   "cn": "行 ID（主键）",
+   "doc": "主键，227 行、最大 1637。行本身 = 一条「载具能运乘客」的配对。"
+  },
+  "SpecializationAvailabilityId": {
+   "cn": "乘客侧（可用性行 ID）",
+   "doc": "指向 SpecializationAvailabilities.Id（error 级外键）。⚠️ **乘客不是直接写单位 ID**，要经这一跳：本行 -> SpecializationAvailabilities 行 -> 它的 UnitId = 乘客单位。实测乘客侧 227/227 全是步兵。（推断那一跳：树状图 §6 的实测。）"
+  },
+  "UnitId": {
+   "cn": "载具侧单位 ID",
+   "doc": "指向 Units.Id（error 级外键）。⚠️ **这一列是载具**（214 个 Type=4 + 13 个 Type=8），不是乘客 —— 名字容易看反。不变量（warning 级 inv.transport.capacity）：载具的 Units.InfantrySlots >= 乘客班的 SquadMembers 行数，原版 227/227 成立；载量不足的后果未实测。108 个步兵单位不在任何运输配对里。"
+  }
+ },
+ "TurretUnits": {
+  "Id": {
+   "cn": "行 ID（主键）",
+   "doc": "主键，1597 行、最大 2230。行本身 = 一次「这个单位装这个炮塔 / 挂架」的绑定。"
+  },
+  "UnitId": {
+   "cn": "单位 ID",
+   "doc": "指向 Units.Id（error 级外键）。312/540 个单位有炮塔行（载具 / 直升机 / 飞机 / 舰船），扇出 1..24（Su-34 24 个、Su-24M2 23 个、AV-8B 21 个）。"
+  },
+  "TurretId": {
+   "cn": "炮塔 ID",
+   "doc": "指向 Turrets.Id（error 级外键）。⚠️ 卡片那一排武器走的是「**只收 Turrets.IsDefault == true** 的炮塔，再按 Options.Turret0..20Id 逐槽覆盖」（unit_card.py::card_turrets）—— 全库有 110 个单位一个 IsDefault 炮塔都没有。"
+  },
+  "Order": {
+   "cn": "装填顺序",
+   "doc": "同一单位内炮塔的排序（1519/1597 是 0）。非 0 的 78 行多是右炮塔 / 车体炮塔 / 指挥塔 —— 它决定游戏装填与卡片排列的先后。自然键 = UnitId + TurretId + Order（实测唯一）。"
+  }
+ },
+ "TurretWeapons": {
+  "Id": {
+   "cn": "行 ID（主键）",
+   "doc": "主键，1279 行、最大 1923。行本身 = 一次「这个炮塔能装这门武器」的绑定（835 个炮塔只有 1 件、最多的 4 件）。"
+  },
+  "WeaponId": {
+   "cn": "武器 ID",
+   "doc": "指向 Weapons.Id（error 级外键）。835 个炮塔只装 1 件武器，最多的装 4 件。"
+  },
+  "TurretId": {
+   "cn": "炮塔 ID",
+   "doc": "指向 Turrets.Id（error 级外键）。⚠️ **这张表自己没有 UnitId** —— 一个炮塔能装的武器是模板级的，单位归属要经 TurretUnits 绕一跳（core/edit/sharing.py 的 Edge.via 就是这一跳；修之前车辆武器的「被 N 个单位共用」恒为 0 或 1）。"
+  },
+  "Order": {
+   "cn": "武器顺序",
+   "doc": "同一炮塔内武器的排列序号（0 占多数，最多到 3）。卡片那一排武器的先后按它 + Id。"
+  },
+  "WeaponChannel": {
+   "cn": "武器通道（按挂载点覆盖）",
+   "doc": "**按挂载点覆盖武器行上的同名值**：同一个武器模板装到不同炮塔，这一列可以不一样。实测 328/1279 行的 Channel 或 Priority 与武器行不同 —— 例：MMG 7.62 PKT 武器行是 (0,0)，装到 BMP-3 主炮塔就变成 (0,2)。取值 0/1/2/3/4/5/6/9/10/12（通道号，不是位掩码；1191/1279 是 0）。"
+  },
+  "WeaponPriority": {
+   "cn": "武器优先级（按挂载点覆盖）",
+   "doc": "同样按挂载点覆盖 Weapons.WeaponPriority：决定这个炮塔上哪门武器优先开火 / 优先显示。取值 0..3，250/1279 非 0。⚠️ Weapons 表自己那两列（WeaponChannel / WeaponPriority）全表是 0 的占位 —— 真正生效的值在这里。"
+  }
+ },
+ "Turrets": {
+  "Id": {
+   "cn": "炮塔 ID（主键）",
+   "doc": "主键，1055 行、最大 1416。被 TurretUnits.TurretId、TurretWeapons.TurretId、Options.Turret0..20Id 与自己的 ParentTurretId 引用。"
+  },
+  "Name": {
+   "cn": "炮塔名",
+   "doc": "模板名（MainTurret M10Booker 105 / MainTurret BTR82A）。⚠️ **Turret Empty（Id=160）是占位空炮塔**：无模型、不旋转、无武器 —— 83 个单位用它表示「这个挂架空着」。"
+  },
+  "ModelFileName": {
+   "cn": "炮塔模型键 / 节点名",
+   "doc": "炮塔模型（Weapon/Hellfire/Hellfire_4 这种，也有些是节点名）。673 种取值、793 行非默认，多数为 null 或空串。产品不做 3D。"
+  },
+  "IsDefault": {
+   "cn": "是否默认",
+   "doc": "软标志（199/1055 为 true）。⚠️ **卡片那一排武器的第一道筛子就是它**：CardData.card_turrets 从 TurretUnits 里**只收 IsDefault == true** 的炮塔，再按 Options.Turret0..20Id 逐槽覆盖。全库 110 个单位一个 IsDefault 炮塔都没有、34 个单位有多个 —— 所以不能拿它当「唯一默认炮塔」。"
+  },
+  "IsDynamicTurret": {
+   "cn": "动态炮塔",
+   "doc": "为 true（6 行）= 这是「载体」而不是直接开火的炮塔。判定是**递归的**：自带这个标志、或武器列表为空、或任一子炮塔是动态的 —— 三者之一就算。样本：CupolaTurret T72B3、NestedTurret Uragan1M / Uran9 系列。与 Options.IsDynamicTurretOption 配套（10 条选项）。"
+  },
+  "ParentTurretId": {
+   "cn": "父炮塔 ID",
+   "doc": "指向 Turrets.Id（**自引用**，error 级外键）。实测 86 个子炮塔、最深 1 层；另有 **965 行是 null**（不是 0！判空要用 is None）。子炮塔也在 TurretUnits 里（86/86）且与父同单位 —— 所以它表达的是「**挂在哪**」而不是「挂不挂」。"
+  },
+  "FullRotation": {
+   "cn": "全向旋转",
+   "doc": "为 true（548/1055）= 炮塔能 360 度转（不用管左右限位）。为 false 时左 / 右水平角才起作用（507 行）。"
+  },
+  "LeftHorizontalAngle": {
+   "cn": "左转限位角",
+   "doc": "**度**，负值（-180 / -120 / 0）。炮塔向左能转多少 —— ⚠️ **是负的**，与 RightHorizontalAngle 的正值配对成射界。25 种取值、522 行非默认。FullRotation 为 true 时这一列没意义。"
+  },
+  "RightHorizontalAngle": {
+   "cn": "右转限位角",
+   "doc": "**度**，正值（0 / 120 / 180）。与左限位配对；两者相减就是这个炮塔的射界宽度。25 种取值、522 行非默认。"
+  },
+  "HorizontalRotationSpeed": {
+   "cn": "水平旋转速度",
+   "doc": "**度 / 秒**（75 / 90 / 0）—— 炮塔转向目标的速度，直接决定跟瞄快慢。8 种取值、671 行非默认。（推断：与 Weapons.VerticalRotationSpeed 同一套语义，那一列是俯仰速度。）"
+  }
+ },
+ "UnitAbilities": {
+  "Id": {
+   "cn": "行 ID（主键）",
+   "doc": "主键，655 行、最大 1838。行本身 = 这个单位有这项能力。"
+  },
+  "UnitId": {
+   "cn": "单位 ID",
+   "doc": "指向 Units.Id（error 级外键）。655 行覆盖 453/540 个单位 —— **87 个单位没有任何能力**（缺了只是 warning，不是 error）。"
+  },
+  "AbilityId": {
+   "cn": "能力 ID",
+   "doc": "指向 Abilities.Id（error 级外键）。⚠️ 这是能力图标的**第一条来源**，另一条是 Options.Ability1..3Id（换上带能力的改装件也会出图标）—— 产品的 build_abilities 目前只读这一条。唯一键 = UnitId + AbilityId（原版 0 组重复）。"
+  }
+ },
+ "UnitArmors": {
+  "Id": {
+   "cn": "行 ID（主键）",
+   "doc": "主键，711 行、最大 1367。行本身 = 这个单位用这套装甲。"
+  },
+  "UnitId": {
+   "cn": "单位 ID",
+   "doc": "指向 Units.Id（error 级外键）。**540/540 个单位必有**（error 级 req.UnitArmors，缺了游戏没兜底），711 行 = 有些单位有备用装甲行。唯一键 = UnitId + ArmorId。"
+  },
+  "ArmorId": {
+   "cn": "装甲 ID",
+   "doc": "指向 Armors.Id（error 级外键）。⚠️ 两件事：(1) error 级规则要求每个单位**至少有一条**指向 IsDefault=true 的装甲行；(2) 卡片取装甲时会先看 Options.ArmorId 有没有覆盖 —— **有覆盖就完全绕过本表**（unit_card.py::CardData.armor），所以改这一列之前先确认没有选项盖着它。"
+  }
+ },
+ "UnitPropulsions": {
+  "Id": {
+   "cn": "行 ID（主键）",
+   "doc": "主键，646 行、最大 1314。行本身 = 这个单位用这套机动。"
+  },
+  "UnitId": {
+   "cn": "单位 ID",
+   "doc": "指向 Units.Id（error 级外键）。**540/540 个单位必有**（error 级 req.UnitPropulsions）—— 加新单位时这是三张必填表之一（另外两张是 Units 与 UnitArmors）。唯一键 = UnitId + MobilityId。"
+  },
+  "MobilityId": {
+   "cn": "机动 ID",
+   "doc": "指向 Mobility.Id（error 级外键）。⚠️ 同装甲：Options.MobilityId 会**整个覆盖**它（unit.CurrentMobility）—— 换履带 / 换发动机的选项走的就是那条路，所以算速度 / 载重 / 两栖时必须传 selected（unit_card.py::CardData.mobility）。"
+  }
+ },
+ "Units": {
+  "OriginalName": {
+   "cn": "原始名（占位）",
+   "doc": "⚠️ 全 540 行都是 null —— 这一列从来没被写过。名字上像「改名前的原名」，实际不要动它，也不要拿它当显示名（显示名走 HUDName）。"
+  },
+  "OwnerInfantryID": {
+   "cn": "所属步兵班 ID（占位）",
+   "doc": "⚠️ 全 540 行都是 0。名字像「这个载具运的是哪个步兵班」，但真正谁运谁走 TransportAvailabilities（载具侧 214 车 + 13 直升机，乘客侧 227 行全是步兵）。"
+  },
+  "OriginalCost": {
+   "cn": "原始成本（占位）",
+   "doc": "⚠️ 全 540 行都是 0。它**不是**基础价 —— 基础价是 Cost。unit_card.py::base_cost 里就是这句「OriginalCost == 0 时它就是 Cost」，所以卡片上的金色数字 = Cost + 所有选中选项的 Cost 之和（card_cost）。"
+  },
+  "Id": {
+   "cn": "单位 ID（主键）",
+   "doc": "主键，540 行但最大 Id 是 706 —— **不连续是常态**，加单位取空号即可。改它要同步 11 张表的 UnitId（UnitPropulsions / UnitArmors / SensorUnits / UnitAbilities / TurretUnits / WeaponAmmunitions / SquadMembers / SquadWeapons / Modifications / SpecializationAvailabilities / TransportAvailabilities）。"
+  },
+  "DisplayInArmory": {
+   "cn": "在军械库里显示",
+   "doc": "军械库卡片墙要不要列出它。armory.py 的判据是 DisplayInArmory is True **且** IsUnitModification 不是 True。实测 72 行不是 true（含 36 个舰船 —— 军械库压根没有「未分类」那一栏）。"
+  },
+  "IsUnitModification": {
+   "cn": "是改装变体",
+   "doc": "这一行本身是不是「某个选项换出来的变体」。实测 78 个单位为 true，**78/78 都被某条 Options.ReplaceUnitId 指向**；但反过来不成立 —— 被指向的 143 个目标里有 65 个是常规单位（比如 Buk M2 换成 Buk M3）。所以它不描述「有没有人指向它」。"
+  },
+  "HUDName": {
+   "cn": "HUD 名（游戏里显示的名字）",
+   "doc": "游戏里那个名字：卡片抬头与卡片墙都**优先**用它，为空才退回 Name（unit_card.py::unit_name / armory.py::_Unit.display_name）。全 540 行都有值（496 种写法），其中 **181 个与 Name 不同** —— Name 带内部前缀与配置后缀（DLC3 FSB Snaipery / Marine Raiders CQC），HUDName 才是游戏里那个（FSB Snaipery / Marine Raiders）。"
+  },
+  "Name": {
+   "cn": "内部名",
+   "doc": "开发用的内部名（BTR-82 / M1A2 SEP v2 TUA）。界面显示用 HUDName；而且卡片抬头还会被选项的 ReplaceUnitName / ConcatenateWithUnitName 覆盖（实机 BTR-82 那张卡写的是 BTR-82A）。"
+  },
+  "Description": {
+   "cn": "描述（占位）",
+   "doc": "⚠️ 530 行是 null、10 行是空串 —— 全库等于没用。界面文案走本地化表（keys/chi），不要往这里写说明文字，游戏不读。"
+  },
+  "ModelFileName": {
+   "cn": "3D 模型键",
+   "doc": "模型 catalog 键（裸名，如 RU_BTR_D），catalog 里 99% 命中。⚠️ **步兵那 194 行的值全是同一个 US_Rangers** —— 改步兵的这一列什么都不会发生，士兵模型在 SquadMembers.ModelFileName 里。"
+  },
+  "PortraitFileName": {
+   "cn": "立绘键",
+   "doc": "卡片右侧那张通栏大图的 catalog 键（走 unitportraits 那组 bundle）。**缺省也走选项覆盖**：第一个非空的 Options.PortraitOverride 优先，为空才回落本列（unit_card.py::unit_portrait_key）。"
+  },
+  "ThumbnailFileName": {
+   "cn": "缩略图键",
+   "doc": "卡片墙那张小图的 catalog 键（unitlabels 那组 bundle）。同样缺省也走 Options.ThumbnailOverride 覆盖 —— 实测有 17 个单位的**缺省**缩略图就被选项改掉了（23 / 72 / 108 / 129…），只读本列会画错。"
+  },
+  "AudioPreset": {
+   "cn": "语音 / 音效预设",
+   "doc": "单位语音与引擎音的预设键（UNIT_SOUND_PRESET_RU_INFANTRY_MOTOSTRELKI 这种），catalog 命中率 0.98+。产品不做音频，只存不播。"
+  },
+  "Cost": {
+   "cn": "基础成本",
+   "doc": "卡片左上那个金色数字的**基数**。实际成本 = 本列 + 所有已选选项的 Options.Cost 之和（unit_card.py::card_cost）。⚠️ 选项里写的是**相对价**（加多少钱），不是「改成多少钱」。实测 374 Su-25T = 65，加默认选项 230 → 卡片 295。"
+  },
+  "UpkeepMultiplier": {
+   "cn": "维护系数（占位）",
+   "doc": "⚠️ 全 540 行都是 1.0，产品没有任何读点 —— 占位列。"
+  },
+  "TimeModifierRefund": {
+   "cn": "撤回时间修正",
+   "doc": "**秒**。「距离撤回至战斗群」那一格的修正量，会被选中选项的 Options.TimeModifierRefund 累加。非阵亡分支：value = (Cost - base) x 0.5 + 30 + 本列（base 一般是 Cost 的 90%），最后与 1.0 取 max（unit_card.py::purchase_delay）。实测 67 行非 0（0 / 300 / 500）。"
+  },
+  "TimeModifierResurrect": {
+   "cn": "复活时间修正",
+   "doc": "**秒**。阵亡后的整备时间 = 1.5 x Cost + 420 + 本列（+ 所有选中选项的 Options.TimeModifierResurrect）。⚠️ 是**负数**居多：实测 BTR-82A（Cost 55）本列 = -120 → 82.5 + 420 - 120 = 382.5 s = 卡片上的 6:22；-240 的那批（363 行非 0）也是往下减。"
+  },
+  "Length": {
+   "cn": "车长",
+   "doc": "**米**，单位包围盒的长。89 种取值（2.0 / 4.0 / 7.0…）。产品与卡片都没有读点，只作为编辑器里的参考值展示。"
+  },
+  "Width": {
+   "cn": "车宽",
+   "doc": "**米**，单位包围盒的宽（54 种取值）。没有读点。"
+  },
+  "Height": {
+   "cn": "车高",
+   "doc": "**米**，单位包围盒的高（45 种取值）。⚠️ 步兵恒 2.0 —— 步兵上它是占位。没有读点。"
+  },
+  "Weight": {
+   "cn": "重量",
+   "doc": "**kg**。⚠️ **步兵恒为 1，不是真重量** —— 步兵重量 = 125 x 班成员数（LoadUnits 里那句 imul eax,[rax+18h],7Dh；unit_card.py::card_weight）。载具 / 直升机 / 飞机才直读本列（BTR-82A = 15000，9K51 Grad = 14000）。"
+  },
+  "Stealth": {
+   "cn": "隐蔽系数",
+   "doc": "隐身系数的原始列；卡片上「隐身」那一格显示的是 **1 / 本列**。⚠️ 卡片实际读的是 CurrentStealth，而且 Options.StealthOverride 会整个盖掉它（全库 20 条选项在用：0.4 / 0.666 / 1.0），只读本列会让 5 个单位的隐蔽显示错。"
+  },
+  "InfantrySlots": {
+   "cn": "座位数",
+   "doc": "这个单位能装几个步兵（Zubr 500 / LCAC 180 / IL-76MD 125 / C-17 102 / Mi-26 85）。⚠️ 两个坑：(1) **有没有这一格**由 Units.GetInfantrySlots() 决定，不是「值为 0 就不显示」—— 与 CategoryType、有没有 SquadMembers 都有关；(2) 步兵自己恒 0，这是**载具侧**的字段。运输不变量：载具的本列 >= 乘客班的 SquadMembers 行数（原版 227/227）。"
+  },
+  "MaxStress": {
+   "cn": "压制值上限",
+   "doc": "单位的压力 / 压制条上限（弹药侧有 StressDamage 与 StressAOERadius 打它）。实测 520 行 1000.0、20 行 0.0。⚠️ **卡片上那格「生命值」读的不是本列**，是 Armors.MaxHealthPoints（unit_card.py::_t_health）；数据-信息卡字段映射.md 里把它写成生命值那一行已经过时。"
+  },
+  "WaterDiveOffset": {
+   "cn": "入水下沉偏移",
+   "doc": "**米**，两栖单位由陆入水时模型的垂直偏移（0.95 / 1.41 这种）。17 行非默认，步兵恒 0。（推断：列名 + 取值分布，没有反编译读点。）"
+  },
+  "CurrentStealth": {
+   "cn": "当前隐蔽系数（运行期那份）",
+   "doc": "运行期那一份隐蔽值，卡片「隐身」那一格读的就是它（1 / 本列）。与 Stealth 的取值分布完全一致；选项的 StealthOverride 优先级更高（缺省也要走覆盖）。"
+  }
+ },
+ "WeaponAmmunitions": {
+  "Id": {
+   "cn": "行 ID（主键）",
+   "doc": "主键，2357 行、最大 4181。行本身 = 一次「某单位的某门武器带某个弹种」的绑定；改携弹量改的是同行的 Quantity。"
+  },
+  "UnitId": {
+   "cn": "单位 ID",
+   "doc": "指向 Units.Id（error 级外键）。⚠️ **键里带单位**是这张表的要点：同一门武器在不同单位上可以带不同弹种、不同弹量（Mk19：LVSR 240 发 / M1150 640 发 / M1064A3 192 发），所以炮塔与武器实例是「每单位一份」。2357 行覆盖 505/540 个单位。"
+  },
+  "WeaponId": {
+   "cn": "武器 ID",
+   "doc": "指向 Weapons.Id（error 级外键）。"
+  },
+  "AmmunitionId": {
+   "cn": "弹药 ID",
+   "doc": "指向 Ammunitions.Id（error 级外键）。武器行里弹种的**显示顺序 = 这里的 Order**（游戏取 First()，unit_card.py::weapon_ammo 按 (Order, AmmunitionId) 排）—— 第一行那个弹种决定卡片分组、射速与简略模式那一排取谁。"
+  },
+  "Order": {
+   "cn": "弹种顺序",
+   "doc": "同一 (单位, 武器) 内弹种的排列序号。2225/2357 是 0（单一弹种居多），1..4 是第二 / 三 / 四 / 五个弹种。改它会改变卡片上「第一个弹种」是谁，连带射速和简略模式那一排。"
+  },
+  "Quantity": {
+   "cn": "携弹量",
+   "doc": "**发**（基数）。⚠️ 卡片上显示的携弹量 = 本列 x Ammunitions.HUDMultiplier（AK 的 HUDMultiplier 是 3）。实测 7.62x54mm 那门机枪 Quantity 400 x HUDMultiplier 5 = 显示 2000。同组武器（同一弹种）的携弹量在卡片上是**求和**的。"
+  }
+ },
+ "Weapons": {
+  "WeaponChannel": {
+   "cn": "武器通道（占位）",
+   "doc": "⚠️ **全 804 行都是 0** —— 这是占位列。真正生效的通道值在 **TurretWeapons.WeaponChannel**（按挂载点覆盖），那里有 88 行非 0。改这一列不会有任何效果。"
+  },
+  "WeaponPriority": {
+   "cn": "武器优先级（占位）",
+   "doc": "⚠️ **全 804 行都是 0** —— 占位列。真正生效的值在 **TurretWeapons.WeaponPriority**（250 行非 0），语义是「同一个炮塔上哪门武器优先开火 / 优先显示」。"
+  },
+  "Id": {
+   "cn": "武器 ID（主键）",
+   "doc": "主键，804 行、最大 1027。被 TurretWeapons / SquadWeapons / SquadMembers / WeaponAmmunitions 四张表引用。"
+  },
+  "Name": {
+   "cn": "武器内部名",
+   "doc": "开发用名，带型号与世代后缀（Rifle M27 T3 Marines / Autocannon 30 2A72 T1）。界面显示优先 HUDName。"
+  },
+  "HUDName": {
+   "cn": "武器显示名",
+   "doc": "卡片武器行上写的名字（Hellfire / Hydra / Igla-S）。804/804 都有值、453 种写法；产品仍保留「为空退回 Name」的兜底（unit_card.py::display_name）。同一门武器在不同单位上显示的携弹量不同（弹药在 WeaponAmmunitions 里按单位另存）。"
+  },
+  "HUDIcon": {
+   "cn": "武器图标键",
+   "doc": "武器行那个小图标（catalog 命中率 1.00，走 unitweaponicons 那组 bundle）。804/804 都有值、472 种写法。产品这一轮刚把它接上（之前那一排是空的）。"
+  },
+  "AudioPreset": {
+   "cn": "开火音效预设",
+   "doc": "开火与炮声的预设键（WEAPON_SOUND_PRESET_AIR_BOMB 这种，catalog 0.98+）。产品不做音频，只存不播。"
+  },
+  "ModelFileName": {
+   "cn": "武器模型键 / 节点名",
+   "doc": "武器模型（有些是 catalog 键、有些是预制体里的节点名，如 m203）。251/804 有值（195 种写法），其余是空串或 null。产品不做 3D。"
+  },
+  "AutoLoaded": {
+   "cn": "自动装填",
+   "doc": "为 true 时**乘员的压力水平不影响这门武器的装填速度**（游戏本地化键 ui_infocard_weapon_autoloader「自动装填」的注解）。实测 33/804 为 true，全是主炮（2A46M / M68 / 2A82 / 2A75 这类）。"
+  },
+  "Silent": {
+   "cn": "已消音",
+   "doc": "为 true 时**射击不会那么快降低你的隐蔽值**（本地化键 ui_infocard_weapon_silent）。实测 35 门，全是带消音器的枪（Mk12 Silenced / M38 Silenced / MK18 CQBR / M2010 Silenced / AK74 SSO）。"
+  },
+  "HasPriorityOnChassis": {
+   "cn": "车体优先",
+   "doc": "这门武器在车体上是否有优先权（631 行为 true）。推断：为 false 的多是与别的武器共用底盘的防空炮 / 航炮（Pantsir 的 2A38M 与 57E6E、LAVAD 的 GAU12、AC130 的 Bofors 与 GAU12）—— 那些单位的主武器是导弹，不是这门炮。（推断：只有取值分布与武器名作依据，没有反编译读点。）"
+  },
+  "CQC": {
+   "cn": "近距离作战",
+   "doc": "为 true 时**这门武器可以打同一栋建筑里的敌人**（本地化键 ui_infocard_weapon_cqc「近距离作战」）。实测 74 门 —— 全是步兵轻武器（AK74M / M4A1 / M27 / RPK74M / M1014 霰弹枪）。"
+  },
+  "IsRadarDependent": {
+   "cn": "需要雷达（占位）",
+   "doc": "⚠️ **全 804 行都是 false** —— 占位列。游戏里那个「需要雷达」（雷达未开机则这门武器不能开火）的提示键 ui_infocard_weapon_radar_dependent 存在，但这一版数据里没有任何武器挂上它。"
+  },
+  "IsVerticalLauncher": {
+   "cn": "垂直发射",
+   "doc": "为 true = 垂直发射装置（导弹从筒里竖直弹出再转向）。实测 20 门，全是舰载 / 车载垂发防空导弹（Tor-M1 x8 / Tor-M2 x16 / S300V x4 / S350 x12 这类）。影响发射动画与最小射程的推断。（推断：列名 + 武器名，没有反编译读点。）"
+  },
+  "IsLowAltDirectWeapon": {
+   "cn": "低空直瞄武器",
+   "doc": "为 true = 该武器在低空（对直升机）走**直瞄**弹道。实测 35 门：24 门只有本列为 true、11 门与 IsHighAltDirectWeapon 同时为 true。推断：它是武器对空射击时的弹道选择开关。（推断：列名 + 取值分布。）"
+  },
+  "IsHighAltDirectWeapon": {
+   "cn": "高空直瞄武器",
+   "doc": "为 true = 该武器在高空（对固定翼）走**直瞄**弹道，11 门（都是两者兼有的那批）。与 IsLowAltDirectWeapon 配对使用。（推断：列名 + 取值分布。）"
+  },
+  "IsUnderbarrel": {
+   "cn": "下挂武器",
+   "doc": "为 true = 挂在主武器下方（下挂榴弹发射器 / 霰弹枪）。实测 24 门：UGL 40 GP34 (AK-74M) / M203 (M4A1) / M320 (M4 mod2) 这类。它决定界面上要不要把它并进主武器的挂件里显示。"
+  },
+  "AimTimeMin": {
+   "cn": "瞄准时间下限",
+   "doc": "**秒**。卡片「瞄准时间」那一行：min == max 时只打一个数，否则打「min - max」（unit_card.py::weapon_detail_rows）。⚠️ 数值走 Single.ToString 默认格式（1 / 0.6666667 这种），不是「0.##」。另外**炸弹（Type 160 / 161）不出这一行**。"
+  },
+  "AimTimeMax": {
+   "cn": "瞄准时间上限",
+   "doc": "**秒**。与 AimTimeMin 配对；两者差值超过相对容差 1e-06 才打区间。⚠️ 弹药侧还有一对覆盖列：Ammunitions.AimTimeMinOverride / AimTimeMaxOverride **非 0 时盖掉本列**（15 条弹药在用）。"
+  },
+  "MultiTargetTracking": {
+   "cn": "多目标跟踪",
+   "doc": "可同时跟踪 / 交战的**目标数**（不是布尔）。实测众数 1（731 行），另外有 2 / 3 / 4 / 10 / 20，以及 10 行为 0。卡片上「多目标」那一行（本地化键 ui_infocard_weapon_multitarget）读的就是它。"
+  },
+  "SimultaneousTracking": {
+   "cn": "每目标导弹数量",
+   "doc": "对**同一个目标**同时飞出去的导弹数（游戏官方中文名就是「每目标导弹数量」，键 ui_infocard_weapon_simtracking）。实测 0 有 555 行（= 一次一发）、1 有 222 行、2 有 19、4 有 1、20 有 7。与 MultiTargetTracking 一起决定「多目标」那一行的完整文案。"
+  },
+  "CanShootOnTheMove": {
+   "cn": "可移动中射击",
+   "doc": "为 true（592/804）= 行进间可开火；为 false 时游戏显示「移动时无法射击」（键 ui_infocard_weapon_static）。false 的 212 门多是牵引火炮 / 迫击炮 / 需要架设的 ATGM 与火箭炮（MSTA-S、TOW2、M121、HIMARS）。"
+  },
+  "StabilizerQuality": {
+   "cn": "稳定器质量",
+   "doc": "**倍率**（1.0 = 有稳定器、0.0 = 没有）。⚠️ 全库只有 4 行为 0.0：MT12 Rapira 与 2A20 系列主炮 —— 也就是「这四门炮在移动中打不准」。其它 800 行都是 1.0。（推断：列名 + 取值分布。）"
+  },
+  "FlashPerShot": {
+   "cn": "每发炮口火光强度",
+   "doc": "**倍率**，1.0 是基准，15 种取值（0.1 / 0.2 / 0.6 / 1.5 / 2.0…）。炮口焰 VFX 的大小，不改数值、只影响观感。424 行是 1.0。"
+  },
+  "CanBeMerged": {
+   "cn": "可合并显示",
+   "doc": "为 true（189 门）= 卡片武器列表里**同名同款的多个挂载可以合并成一行显示带数量**。实测 true 的全是带「xN」的多联装（ATGM Hellfire x4 / RocketPod 70 Hydra x19 / AAM AIM9 x1 / Bomb Mk82 x2）。⚠️ 产品目前的合并口径是「按首个弹种分组」（unit_card.py::weapon_groups），还没读这一列 —— 接上它才能与游戏逐格一致。（推断：列名 + 武器名样本。）"
+  },
+  "LowerVerticalAngle": {
+   "cn": "俯角",
+   "doc": "**度**，炮口能向下压到多少（负值：-85 / -10 / -2）。22 种取值。与 UpperVerticalAngles 一起决定这门武器能不能打近处 / 打俯冲目标。⚠️ 载入时这两个角会被**取负**处理（LoadWeapon 只做 Clone + 两个俯仰角取负 + 灌弹药列表），所以别指望「库里读到的就是最终值」。"
+  },
+  "UpperVerticalAngles": {
+   "cn": "仰角",
+   "doc": "**度**，炮口能抬到多少（0 / 30 / 60 / 85 / 90）。22 种取值。⚠️ 列名是**复数 Angles**（Lower 那一列是单数 Angle）—— 库里就是这么写的，别照着一边改名。防空 / 榴弹炮的仰角最大（85 / 90），主炮一般 60。"
+  },
+  "VerticalRotationSpeed": {
+   "cn": "俯仰速度",
+   "doc": "**度 / 秒**，炮口上下摆动的速度（0 / 15 / 30 / 60 / 90 / 180 / 360）。17 种取值，604 行非默认。只影响瞄准快慢的观感与仿真。（推断：列名 + 取值分布。）"
+  },
+  "MagazineSize": {
+   "cn": "弹匣容量",
+   "doc": "**发**。卡片「弹匣容量」那一行读它，条件是 **> 1**（304 行是 1，那些不出这一行）。⚠️ 它与「射速」那一行**互斥**，看的是分支不是并列：MagazineSize > 1 且首个弹种是直射弹药（TrajectoryType == 10）且类型不是 110 / 140 → 走射速那一支；否则出弹匣容量（unit_card.py::weapon_detail_rows）。"
+  },
+  "MagazineReloadTimeMin": {
+   "cn": "装填时间下限",
+   "doc": "**秒**。卡片「装填时间」那一行取 max 为主、与 min 差得超过相对容差 1e-06 才打区间。⚠️ 固定翼上只给航炮（Type 116 PlaneGun）出这一行。⚠️ 它同时是射速公式的输入（ReloadMin）。"
+  },
+  "MagazineReloadTimeMax": {
+   "cn": "装填时间上限",
+   "doc": "**秒**。与 Min 配对；也是射速公式的输入（ReloadMax）。装填时间与「射速」那一行互斥（同 MagazineSize 那条分支）。"
+  },
+  "ShotsPerBurstMin": {
+   "cn": "点射发数下限",
+   "doc": "**发**。⚠️ 它**不是** AI 的齐射发数（那是 Short / Normal / LongGroundAttackBurst）—— 它和 TimeBetweenBursts 一起喂**射速**公式 RateOfFireSecond：minTime = TBBMin x (mag / burstMax - 1) + …，最后 mag / abs(t) 得发/秒（unit_card.py::rate_of_fire_second）。0 会让射速直接返回 0。"
+  },
+  "ShotsPerBurstMax": {
+   "cn": "点射发数上限",
+   "doc": "**发**。与 Min 一起构成「最短 / 最长剖面」两端（burstMax 进 minTime、burstMin 进 maxTime），射速取两者的中值。⚠️ 别与 Short/Normal/LongGroundAttackBurst 混。"
+  },
+  "TimeBetweenBurstsMin": {
+   "cn": "点射间隔下限",
+   "doc": "**秒**。点射与点射之间的最短间隔，射速公式的输入。⚠️ 轻武器那批 4.0 s 的间隔**看着像占位、其实就是库里的值** —— LoadWeapon 不改这几个时序字段（只做 Clone + 俯仰角取负 + 灌弹药），所以公式看到的就是数据库里的数。"
+  },
+  "TimeBetweenBurstsMax": {
+   "cn": "点射间隔上限",
+   "doc": "**秒**。与 Min 配对，射速公式取两端中值。28 种取值、523 行非默认。"
+  },
+  "TimeBetweenShotsInBurst": {
+   "cn": "点射内每发间隔",
+   "doc": "**秒**。一个点射里相邻两发之间的间隔（0.2 是常见值），射速公式的输入。它乘的是「点射内没在换弹的那几发」的数量（mag - mag/burst）。"
+  },
+  "ShortGroundAttackBurst": {
+   "cn": "短齐射发数",
+   "doc": "**发**。AI 的短点射档位（Grad = 10 / HIMARS = 2）。⚠️ 它**不是** ShotsPerBurst —— 那是射速公式的输入；这一组是「齐射时长」那一行的显示值，卡片上拼成「短 / 中 / 长」三档，且**只对榴弹炮 111 / 迫击炮 112 / 多管火箭炮 113 发射**（unit_card.py::weapon_detail_rows）。"
+  },
+  "NormalGroundAttackBurst": {
+   "cn": "常规齐射发数",
+   "doc": "**发**。AI 常规点射档位（Grad = 20 / HIMARS = 3），「齐射时长」那一行的中间那个数。19 种取值、513 行非默认。"
+  },
+  "LongGroundAttackBurst": {
+   "cn": "长齐射发数",
+   "doc": "**发**。AI 长点射档位（Grad = 40 / HIMARS = 6），「齐射时长」那一行最后一个数。最多 56 发。"
+  }
+ }
+}

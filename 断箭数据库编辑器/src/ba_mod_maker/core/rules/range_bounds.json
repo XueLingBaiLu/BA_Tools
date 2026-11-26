@@ -1,0 +1,431 @@
+{
+ "schema": 1,
+ "consumed_by": "tools/gen_rulebook.py",
+ "title": "数值区间参照 —— BARO 的 RealStats.Bounds（生成 range / cross_range 规则的唯一输入）",
+ "source": {
+  "mod": "BrokenArrowRealismOverhaul (BARO)",
+  "version": "5.9.2",
+  "file": "_work_mod_analysis/_scratch_code_layer/decomp/BrokenArrowRealismOverhaul.decompiled.cs",
+  "symbol": "RealStats.Bounds = new Dictionary<string, (double, double, bool)>(StringComparer.OrdinalIgnoreCase)",
+  "lines": "501539-501559",
+  "predicate_line": "503026",
+  "predicate_quote": "if (v > value.Item2 || v < value.Item1 || (!value.Item3 && v <= value.Item1))",
+  "cross_lines": "503144-503157",
+  "evidence_level": "mod-authored",
+  "evidence_note": "这是 **mod 作者自己定的合理区间**，不是游戏官方限制。BARO 用它校验自己那份 lot CSV 的覆盖值（判据那一行住在逐行读 CSV 的校验器里，报错文本形态是 “{pl.File} : Id {line.Id} {列} = {值} hors limites”），"
+ },
+ "csv_mapping": {
+  "evidence_level": "measured+task-3",
+  "note": "Bounds 字典只按**列名**索引，不含表名；接到我们 24 张表上靠的是 BARO 自己的 CSV->表映射（Munitions.csv -> Ammunitions / Capteurs.csv -> Sensors / Capacites.csv -> Abilities）。",
+  "tables": {
+   "Munitions": "Ammunitions",
+   "Capteurs": "Sensors",
+   "Capacites": "Abilities"
+  }
+ },
+ "semantics": {
+  "check_range": "lo <= v <= hi，两端都闭；lo / hi 任一为 null 即单边。值命中 sentinels 就**跳过**（不算 checked、不判越界）。",
+  "check_cross_range": "左式 = Σ(系数·left_terms)；右式 = Σ(系数·right_terms) + right_const + right_scale·max(right_max_of)；判定 = 左式 relation 右式。gate_max_of / gate_gt 是前置条件：只有 max(gate_max_of) > gate_gt 的行才判。",
+  "required_flag": "三元组的第三项原样搬进规则的 required 字段（出处元数据）。⚠️ BARO 自己的判据比 [lo, hi] 多一条：required=false 时下界是**开的**（v <= lo 也算越界，见 predicate_line）。",
+  "sentinels": "**哨兵 = 「这一列对这一行不适用」的占位值，逐列枚举、每条带实测命中行数。**判定时值 ∈ sentinels 就跳过。⛔ 这**不是**「值为 0 就过」的无脑分支：sentinels 缺失或为空的规则仍然严格判。",
+  "cross_range_has_no_sentinels": "cross_range **不用** sentinels —— 它的「这一行不适用」由 gate_max_of / gate_gt 表达（对应原文的 num > 0.0）。",
+  "effect_measured_2026_10_08": "加哨兵前：18 条 range 在原版 52085 上共 **2753** 条越界；换成忠实原文的 cross 形状前，旧的 `MinimalRange <= GroundRange` 是 **58** 条。加哨兵后：range **0** 条；新的 cross 形状也是 **0** 条（626 行过闸、0 行违反）。"
+ },
+ "ranges": [
+  {
+   "table": "Ammunitions",
+   "column": "GroundRange",
+   "source_csv": "Munitions.csv",
+   "lo": 0,
+   "hi": 100000,
+   "required": false,
+   "sentinels": [
+    {
+     "value": 0,
+     "rows_52085": 63,
+     "why": "0 = 这一项对这一行不适用（原版拿 0 当占位）"
+    }
+   ],
+   "vanilla_hits_52085": 0,
+   "vanilla_hits_after_sentinels_52085": 0,
+   "real_value_span_52085": "1~5000"
+  },
+  {
+   "table": "Ammunitions",
+   "column": "LowAltRange",
+   "source_csv": "Munitions.csv",
+   "lo": 0,
+   "hi": 100000,
+   "required": false,
+   "sentinels": [
+    {
+     "value": 0,
+     "rows_52085": 478,
+     "why": "0 = 这一项对这一行不适用（原版拿 0 当占位）"
+    }
+   ],
+   "vanilla_hits_52085": 0,
+   "vanilla_hits_after_sentinels_52085": 0,
+   "real_value_span_52085": "75~4500"
+  },
+  {
+   "table": "Ammunitions",
+   "column": "HighAltRange",
+   "source_csv": "Munitions.csv",
+   "lo": 0,
+   "hi": 100000,
+   "required": false,
+   "sentinels": [
+    {
+     "value": 0,
+     "rows_52085": 512,
+     "why": "0 = 这一项对这一行不适用（原版拿 0 当占位）"
+    },
+    {
+     "value": -1,
+     "rows_52085": 35,
+     "why": "该列的第二个哨兵：原版 35 行写 -1（负射程无意义；该列真实值域 500~4500）"
+    }
+   ],
+   "vanilla_hits_52085": 35,
+   "vanilla_hits_after_sentinels_52085": 0,
+   "real_value_span_52085": "500~4500"
+  },
+  {
+   "table": "Ammunitions",
+   "column": "MinimalRange",
+   "source_csv": "Munitions.csv",
+   "lo": 0,
+   "hi": 100000,
+   "required": false,
+   "sentinels": [
+    {
+     "value": 0,
+     "rows_52085": 287,
+     "why": "0 = 这一项对这一行不适用（原版拿 0 当占位）"
+    }
+   ],
+   "vanilla_hits_52085": 0,
+   "vanilla_hits_after_sentinels_52085": 0,
+   "real_value_span_52085": "1~1500"
+  },
+  {
+   "table": "Ammunitions",
+   "column": "MaxSeekerDistance",
+   "source_csv": "Munitions.csv",
+   "lo": 0,
+   "hi": 100000,
+   "required": false,
+   "sentinels": [
+    {
+     "value": 0,
+     "rows_52085": 450,
+     "why": "0 = 这一项对这一行不适用（原版拿 0 当占位）"
+    }
+   ],
+   "vanilla_hits_52085": 0,
+   "vanilla_hits_after_sentinels_52085": 0,
+   "real_value_span_52085": "120~4500"
+  },
+  {
+   "table": "Ammunitions",
+   "column": "SeadProjectileRangeOverride",
+   "source_csv": "Munitions.csv",
+   "lo": 0,
+   "hi": 100000,
+   "required": false,
+   "sentinels": [
+    {
+     "value": 0,
+     "rows_52085": 629,
+     "why": "0 = 这一项对这一行不适用（原版拿 0 当占位）"
+    }
+   ],
+   "vanilla_hits_52085": 0,
+   "vanilla_hits_after_sentinels_52085": 0,
+   "real_value_span_52085": "1100（只 1 行）"
+  },
+  {
+   "table": "Ammunitions",
+   "column": "NonSeadProjectileRangeOverride",
+   "source_csv": "Munitions.csv",
+   "lo": 0,
+   "hi": 100000,
+   "required": false,
+   "sentinels": [
+    {
+     "value": 0,
+     "rows_52085": 630,
+     "why": "0 = 这一项对这一行不适用（原版拿 0 当占位）"
+    }
+   ],
+   "vanilla_hits_52085": 0,
+   "vanilla_hits_after_sentinels_52085": 0,
+   "real_value_span_52085": "（整列 630/630 都是哨兵）"
+  },
+  {
+   "table": "Ammunitions",
+   "column": "MuzzleVelocity",
+   "source_csv": "Munitions.csv",
+   "lo": 50,
+   "hi": 2000,
+   "required": true,
+   "sentinels": [
+    {
+     "value": 0,
+     "rows_52085": 130,
+     "why": "0 = 这一项对这一行不适用（原版拿 0 当占位）"
+    },
+    {
+     "value": 5,
+     "rows_52085": 24,
+     "why": "非炮射弹的占位：24 行全是 TrajectoryType=110（有动力/游荡弹），BurnTime 全 =4、MaxSpeed 142~200；该列去掉这三个哨兵后 472 个值**全在 50~1050**，21~49 一个都没有"
+    },
+    {
+     "value": 20,
+     "rows_52085": 4,
+     "why": "同上（TrajectoryType 200 / 110 各 3 / 1 行）—— 与 5.0 同一簇占位值"
+    }
+   ],
+   "vanilla_hits_52085": 158,
+   "vanilla_hits_after_sentinels_52085": 0,
+   "real_value_span_52085": "50~1050"
+  },
+  {
+   "table": "Ammunitions",
+   "column": "MaxSpeed",
+   "source_csv": "Munitions.csv",
+   "lo": 50,
+   "hi": 2700,
+   "required": true,
+   "sentinels": [
+    {
+     "value": 0,
+     "rows_52085": 446,
+     "why": "0 = 这一项对这一行不适用（原版拿 0 当占位）"
+    }
+   ],
+   "vanilla_hits_52085": 446,
+   "vanilla_hits_after_sentinels_52085": 0,
+   "real_value_span_52085": "140~1150"
+  },
+  {
+   "table": "Ammunitions",
+   "column": "Acceleration",
+   "source_csv": "Munitions.csv",
+   "lo": 1,
+   "hi": 3000,
+   "required": true,
+   "sentinels": [
+    {
+     "value": 0,
+     "rows_52085": 446,
+     "why": "0 = 这一项对这一行不适用（原版拿 0 当占位）"
+    }
+   ],
+   "vanilla_hits_52085": 446,
+   "vanilla_hits_after_sentinels_52085": 0,
+   "real_value_span_52085": "12~800"
+  },
+  {
+   "table": "Ammunitions",
+   "column": "BurnTime",
+   "source_csv": "Munitions.csv",
+   "lo": 0.1,
+   "hi": 60,
+   "required": true,
+   "sentinels": [
+    {
+     "value": 0,
+     "rows_52085": 446,
+     "why": "0 = 这一项对这一行不适用（原版拿 0 当占位）"
+    }
+   ],
+   "vanilla_hits_52085": 446,
+   "vanilla_hits_after_sentinels_52085": 0,
+   "real_value_span_52085": "1~8（另有 5.0/20.0 各 4/24 行，仍在区间内）"
+  },
+  {
+   "table": "Ammunitions",
+   "column": "SmokeRadius",
+   "source_csv": "Munitions.csv",
+   "lo": 1,
+   "hi": 300,
+   "required": true,
+   "sentinels": [
+    {
+     "value": 0,
+     "rows_52085": 611,
+     "why": "0 = 这一项对这一行不适用（原版拿 0 当占位）"
+    }
+   ],
+   "vanilla_hits_52085": 611,
+   "vanilla_hits_after_sentinels_52085": 0,
+   "real_value_span_52085": "10~50"
+  },
+  {
+   "table": "Ammunitions",
+   "column": "SmokeDuration",
+   "source_csv": "Munitions.csv",
+   "lo": 1,
+   "hi": 120,
+   "required": true,
+   "sentinels": [
+    {
+     "value": 0,
+     "rows_52085": 611,
+     "why": "0 = 这一项对这一行不适用（原版拿 0 当占位）"
+    }
+   ],
+   "vanilla_hits_52085": 611,
+   "vanilla_hits_after_sentinels_52085": 0,
+   "real_value_span_52085": "10~60"
+  },
+  {
+   "table": "Ammunitions",
+   "column": "SmokeFadeDuration",
+   "source_csv": "Munitions.csv",
+   "lo": 0,
+   "hi": 30,
+   "required": true,
+   "sentinels": [
+    {
+     "value": 0,
+     "rows_52085": 612,
+     "why": "0 = 这一项对这一行不适用（原版拿 0 当占位）"
+    }
+   ],
+   "vanilla_hits_52085": 0,
+   "vanilla_hits_after_sentinels_52085": 0,
+   "real_value_span_52085": "1~3"
+  },
+  {
+   "table": "Sensors",
+   "column": "OpticsGround",
+   "source_csv": "Capteurs.csv",
+   "lo": 0,
+   "hi": 100000,
+   "required": false,
+   "sentinels": [
+    {
+     "value": 0,
+     "rows_52085": 2,
+     "why": "0 = 这一项对这一行不适用（原版拿 0 当占位）"
+    }
+   ],
+   "vanilla_hits_52085": 0,
+   "vanilla_hits_after_sentinels_52085": 0,
+   "real_value_span_52085": "50~2750"
+  },
+  {
+   "table": "Sensors",
+   "column": "OpticsLowAltitude",
+   "source_csv": "Capteurs.csv",
+   "lo": 0,
+   "hi": 100000,
+   "required": false,
+   "sentinels": [
+    {
+     "value": 0,
+     "rows_52085": 0,
+     "why": "0 = 这一项对这一行不适用（原版拿 0 当占位）；本版数据里没有一行用到这个哨兵（36/36 行都是真实值），列出来是为了口径一致"
+    }
+   ],
+   "vanilla_hits_52085": 0,
+   "vanilla_hits_after_sentinels_52085": 0,
+   "real_value_span_52085": "50~2000"
+  },
+  {
+   "table": "Sensors",
+   "column": "OpticsHighAltitude",
+   "source_csv": "Capteurs.csv",
+   "lo": 0,
+   "hi": 100000,
+   "required": false,
+   "sentinels": [
+    {
+     "value": 0,
+     "rows_52085": 1,
+     "why": "0 = 这一项对这一行不适用（原版拿 0 当占位）"
+    }
+   ],
+   "vanilla_hits_52085": 1,
+   "vanilla_hits_after_sentinels_52085": 0,
+   "real_value_span_52085": "1000~6000"
+  },
+  {
+   "table": "Abilities",
+   "column": "LaserMaxRange",
+   "source_csv": "Capacites.csv",
+   "lo": 0,
+   "hi": 100000,
+   "required": true,
+   "sentinels": [
+    {
+     "value": 0,
+     "rows_52085": 65,
+     "why": "0 = 这一项对这一行不适用（原版拿 0 当占位）"
+    }
+   ],
+   "vanilla_hits_52085": 0,
+   "vanilla_hits_after_sentinels_52085": 0,
+   "real_value_span_52085": "1200~2000"
+  }
+ ],
+ "cross_ranges": [
+  {
+   "table": "Ammunitions",
+   "name": "MinimalRange_lt_90pct_of_max_range",
+   "left_terms": [
+    [
+     "MinimalRange",
+     1
+    ]
+   ],
+   "right_terms": [],
+   "right_max_of": [
+    "GroundRange",
+    "LowAltRange",
+    "HighAltRange"
+   ],
+   "right_scale": 0.9,
+   "right_const": 0,
+   "gate_max_of": [
+    "GroundRange",
+    "LowAltRange",
+    "HighAltRange"
+   ],
+   "gate_gt": 0,
+   "relation": "<",
+   "source_lines": "503144-503157",
+   "evidence_level": "mod-authored",
+   "evidence_note": "**逐字对应原文**（decompiled.cs:503144-503157）：num = Math.Max(Get(line,\"GroundRange\"), Math.Max(Get(line,\"LowAltRange\"), Get(line,\"HighAltRange\")))；num2 = MinimalRange；",
+   "vanilla_hits_52085": 0,
+   "gated_rows_52085": 626,
+   "supersedes": "cross.Ammunitions.MinimalRange_le_GroundRange（MinimalRange <= GroundRange）",
+   "superseded_note": "旧形状是 Lead 最初给的口径，2026-10-08 Lead 亲自复核原文后确认写错并作废。旧形状在原版读数 **58** 条，58/58 都是 GroundRange == 0 的「不适用」行；新形状带 num > 0 前置条件，读数 **0**。"
+  },
+  {
+   "table": "Ammunitions",
+   "name": "SmokeDuration_plus_SmokeFadeDuration_le_120",
+   "left_terms": [
+    [
+     "SmokeDuration",
+     1
+    ],
+    [
+     "SmokeFadeDuration",
+     1
+    ]
+   ],
+   "right_terms": [],
+   "right_const": 120,
+   "relation": "<=",
+   "source_lines": "503034-503055",
+   "evidence_level": "mod-authored",
+   "evidence_note": "与 BARO 逐字一致：(SmokeDuration) + (SmokeFadeDuration) > 120 即报 “au-delà du plafond de 120 s”。",
+   "vanilla_hits_52085": 0,
+   "vanilla_hits_after_sentinels_52085": 0
+  }
+ ]
+}

@@ -1,0 +1,40 @@
+{
+  "schema": 1,
+  "designed_by": "docs/设计-Blender插件-游戏外观还原.md §4 D2 / §4 D2.1（2026-10-03 已裁定）",
+  "platforms": ["win-x64"],
+  "blender_support": ["4.2 LTS", "4.5 LTS", "5.x"],
+  "verified_interpreters": {
+    "cp311": {
+      "blender": "4.0-4.5（含 4.2 LTS / 4.5 LTS）",
+      "evidence": "外部资料·未真机验收（本机只装了 5.2.1）"
+    },
+    "cp313": {
+      "blender": "5.2.1 LTS",
+      "evidence": "本机实测：Blender 5.2.1 = Python 3.13.13，UnityPy 1.25.3 在 blender -b 下可导入"
+    }
+  },
+  "dirs": {
+    "pure": "pure",
+    "native": "native/cp{major}{minor}",
+    "licenses": "LICENSES"
+  },
+  "rule": "插件按 sys.version_info[:2] 选 native/cp3XX；池里没有对应版本时**明确报错并列出缺哪份**，不许静默回落。",
+  "packages": [
+    {"name": "UnityPy", "version": "1.25.3", "kind": "pure", "needed": true, "mb_total": 1.99, "mb_native": 0.11, "why": "资产主体（纯 Python）"},
+    {"name": "etcpak", "version": "0.9.15", "kind": "native", "needed": true, "mb_total": 4.39, "mb_native": 0.58, "why": "写回要压 DXT"},
+    {"name": "fsspec", "version": "2026.7.0", "kind": "pure", "needed": true, "mb_total": 1.61, "mb_native": 0.00, "why": "UnityPy 顶层硬依赖"},
+    {"name": "lz4", "version": "4.4.5", "kind": "native", "needed": true, "mb_total": 0.26, "mb_native": 0.19, "why": "本作块压缩类型 3"},
+    {"name": "texture2ddecoder", "version": "1.0.6", "kind": "native", "needed": true, "mb_total": 0.13, "mb_native": 0.13, "why": "含 crn 解码（unpack_crunch）"},
+    {"name": "attrs", "version": "25.3.0", "kind": "pure", "needed": true, "mb_total": 0.09, "mb_native": 0.00, "why": "UnityPy 类装饰（新式 import 名）"},
+    {"name": "attr", "version": "25.3.0", "kind": "pure", "needed": true, "mb_total": 0.25, "mb_native": 0.00, "why": "attrs 的**第二个 import 名**（旧式）：attrs/__init__.py 从 attr 取符号，只带 attrs 不带 attr 会在真机 ImportError（2026-10-19 实见 ClassProps）"},
+    {"name": "brotli", "version": null, "kind": "native", "needed": false, "mb_total": 0.82, "mb_native": 0.82, "why": "本作无 .unityweb，可不带"},
+    {"name": "Pillow", "version": null, "kind": "native", "needed": false, "mb_total": 15.29, "mb_native": 12.81, "why": "不带走 raw 像素 -> 图像"},
+    {"name": "astc_encoder", "version": null, "kind": "native", "needed": false, "mb_total": 10.70, "mb_native": 1.04, "why": "本作无 ASTC 贴图"},
+    {"name": "fmod_toolkit", "version": null, "kind": "pure", "needed": false, "mb_total": 1.66, "mb_native": 0.00, "why": "音频，与外观无关"}
+  ],
+  "size_budget_mb": {
+    "pure_shared": 7.4,
+    "per_extra_interpreter_native": 1.8,
+    "total_three_interpreters_with_our_code": 13.0
+  }
+}

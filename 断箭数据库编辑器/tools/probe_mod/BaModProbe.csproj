@@ -1,0 +1,116 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    BaModProbe: debug probe mod for Broken Arrow. NOT part of the shipped product.
+
+    Every reference points at a *configurable* game directory; nothing is hard-wired to
+    any particular mod package. Override the game directory with either
+
+        dotnet build -p:GameDir="D:\path\to\broken_arrow"
+        $env:BA_MOD_MAKER_GAME = "D:\path\to\broken_arrow"      # same variable the product uses
+        powershell -File build.ps1 -GameDir "D:\path\to\broken_arrow"
+
+    Reference map (verified by Mono.Cecil, see README.md "type provenance"):
+        <GameDir>\MelonLoader\net6\MelonLoader.dll             MelonLoader 0.7.3
+        <GameDir>\MelonLoader\net6\0Harmony.dll                Harmony 2.x
+        <GameDir>\MelonLoader\net6\Il2CppInterop.Runtime.dll   Il2CppObjectBase.Pointer
+        <GameDir>\MelonLoader\Il2CppAssemblies\*.dll           Il2CppInterop proxy assemblies
+  -->
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <AssemblyName>BaModProbe</AssemblyName>
+    <RootNamespace>BaModProbe</RootNamespace>
+    <LangVersion>latest</LangVersion>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <DebugType>portable</DebugType>
+    <NoWarn>$(NoWarn);CS0436;CS0618</NoWarn>
+    <ProbeWarnAsError>false</ProbeWarnAsError>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!-- GameDir precedence: -p:GameDir > $env:BA_MOD_MAKER_GAME > documented default -->
+    <GameDir Condition="'$(GameDir)' == '' and '$(BA_MOD_MAKER_GAME)' != ''">$(BA_MOD_MAKER_GAME)</GameDir>
+    <GameDir Condition="'$(GameDir)' == ''">D:\Steam\steamapps\common\broken_arrow</GameDir>
+    <MelonNet6Dir>$(GameDir)\MelonLoader\net6</MelonNet6Dir>
+    <ProxyDir>$(GameDir)\MelonLoader\Il2CppAssemblies</ProxyDir>
+  </PropertyGroup>
+
+  <!-- Fail early with an actionable message instead of a wall of CS0246. -->
+  <Target Name="ProbePreflight" BeforeTargets="BeforeBuild">
+    <Error Condition="!Exists('$(MelonNet6Dir)\MelonLoader.dll')"
+           Text="MelonLoader.dll not found under '$(MelonNet6Dir)'. MelonLoader is not installed in '$(GameDir)', or pass -p:GameDir=... ." />
+    <Error Condition="!Exists('$(MelonNet6Dir)\0Harmony.dll')"
+           Text="0Harmony.dll not found under '$(MelonNet6Dir)'." />
+    <Error Condition="!Exists('$(MelonNet6Dir)\Il2CppInterop.Runtime.dll')"
+           Text="Il2CppInterop.Runtime.dll not found under '$(MelonNet6Dir)'." />
+    <ItemGroup>
+      <_ProbeProxyProbe Include="$(ProxyDir)\Il2CppBrokenArrow.dll" />
+    </ItemGroup>
+    <Error Condition="'@(_ProbeProxyProbe)' == ''"
+           Text="Il2CppBrokenArrow.dll not found in '$(ProxyDir)'. Launch the game once through MelonLoader so the Il2CppAssemblyGenerator produces the proxy assemblies, then rebuild." />
+    <Message Importance="high" Text="BaModProbe: GameDir=$(GameDir)" />
+  </Target>
+
+  <!--
+    The offline test project lives at tests/JsonTests and has its own obj/ + bin/.
+    Without this Remove, the default **/*.cs glob would pull its *generated* AssemblyInfo.cs
+    into this project and the build dies with CS0579 (duplicate assembly attributes).
+  -->
+  <ItemGroup>
+    <Compile Remove="tests/**" />
+    <None Remove="tests/**" />
+    <Compile Remove="_work/**" />
+    <None Remove="_work/**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="MelonLoader">
+      <HintPath>$(MelonNet6Dir)\MelonLoader.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="0Harmony">
+      <HintPath>$(MelonNet6Dir)\0Harmony.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Il2CppInterop.Runtime">
+      <HintPath>$(MelonNet6Dir)\Il2CppInterop.Runtime.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+  <!--
+    All Il2CppInterop proxy assemblies. Referencing the whole set keeps the build working
+    across game updates; the compiler only resolves the types the sources actually name.
+    Set ProbeReferenceMode=Minimal to reference just the keep-list (see README).
+  -->
+  <ItemGroup Condition="'$(ProbeReferenceMode)' != 'Minimal'">
+    <_ProbeProxyDll Include="$(ProxyDir)\*.dll" />
+    <Reference Include="@(_ProbeProxyDll)">
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(ProbeReferenceMode)' == 'Minimal'">
+    <Reference Include="Il2CppBrokenArrow">
+      <HintPath>$(ProxyDir)\Il2CppBrokenArrow.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Il2Cppmscorlib">
+      <HintPath>$(ProxyDir)\Il2Cppmscorlib.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Il2CppSystem">
+      <HintPath>$(ProxyDir)\Il2CppSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Il2CppSystem.Core">
+      <HintPath>$(ProxyDir)\Il2CppSystem.Core.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+</Project>
