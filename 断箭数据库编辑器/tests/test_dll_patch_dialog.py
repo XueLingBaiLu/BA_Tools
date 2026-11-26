@@ -22,6 +22,12 @@ from ba_mod_maker.core.asset import dllpatch
 from test_dllpatch import _pretend_original
 
 
+@pytest.fixture(autouse=True)
+def _isolate_patch_delta(tmp_path, monkeypatch):
+    """与 test_dllpatch 同口径：⛔ 不许把合成 DLL 的反向 Δ 写进用户真正的 ~/.ba_mod_maker。"""
+    monkeypatch.setenv("BA_MOD_MAKER_VAR_DIR", str(tmp_path / "_var"))
+
+
 @pytest.fixture(scope="module")
 def qapp():
     from PySide6.QtGui import QFontDatabase

@@ -263,15 +263,49 @@ BUILD_1029 = Build(
         # 2026-11-12 · 忽略 ResetDeckData（ServerCommands code=72）
         # `cmp sil,48h` → `cmp sil,FFh`：命令码是 byte，0xFF 永不命中 ⇒ 客户端不再把本地卡组
         # 换成默认卡组（含库里新加的单位也不换）。真机验证：含 M1A2 T 的卡组进对局未被替换。
-        # 依据：_work_db/isil_b2/IsilDump/.../Room/NetworkRoomService.txt:10790-10849（code==72 分支）
+        # 依据：_work_db/isil_b2/IsilDump/.../Room/NetworkRoomService.txt:10790-10849
+        # （code==72 分支）
         ("忽略 ResetDeckData(code 72)", 0x18062DAF8, 0x48, 0xFF),
     ),
 
     backup_name="GameAssembly.dll.12e70883.orig",
 )
 
+#: **1.2.765**（Steam **2026-11-19** 更新，153,977,760 B，sha256 `007c0195…`）——
+#: 第一张由**产品自动重定位**（core/asset/autoport.py）推出并全闸验收的表：
+#: 19 条尺子全 PASS · 独立真值交叉全 OK（slot == dumper ScriptMetadata 0x1886FB8D8 ·
+#: 托管方法 == dumper 索引 140,619/140,619 全量正控 · 导出表逐字）·
+#: 与 BUILD_1029 的 16 指令骨架**逐条同形**（rip/jmp/call 打码后 IDENTICAL ×5）。
+#: 位移规律：托管代码块整体 **-0x850**，.text 运行期桩 **-0xDE0**，klass 槽 **-0x288**。
+#: ⚠ label 的 1.2.765 取自两版 dump 字面量表实测（内部版本号）；营销号未证实，认版本一律按 sha。
+#: ⚠ 现盘 .text 节 VA-raw=0x1000（il2cpp 节仍 0xC00）——被写地址全在 il2cpp 节，
+#: autoport 的写偏移闸逐个核过（5/5 RVA-0xC00）。
+BUILD_1119 = Build(
+    label="1.2.765 (2026-11-19)",
+    orig_sha256="007c019575fabcf16748fcdc02052d3bb2571757b8bfd8c69b05508eaf022cc1",
+    base=0x180000000,
+    init_meta=0x1866AFD00,
+    file_exists=0x18421ABB0,
+    object_new=0x1866AFF90,
+    ctor=0x18027C230,
+    load_source=0x180290540,
+    string_new=0x1866DEC00,
+    gchandle_new=0x1866DE1D0,
+    slot_klass=0x1886FB8D8,
+    sites=(
+        ("Load()", 0x180291C51, 0x180291C56, 0x1802918E0),
+        ("LoadCompiled()", 0x180291ADE, 0x180291AE3, 0x180291F00),
+    ),
+    cave_len=138,
+    byte_patches=(
+        # 与 BUILD_1029 同口径：OnIncomingMessage 体内唯一 cmp sil,48h;jne（autoport 第 7 步）。
+        ("忽略 ResetDeckData(code 72)", 0x18062D488, 0x48, 0xFF),
+    ),
+    backup_name="GameAssembly.dll.007c0195.orig",
+)
+
 #: 本工具认得的全部版本（顺序只影响展示；认版本一律按 sha256）。
-BUILDS: tuple[Build, ...] = (BUILD_120, BUILD_121, BUILD_121P2, BUILD_121R, BUILD_1029)
+BUILDS: tuple[Build, ...] = (BUILD_120, BUILD_121, BUILD_121P2, BUILD_121R, BUILD_1029, BUILD_1119)
 
 # ---------------------------------------------------------------- 本版常量（= 1.2.0）
 # ⚠️ 这批模块级常量**全部保留**：`patched_image(orig)` / `build_cave(cave, ret)` 的老签名
@@ -337,6 +371,45 @@ def build_for_sha(sha: str) -> Build | None:
 def build_for_backup(data: bytes) -> Build | None:
     """按备份的**内容**认版本。"""
     return build_for_sha(sha256(data))
+
+
+def _build_to_dict(b: Build) -> dict:
+    """Build → JSON 可存字典（反向 Δ 里带一份，学习版不靠 BUILDS 也能认）。"""
+    return {
+        "label": b.label, "orig_sha256": b.orig_sha256, "base": b.base,
+        "init_meta": b.init_meta, "file_exists": b.file_exists, "object_new": b.object_new,
+        "ctor": b.ctor, "load_source": b.load_source, "string_new": b.string_new,
+        "gchandle_new": b.gchandle_new, "slot_klass": b.slot_klass,
+        "sites": [list(s) for s in b.sites], "cave_len": b.cave_len,
+        "backup_name": b.backup_name,
+        "byte_patches": [list(p) for p in b.byte_patches],
+        "code_patches": [[n, va, o.hex(), nw.hex()] for n, va, o, nw in b.code_patches],
+    }
+
+
+def _build_from_dict(d: object) -> Build | None:
+    """反向 Δ 里的 build_table → Build。坏数据 ⇒ None（⛔ 不猜）。"""
+    if not isinstance(d, dict):
+        return None
+    try:
+        return Build(
+            label=str(d["label"]), orig_sha256=str(d["orig_sha256"]), base=int(d["base"]),
+            init_meta=int(d["init_meta"]), file_exists=int(d["file_exists"]),
+            object_new=int(d["object_new"]), ctor=int(d["ctor"]),
+            load_source=int(d["load_source"]), string_new=int(d["string_new"]),
+            gchandle_new=int(d["gchandle_new"]), slot_klass=int(d["slot_klass"]),
+            sites=tuple((str(n), int(s), int(r), int(c)) for n, s, r, c in d["sites"]),
+            cave_len=int(d["cave_len"]), backup_name=str(d["backup_name"]),
+            byte_patches=tuple(
+                (str(n), int(va), int(o), int(nw)) for n, va, o, nw in d.get("byte_patches", [])
+            ),
+            code_patches=tuple(
+                (str(n), int(va), bytes.fromhex(o), bytes.fromhex(nw))
+                for n, va, o, nw in d.get("code_patches", [])
+            ),
+        )
+    except (KeyError, TypeError, ValueError):
+        return None
 
 
 def rel32(here_va: int, target_va: int) -> bytes:
@@ -538,7 +611,7 @@ def patched_image(original: bytes, build: Build | None = None) -> bytes:
         out[o_steal : o_steal + 5] = b"\xe9" + struct.pack("<i", cave - (steal + 5))
     for bname, va, orig_bytes, new_bytes in _writes(b):
         o = _off(_rva(va, b))
-        if not (0 <= o and o + len(orig_bytes) <= len(out)):
+        if not (o >= 0 and o + len(orig_bytes) <= len(out)):
             raise UserFacingError(f"{bname}: 改字节点偏移越界 {o:#x}")
         cur = bytes(out[o : o + len(orig_bytes)])
         if cur != orig_bytes:
@@ -613,32 +686,26 @@ class PatchStatus:
         return self.has_backup and self.state is not PatchState.NOT_INSTALLED
 
     def summary_lines(self) -> list[str]:
-        """给人看的几行。CLI 与 GUI 共用，避免两处措辞不一致。"""
+        """给人看的几行。CLI 与 GUI 共用，避免两处措辞不一致。
+
+        2026-11-26 用户口径「别那么多字」：压到 5~7 行；红线 HEAD＋原因仍逐条在
+        （tests/test_online_redline.py 钉着），版本未收录时点明「打补丁时自动重定位」。
+        """
+        version_text = (
+            self.build.label if self.build is not None else "未收录（打补丁时自动重定位）"
+        )
         lines = [
             f"游戏目录 : {self.game_root}",
-            f"DLL      : {DLL_NAME}  {self.dll_size:,} 字节  sha256 {self.dll_sha256[:16]}…",
+            f"DLL : {DLL_NAME} {self.dll_size:,} B · sha256 {self.dll_sha256[:16]}…",
+            f"补丁状态 : {self.state.label}",
+            f"认出来的版本 : {version_text}",
+            f"{PACKAGE_NAME} : {'有' if self.db_zip_present else '无'}",
         ]
         if self.has_backup:
-            lines.append(f"备份     : {self.backup.name}（原版 sha256 {self.backup_sha256[:16]}…）")
-        else:
-            lines.append("备份     : 无 —— 打了之后就还原不回去了")
-        has_zip = "有" if self.db_zip_present else "无"
-        lines.append(f"{PACKAGE_NAME} : {has_zip}")
-        lines.append(f"补丁状态 : {self.state.label}")
-        # ★ 2026-10-18（Steam 2026-10-17 11:30 更新后真机）：`MODIFIED` 的那一句
-        #   「DLL 被改过，但不是本工具打的」在**游戏更新**这一档会误导人 ——
-        #   实测：更新把 GameAssembly.dll 换成了新版，`.orig` 还是旧版 ⇒ 两边都对不上
-        #   已知的那几份原版。所以这一档要**把两种可能都点出来**（更新 / 别的工具）。
-        if self.state is PatchState.MODIFIED and self.build is None:
-            lines.append(
-                "⚠ 可能的原因：**游戏更新过**（Steam 换了 GameAssembly.dll，备份还是旧版本）"
-                "，或者别的工具改过它。本工具还不认识这版 DLL —— 加一条 BUILDS 之前 ⛔ 不许打补丁。"
-            )
-        lines.append(
-            f"认出来的版本 : {self.build.label}"
-            if self.build is not None
-            else "认出来的版本 : 没认出来（不在本工具已知的原版表里）"
-        )
+            lines.append(f"备份 : {self.backup.name}")
+        # 未收录 + 非原版状态：把「游戏更新过」点出来（⛔ 不许让人以为是自己搞坏的）。
+        if self.build is None and self.state in (PatchState.MODIFIED, PatchState.NO_BACKUP):
+            lines.append("⚠ 可能游戏更新过（或别的工具改过）—— 打补丁时会自动重定位")
         # ⛔ 注入与静态改动**都要报**（kb/26 §7）：前者是"绝不许联机"那条，后者是"风险自负"。
         reasons = redline_reasons(self)
         injected = injection_reasons(self.game_root)
@@ -717,7 +784,7 @@ _last_write_error = ""
 def _dotnet_write_region(path: Path, start: int, data: bytes) -> bool:
     """借系统自带的 PowerShell(.NET) 就地写这几段字节（不读整包、不要管理员、不弹窗）。"""
     global _last_write_error
-    system_root = os.environ.get("SystemRoot", r"C:\Windows")
+    system_root = os.environ.get("SYSTEMROOT", r"C:\Windows")
     candidates = [
         shutil.which("powershell.exe"),
         os.path.join(system_root, "System32", "WindowsPowerShell", "v1.0", "powershell.exe"),
@@ -815,6 +882,9 @@ def _write_delta(
         "build": build.label,
         "orig_sha256": build.orig_sha256,
         "regions": [[off, data.hex()] for off, data in originals],
+        # 2026-11-26：整张表随 Δ 存一份 —— 自动重定位的学习版不在 BUILDS 里，
+        # status/restore 靠它认版本（⛔ 不再依赖「代码里恰好有这条常量」）。
+        "build_table": _build_to_dict(build),
     }
     if patched is not None:
         payload["patched"] = [[off, data.hex()] for off, data in patched]
@@ -884,6 +954,11 @@ def status(game_root: str | Path) -> PatchStatus:
         try:
             meta = _read_delta(delta)
             b = build_for_sha(str(meta.get("orig_sha256", "")))
+            if b is None:
+                # 学习版（自动重定位打的，不在 BUILDS）：用 Δ 里随存的整张表认。
+                cand = _build_from_dict(meta.get("build_table"))
+                if cand is not None and cand.orig_sha256 == str(meta.get("orig_sha256", "")):
+                    b = cand
             if b is not None and int(meta.get("size", 0)) == st.dll_size:
                 want = _patched_regions(b)
                 # Δ 里记着「这次写进去的新字节」 ⇒ 用它认「本工具打的某一版」（旧 Δ 没这个键）
@@ -900,7 +975,9 @@ def status(game_root: str | Path) -> PatchStatus:
                     # 旧 Δ（没有 `patched` 键）：表变过之后认不出「这一版」，但**它记着原字节**。
                     # 只要盘上这些区间确实被写过（与原字节不同），就仍允许还原 —— 否则
                     # 一次地址表变更就把唯一的还原出口锁死（2026-10-27 踩过同一个坑）。
-                    saved = [(int(off), bytes.fromhex(data)) for off, data in meta.get("regions", [])]
+                    saved = [
+                        (int(off), bytes.fromhex(data)) for off, data in meta.get("regions", [])
+                    ]
                     hits_current = bool(saved) and all(
                         _read_region(dll, off, off + len(data)) != data for off, data in saved
                     )
@@ -914,7 +991,7 @@ def status(game_root: str | Path) -> PatchStatus:
         except (OSError, ValueError, KeyError):
             pass  # Δ 坏了 ⇒ 退回老的整包比对，别把状态判死
 
-    cur = _read(dll)
+    _read(dll)  # 可读性探针：读不了就在这里抛，别带着坏 DLL 往下认版本
     candidates = backup_candidates(root)
     if not candidates:
         st.build = own
@@ -1045,22 +1122,33 @@ def apply(
             hint="先 `patch restore` 还原成原版，再 `patch apply` 打这一版；⛔ 不要手工改字节。",
         )
 
-    # ⛔ **版本闸**：当前 DLL 的 sha256 必须命中 `BUILDS` 里某一份。认不出来就拒绝，
-    #    `force` 也不许绕过 —— 地址表按版本走，拿旧版本的地址打新版本的 DLL，
+    # ⛔ **版本闸**：当前 DLL 的 sha256 必须命中 `BUILDS` 里某一份，**或者**由
+    #    autoport 从这份 DLL 自己的元数据重新推出整张表并全闸通过（2026-11-26）。
+    #    两条路都不行就拒绝，`force` 也不许绕过 —— 拿旧版本的地址打新版本的 DLL，
     #    11 个地址会全部指到别的函数上（这是真打坏过 DLL 的那个口子）。
     build = build_for_sha(st.dll_sha256)
+    auto_note = ""
     if build is None:
-        known = "、".join(b.label for b in BUILDS)
-        raise UserFacingError(
-            "当前 DLL 不是本工具已知的原版",
-            hint=(
-                f"本工具还不认识这一版（认得的：{known}）—— 地址表里没有它，"
-                "打下去会把地址指到别的函数上。请等本工具更新支持这一版；⛔ 不要手工改字节。"
-                "（`--force` 也越不过这道闸。）"
-                "要先用起来：还原本工具打过的补丁，或走 Steam 校验完整性。"
-            ),
-            got=st.dll_sha256[:16],
+        from ba_mod_maker.core.asset import autoport
+        from ba_mod_maker.core.asset.il2cpp_index import UnsupportedMetadataError
+
+        metadata = (
+            st.game_root / "BrokenArrow_Data" / "il2cpp_data" / "Metadata" / "global-metadata.dat"
         )
+        try:
+            build, rep = autoport.derive(st.dll, metadata)
+        except (autoport.AutoportError, UnsupportedMetadataError, OSError, ValueError) as exc:
+            known = "、".join(b.label for b in BUILDS)
+            raise UserFacingError(
+                "当前 DLL 不是本工具已知的原版",
+                hint=(
+                    f"本工具还不认识这一版（认得的：{known}）—— 自动重定位也没能推出安全地址表："
+                    f"{exc}。⛔ 不要手工改字节。（`--force` 也越不过这道闸。）"
+                    "要先用起来：还原本工具打过的补丁，或走 Steam 校验完整性。"
+                ),
+                got=st.dll_sha256[:16],
+            ) from exc
+        auto_note = f"（新版自动重定位：{len(rep)} 条尺子全过）"
 
     # ★ 2026-11-10：只动补丁那 4 段（合计 286 字节），不再整包读/写/拷。
     #   备份也换成**反向 Δ**（AGENTS 的口径：⛔ 不拷整包当备份）。
@@ -1088,7 +1176,7 @@ def apply(
     # ⛔ 不再调 with_redline：它会为了拼警告再跑一次 status()（= 又读一遍 147 MB）。
     #    红线本来就在对话框顶部常驻显示。
     return (
-        f"已打补丁（{build.label}）：只写了 {written} 字节（反向 Δ 备份 {delta.name}，"
+        f"已打补丁（{build.label}）{auto_note}：只写了 {written} 字节（反向 Δ 备份 {delta.name}，"
         f"{delta.stat().st_size} 字节）{tail}"
     )
 
@@ -1171,8 +1259,8 @@ def restore(game_root: str | Path, *, check_game_running: bool = True) -> str:
 def uninstall_hint() -> str:
     """最省事的「卸载」方式（不用动 DLL）。"""
     return (
-        f"最省事的卸载：删掉游戏根目录的 {PACKAGE_NAME} 即可 —— "
-        f"补丁会自动走原版路径，{DLL_NAME} 可以一直留着。要彻底还原再用还原功能。"
+        f"卸载最省事：删掉游戏根目录的 {PACKAGE_NAME} —— 补丁自动休眠，{DLL_NAME} 不用动。"
+        "要彻底还原再用「还原 DLL」。"
     )
 
 # ---------------------------------------------------------------- 联机红线（kb/26）
@@ -1220,16 +1308,15 @@ ONLINE_REDLINE_FORM_PENDING = (
 )
 
 #: 红线的正文。三段与 kb/26 §3 的三条硬结论一一对应（① 已按 §7 收窄成"注入形态"）。
+#: 2026-11-26 用户口径「别那么多字」：压成三短句；**四个锚点词一字不动**
+#: （绝对不许进联机入口 / 关掉 EAC 不是安全措施 / 被判 7 天 / in a skirmish ——
+#: tests/test_online_redline.py 的 CONCLUSION_ANCHORS 钉着）。
 ONLINE_REDLINE_BODY = (
-    "1. **进程内注入**（MelonLoader / version.dll 劫持 / 运行时内存写入 / 任何 Mods 加载器）"
-    "⇒ **绝对不许进联机入口**（遭遇战、任何联机房间）—— 7 天那次唯一生效的就是它。\n"
-    "2. **静态文件替换**（" + DLL_NAME + " 字节补丁 / " + PACKAGE_NAME + " / 资产与数据包）"
-    "⇒ **可以联机**、但**风险自负**（用户实测未被封；⚠ 非官方承诺）；"
-    "⚠ 走自建服务器时**漏一条外连 = 再来一次自动 7 天**。\n"
-    "3. **关掉 EAC 不是安全措施**（EAC 跑在**本机**，封号是**服务器端**判定），"
-    "它只是「能启动」的前提。代价是实测的：**用户账号已因「改了客户端」被判 7 天**，"
-    "触发场景就是**进遭遇战**；外部的 BARO mod 作者同样 7 天，README 原话："
-    "\"it happened to the author, for seven days, in a skirmish.\""
+    "1. 进程内注入（MelonLoader / version.dll 劫持 / Mods 加载器）⇒ **绝对不许进联机入口**。\n"
+    "2. 静态文件替换（" + DLL_NAME + " 补丁 / " + PACKAGE_NAME + " / 资产与数据包）"
+    "⇒ **可以联机**、**风险自负**（⚠ 非官方承诺）。\n"
+    "3. **关掉 EAC 不是安全措施**（封号是服务端判定）—— 实测**被判 7 天**，触发于进遭遇战"
+    "（外部 mod 作者同判，README 原话：\"in a skirmish\"）。"
 )
 
 
@@ -1302,7 +1389,7 @@ def online_redline(
     game_root: str | Path | None,
     *,
     pending_change: bool = False,
-    patch_status: "PatchStatus | None" = None,
+    patch_status: PatchStatus | None = None,
 ) -> str | None:
     """进「会改游戏目录 / 会让游戏读我们的数据」的入口时，该给用户的那条警告。
 

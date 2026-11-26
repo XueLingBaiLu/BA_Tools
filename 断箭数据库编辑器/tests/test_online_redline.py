@@ -289,13 +289,18 @@ def test_apply_result_carries_the_redline(patched_game: Path) -> None:
 
 
 def test_restore_keeps_warning_while_the_zip_stays(patched_game: Path, monkeypatch) -> None:
-    """还原回原版、但 BA_Mod.zip 还在 ⇒ **仍然要报**（现场还没干净）。"""
+    """还原回原版、但 BA_Mod.zip 还在 ⇒ **仍然要报**（现场还没干净）。
+
+    2026-11-10 起 restore 的返回消息不再挂红线前缀（对话框顶部常驻）——
+    改钉：还原后 status 摘要里红线仍在（zip 没删 ⇒ reasons 非空）。
+    """
     monkeypatch.setattr("ba_mod_maker.core.assets.game.is_game_running", lambda: False)
     external_db.ensure_zip_dir(patched_game)
     external_db.game_zip_path(patched_game).write_bytes(b"x")
     msg = dllpatch.restore(patched_game)
     assert "已还原" in msg
-    assert msg.startswith(dllpatch.ONLINE_REDLINE_HEAD)
+    text = "\n".join(dllpatch.status(patched_game).summary_lines())
+    assert dllpatch.ONLINE_REDLINE_HEAD in text
     # 把包也删掉 ⇒ 现场干净了，必须恢复安静（负控收尾）
     external_db.game_zip_path(patched_game).unlink()
     assert dllpatch.online_redline(patched_game) is None

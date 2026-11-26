@@ -153,6 +153,9 @@ select = [
 # core 里的延迟 import 是两件正事的手段：① 拆环（session ↔ edit.package、
 # dataset ↔ loader、dllpatch ↔ assets.game）② 可选依赖（lz4 / lzma 装了才用）。
 "src/ba_mod_maker/core/**" = ["PLC0415"]
+# autoport 与 dllpatch 同包：复用其**唯一口径**的区间/装配/节映射函数
+# （_patch_regions / _only_patch_regions_differ / _SECTION_DELTA）——⛔ 不另写一份逻辑。
+"src/ba_mod_maker/core/asset/autoport.py" = ["SLF001"]
 # enterEvent / leaveEvent / hideEvent 是 **Qt 覆写**，改名就失去覆写语义。
 "src/ba_mod_maker/app/widgets/row_entries.py" = ["N802"]
 

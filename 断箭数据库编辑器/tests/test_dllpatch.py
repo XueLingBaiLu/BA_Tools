@@ -215,12 +215,16 @@ def test_apply_refuses_unknown_original_without_force(tmp_path, monkeypatch) -> 
     assert "不是本工具已知的原版" in str(excinfo.value)
 
 
-def test_apply_refuses_while_game_running(tmp_path, monkeypatch) -> None:
+def test_apply_does_not_check_game_running(tmp_path, monkeypatch) -> None:
+    """2026-11-10 用户口径「检查全删，只留版本闸」：游戏在跑也照打（写不进自然报 Errno 13）。
+
+    原 test_apply_refuses_while_game_running 钉的是被删掉的旧检查 —— 改钉现行口径。
+    """
     monkeypatch.setattr("ba_mod_maker.core.assets.game.is_game_running", lambda: True, raising=True)
-    _write_game(tmp_path)
-    with pytest.raises(UserFacingError) as excinfo:
-        dllpatch.apply(tmp_path)
-    assert "游戏正在运行" in str(excinfo.value)
+    _write_game(tmp_path, backup=False)
+    _pretend_original(monkeypatch, _fake_original())
+    dllpatch.apply(tmp_path)
+    assert dllpatch.status(tmp_path).state is dllpatch.PatchState.PATCHED
 
 
 def test_restore_round_trips(tmp_path, monkeypatch) -> None:
@@ -258,10 +262,13 @@ def test_verify_reports_failure_when_modified(tmp_path, monkeypatch) -> None:
     dllpatch.apply(tmp_path)
     ok, _msg = dllpatch.verify(tmp_path)
     assert ok is True
-    # 手动改一个字节 -> verify 必须报 FAILED
+    # 手动改一个字节 -> verify 必须报 FAILED。
+    # ⚠ 2026-11-26：改在**补丁区间里**（cave 体首字节）—— 稀疏反向 Δ 只记录被改的几段，
+    #   区间外的外国改动它看不见（11-10 稀疏化的已知取舍）；区间内的篡改必须被抓。
     dll = tmp_path / dllpatch.DLL_NAME
     data = bytearray(dll.read_bytes())
-    data[0] ^= 0xFF
+    cave_off = dllpatch._off(dllpatch._rva(dllpatch.BUILD_120.sites[0][3]))
+    data[cave_off] ^= 0xFF
     dll.write_bytes(bytes(data))
     ok2, msg2 = dllpatch.verify(tmp_path)
     assert ok2 is False
@@ -308,6 +315,7 @@ def test_build_121_pins_the_accepted_readings() -> None:
         dllpatch.BUILD_121P2,
         dllpatch.BUILD_121R,
         dllpatch.BUILD_1029,
+        dllpatch.BUILD_1119,
     )
     assert b.label.startswith("1.2.1")
     assert b.orig_sha256 == "2412e79af4fed4613617fa7117e0e060f30800282f445507a7c18986868e3447"
@@ -388,6 +396,50 @@ def test_build_1029_pins_the_accepted_readings() -> None:
     )
     assert b.backup_name == "GameAssembly.dll.12e70883.orig"
     assert dllpatch.build_for_sha(b.orig_sha256) is b
+
+
+def test_build_1119_pins_the_accepted_readings() -> None:
+    """1.2.765（2026-11-19，153,977,760 B / `007c0195…`）—— 第一张**自动重定位**推出的表。
+
+    源：产品 autoport.derive 在现盘 DLL 上实跑（_work_db/patch1119/run_autoport.py）：
+    19 条尺子全 PASS · slot == dumper ScriptMetadata · 托管方法 == dumper 索引
+    （140,619/140,619 全量正控）· 与 BUILD_1029 的 16 指令骨架逐条同形（×5 IDENTICAL）。
+    """
+    b = dllpatch.BUILD_1119
+    assert b.label == "1.2.765 (2026-11-19)"
+    assert b.orig_sha256 == "007c019575fabcf16748fcdc02052d3bb2571757b8bfd8c69b05508eaf022cc1"
+    assert (b.base, b.init_meta, b.file_exists, b.object_new) == (
+        0x180000000,
+        0x1866AFD00,
+        0x18421ABB0,
+        0x1866AFF90,
+    )
+    assert (b.ctor, b.load_source, b.string_new, b.gchandle_new) == (
+        0x18027C230,
+        0x180290540,
+        0x1866DEC00,
+        0x1866DE1D0,
+    )
+    assert b.slot_klass == 0x1886FB8D8
+    assert b.cave_len == 138
+    assert b.sites == (
+        ("Load()", 0x180291C51, 0x180291C56, 0x1802918E0),
+        ("LoadCompiled()", 0x180291ADE, 0x180291AE3, 0x180291F00),
+    )
+    assert b.byte_patches == (("忽略 ResetDeckData(code 72)", 0x18062D488, 0x48, 0xFF),)
+    assert b.backup_name == "GameAssembly.dll.007c0195.orig"
+    assert dllpatch.build_for_sha(b.orig_sha256) is b
+
+
+def test_build_table_round_trips_through_json() -> None:
+    """学习版靠反向 Δ 里的 build_table 认版本 —— 序列化/反序列化必须逐字段等价。"""
+    for b in dllpatch.BUILDS:
+        back = dllpatch._build_from_dict(dllpatch._build_to_dict(b))
+        assert back == b
+    assert dllpatch._build_from_dict(None) is None
+    assert dllpatch._build_from_dict({"label": "坏数据"}) is None
+
+
 def test_restore_accepts_an_older_patch_but_not_foreign_edits() -> None:
     """还原闸：**我们自己打的上一版补丁**要能还原；区间外被改过（例：游戏更新）必须拒。
 
@@ -447,7 +499,11 @@ def test_patched_image_follows_the_build_not_the_module_constants() -> None:
 def test_status_reads_the_version_from_the_backup_content_not_its_name(
     tmp_path, monkeypatch
 ) -> None:
-    """认版本靠**内容**：备份叫 `.orig` 还是 `<别的名字>.orig` 都一样。"""
+    """认版本靠**内容**：备份叫 `.orig` 还是 `<别的名字>.orig` 都一样。
+
+    2026-11-10 稀疏化后：当前 DLL 自己命中 BUILDS ⇒ 走早退支（NOT_INSTALLED），
+    版本由 sha256 认出 —— 与备份文件名无关（名字 independence 由 delta/build_table 用例接力钉）。
+    """
     orig = _fake_original()
     fake = _pretend_original(monkeypatch, orig)
     (tmp_path / dllpatch.DLL_NAME).write_bytes(orig)
@@ -455,7 +511,7 @@ def test_status_reads_the_version_from_the_backup_content_not_its_name(
     st = dllpatch.status(tmp_path)
     assert st.state is dllpatch.PatchState.NOT_INSTALLED
     assert st.build is fake
-    assert st.backup.name == "GameAssembly.dll.deadbeef.orig"
+    assert st.can_apply
 
 
 def test_summary_lines_name_the_recognized_version(tmp_path, monkeypatch) -> None:
@@ -464,15 +520,18 @@ def test_summary_lines_name_the_recognized_version(tmp_path, monkeypatch) -> Non
     _write_game(tmp_path)
     text = "\n".join(dllpatch.status(tmp_path).summary_lines())
     assert "认出来的版本" in text and "1.2.0" in text
-    # 负控：认不出来时那一行必须说「没认出来」，不许静默省掉
+    # 负控：认不出来时那一行必须说「未收录」（并点明自动重定位），不许静默省掉
     (tmp_path / dllpatch.BACKUP_NAME).unlink()
     (tmp_path / dllpatch.DLL_NAME).write_bytes(b"not the original")
     text2 = "\n".join(dllpatch.status(tmp_path).summary_lines())
-    assert "没认出来" in text2
+    assert "未收录" in text2 and "自动重定位" in text2
 
 
 def test_apply_writes_the_backup_under_the_builds_own_name(tmp_path, monkeypatch) -> None:
-    """备份落到 `build.backup_name`（不是写死 `.orig`），内容 = 打之前的原版。"""
+    """2026-11-10 起备份 = **反向 Δ**（var 目录，几百字节），⛔ 不再整包拷 `.orig`。
+
+    钉：Δ 里记着 build.label / orig_sha256 / 整张 build_table；status 认得出 PATCHED。
+    """
     monkeypatch.setattr(
         "ba_mod_maker.core.assets.game.is_game_running", lambda: False, raising=True
     )
@@ -480,8 +539,13 @@ def test_apply_writes_the_backup_under_the_builds_own_name(tmp_path, monkeypatch
     (tmp_path / dllpatch.DLL_NAME).write_bytes(orig)
     fake = _pretend_original(monkeypatch, orig, backup_name="GameAssembly.dll.deadbeef.orig")
     msg = dllpatch.apply(tmp_path)
-    assert (tmp_path / fake.backup_name).read_bytes() == orig
-    assert not (tmp_path / dllpatch.BACKUP_NAME).is_file(), "不许再用历史遗留那个名字"
+    delta = dllpatch.delta_path(tmp_path)
+    assert delta.is_file()
+    meta = dllpatch._read_delta(delta)
+    assert meta["build"] == fake.label
+    assert meta["orig_sha256"] == fake.orig_sha256
+    assert dllpatch._build_from_dict(meta["build_table"]) == fake
+    assert not (tmp_path / fake.backup_name).is_file(), "不许再整包拷备份"
     assert fake.label in msg
     st = dllpatch.status(tmp_path)
     assert st.state is dllpatch.PatchState.PATCHED and st.build is fake
@@ -513,7 +577,10 @@ def test_apply_picks_the_build_by_sha_and_restores_that_version(tmp_path, monkey
     patched = (tmp_path / dllpatch.DLL_NAME).read_bytes()
     for _name, steal, _ret, _cave in dllpatch.BUILD_121.sites:
         assert patched[dllpatch._off(dllpatch._rva(steal, dllpatch.BUILD_121))] == 0xE9
-    assert (tmp_path / dllpatch.BUILD_121.backup_name).read_bytes() == orig121
+    # 反向 Δ 记的是选中那版的 label / sha（⛔ 不是整包 .orig）
+    meta = dllpatch._read_delta(dllpatch.delta_path(tmp_path))
+    assert meta["build"] == dllpatch.BUILDS[1].label
+    assert meta["orig_sha256"] == dllpatch.BUILDS[1].orig_sha256
     dllpatch.restore(tmp_path)
     assert (tmp_path / dllpatch.DLL_NAME).read_bytes() == orig121
     assert dllpatch.status(tmp_path).state is dllpatch.PatchState.NOT_INSTALLED
@@ -592,36 +659,40 @@ def _boom_copy(*args, **kwargs):
 
 
 def test_apply_permission_error_on_backup_copy_is_user_facing(tmp_path, monkeypatch) -> None:
-    """备份拷贝抛 PermissionError ⇒ UserFacingError，hint 指路「管理员 / 写权限」。"""
+    """反向 Δ 写盘抛 PermissionError ⇒ UserFacingError，hint 指路「管理员 / 写权限」。
+
+    2026-11-10 起备份是 Δ（_write_delta），不再是 shutil.copy2 —— 改钉现行写盘路径。
+    """
     monkeypatch.setattr(
         "ba_mod_maker.core.assets.game.is_game_running", lambda: False, raising=True
     )
     _write_game(tmp_path, backup=False)
-    fake = _pretend_original(monkeypatch, _fake_original())
-    monkeypatch.setattr(dllpatch.shutil, "copy2", _boom_copy)
+    _pretend_original(monkeypatch, _fake_original())
+
+    def boom(*args, **kwargs):
+        raise PermissionError(13, "Access is denied")
+
+    monkeypatch.setattr(dllpatch, "_write_delta", boom)
     with pytest.raises(UserFacingError) as excinfo:
         dllpatch.apply(tmp_path)
     text = str(excinfo.value)
     assert "管理员" in text and "写权限" in text
-    assert not (tmp_path / fake.backup_name).is_file()
+    assert not dllpatch.delta_path(tmp_path).is_file()
 
 
 def test_apply_permission_error_on_dll_write_is_user_facing(tmp_path, monkeypatch) -> None:
-    """备份成功、写回 DLL 时抛 PermissionError ⇒ 也要 UserFacingError，DLL 原样不动。"""
+    """Δ 成功、写回 DLL 时抛 PermissionError ⇒ 也要 UserFacingError，DLL 原样不动。"""
     monkeypatch.setattr(
         "ba_mod_maker.core.assets.game.is_game_running", lambda: False, raising=True
     )
     data = _fake_original()
     _write_game(tmp_path, original=data, backup=False)
     _pretend_original(monkeypatch, data)
-    real_write = Path.write_bytes
 
-    def boom(path, payload):
-        if path.name == dllpatch.DLL_NAME:
-            raise PermissionError(13, "Access is denied", str(path))
-        return real_write(path, payload)
+    def boom(*args, **kwargs):
+        raise PermissionError(13, "Access is denied")
 
-    monkeypatch.setattr(Path, "write_bytes", boom)
+    monkeypatch.setattr(dllpatch, "_write_region", boom)
     with pytest.raises(UserFacingError) as excinfo:
         dllpatch.apply(tmp_path)
     assert "管理员" in str(excinfo.value)
@@ -629,23 +700,26 @@ def test_apply_permission_error_on_dll_write_is_user_facing(tmp_path, monkeypatc
 
 
 def test_apply_permission_precheck_blocks_before_any_write(tmp_path, monkeypatch) -> None:
-    """可写性预检失败 ⇒ 直接 UserFacingError；**一个字节都不动**，连备份都不建。"""
+    """Δ 写失败 ⇒ 直接 UserFacingError；**DLL 一个字节都不动**。
+
+    11-10 删了 mkstemp 预检（写不进自然报错）—— 改钉「备份失败不碰 DLL」这条不变量。
+    """
     monkeypatch.setattr(
         "ba_mod_maker.core.assets.game.is_game_running", lambda: False, raising=True
     )
     data = _fake_original()
     _write_game(tmp_path, original=data, backup=False)
-    fake = _pretend_original(monkeypatch, data)
+    _pretend_original(monkeypatch, data)
 
     def boom(*args, **kwargs):
         raise PermissionError(13, "Access is denied")
 
-    monkeypatch.setattr(dllpatch.tempfile, "mkstemp", boom)
+    monkeypatch.setattr(dllpatch, "_write_delta", boom)
     with pytest.raises(UserFacingError) as excinfo:
         dllpatch.apply(tmp_path)
     assert "管理员" in str(excinfo.value)
     assert (tmp_path / dllpatch.DLL_NAME).read_bytes() == data
-    assert not (tmp_path / fake.backup_name).is_file()
+    assert not dllpatch.delta_path(tmp_path).is_file()
 
 
 def test_restore_permission_error_is_user_facing(tmp_path, monkeypatch) -> None:
@@ -707,7 +781,9 @@ def _fake_with_code_patch(original: bytes, *, orig_bytes: bytes | None = None) -
     fake = replace(dllpatch.BUILD_120, orig_sha256=hashlib.sha256(original).hexdigest())
     off = dllpatch._off(dllpatch._rva(_EOS_LOGIN_VA, fake))
     want = original[off : off + len(_EOS_LOGIN_NEW)] if orig_bytes is None else orig_bytes
-    return replace(fake, code_patches=(("EOS 登录放行（自建后端）", _EOS_LOGIN_VA, want, _EOS_LOGIN_NEW),))
+    return replace(
+        fake, code_patches=(("EOS 登录放行（自建后端）", _EOS_LOGIN_VA, want, _EOS_LOGIN_NEW),)
+    )
 
 
 def test_code_patches_write_the_whole_byte_string(monkeypatch, tmp_path):
@@ -755,4 +831,53 @@ def test_code_patches_round_trip_through_apply_and_restore(monkeypatch, tmp_path
 
     dllpatch.restore(tmp_path)
     assert dll.read_bytes() == original
+
+
+# --------------------------------------------------------------------------- #
+# 自动重定位接线（2026-11-26）：未知 sha → autoport；成功照打，失败照拒
+# --------------------------------------------------------------------------- #
+
+
+def test_apply_uses_autoport_for_unknown_version(tmp_path, monkeypatch) -> None:
+    """BUILDS 认不出 + autoport 推出表 ⇒ 照打；学习版靠 Δ 里的 build_table 认。"""
+    from ba_mod_maker.core.asset import autoport
+
+    monkeypatch.setattr(
+        "ba_mod_maker.core.assets.game.is_game_running", lambda: False, raising=True
+    )
+    orig = _fake_original()
+    _write_game(tmp_path, original=orig, backup=False)
+    learned = replace(
+        dllpatch.BUILD_120,
+        orig_sha256=hashlib.sha256(orig).hexdigest(),
+        label="学习版 (deadbeef)",
+    )
+    monkeypatch.setattr(autoport, "derive", lambda dll, md, **kw: (learned, ["PASS x"] * 19))
+    msg = dllpatch.apply(tmp_path)
+    assert "学习版" in msg and "自动重定位" in msg
+    st = dllpatch.status(tmp_path)
+    assert st.state is dllpatch.PatchState.PATCHED
+    assert st.build == learned  # ⛔ 不在 BUILDS 里 —— 靠 build_table 认出来的
+    dllpatch.restore(tmp_path)
+    assert (tmp_path / dllpatch.DLL_NAME).read_bytes() == orig
+
+
+def test_apply_refuses_when_autoport_fails(tmp_path, monkeypatch) -> None:
+    """autoport 尺子红了 ⇒ 仍然拒绝（版本闸的口径一个字没放宽），DLL 一个字节不动。"""
+    from ba_mod_maker.core.asset import autoport
+
+    monkeypatch.setattr(
+        "ba_mod_maker.core.assets.game.is_game_running", lambda: False, raising=True
+    )
+    data = _fake_original()
+    _write_game(tmp_path, original=data, backup=False)
+
+    def boom(dll, md, **kw):
+        raise autoport.AutoportError("负控塌不下来")
+
+    monkeypatch.setattr(autoport, "derive", boom)
+    with pytest.raises(UserFacingError) as excinfo:
+        dllpatch.apply(tmp_path, force=True)
+    assert "不是本工具已知的原版" in str(excinfo.value)
+    assert (tmp_path / dllpatch.DLL_NAME).read_bytes() == data
 

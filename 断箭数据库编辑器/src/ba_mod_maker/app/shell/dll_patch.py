@@ -42,7 +42,6 @@ from ba_mod_maker.core.assets import game as game_mod
 from ba_mod_maker.core.errors import UserFacingError
 
 
-
 class DllPatchDialog(QDialog):
     """装 / 卸 / 查外部数据库补丁。"""
 
@@ -79,10 +78,8 @@ class DllPatchDialog(QDialog):
         layout.addWidget(self._redline)
 
         why = QLabel(
-            "装上之后，保存只需写一个 ~300 KB 的 BA_Mod.zip（毫秒级），"
-            "不必再重写 7.1 GB 的 data.unity3d。"
-            "另外，它会跳过服务端的『换默认卡组』命令（code 72）："
-            "卡组里有库里没有的单位（例如 M1A2 T）时，卡组也不会被换成默认卡组。"
+            "保存只写 ~300 KB 的 BA_Mod.zip（毫秒级），不再重写 7.1 GB；"
+            "并忽略服务端『换默认卡组』命令（code 72）。"
         )
         why.setWordWrap(True)
         why.setFont(ui_font(TOKENS.typography.size_sm))
@@ -174,16 +171,27 @@ class DllPatchDialog(QDialog):
             self._say_error(str(exc))
             return
         except OSError as exc:
-            self._say_error(f"读写游戏目录失败：{exc}")
+            self._say_error(self._oserror_text(exc))
             return
         if self._refresh_quietly():
             self._note.setText(message)
 
+    @staticmethod
+    def _oserror_text(exc: OSError) -> str:
+        msg = f"读写游戏目录失败：{exc}"
+        if getattr(exc, "errno", None) == 13:
+            msg += chr(10) + dllpatch.WRITE_PERMISSION_HINT
+        return msg
+
 
     def _say_error(self, text: str) -> None:
-        """错误写进本对话框的状态区 —— 2026-11-10 用户口径：别再弹提示框。"""
+        """错误写进本对话框的状态区 —— 2026-11-10 用户口径：别再弹提示框。
+
+        2026-11-26「别那么多字」：不再无条件追加整段权限指引 ——
+        UserFacingError 的 str 已自带「建议：…」；裸 OSError 只在 errno 13 时补权限指引。
+        """
         self._refresh_quietly()
-        self._note.setText("⚠ " + text + chr(10) + dllpatch.WRITE_PERMISSION_HINT)
+        self._note.setText("⚠ " + text)
 
     def _refresh_quietly(self) -> bool:
         """刷新状态区；**连读盘都失败**时把话说在状态区里（不弹第二个框）。
@@ -205,17 +213,8 @@ class DllPatchDialog(QDialog):
     def _on_apply(self) -> None:
         if self._root is None:
             return
-        # 有没有备份，风险不一样，所以话术要分开 —— 但只问一次。
-        # ⛔ 备份名不许写死：2026-10-14 起备份名**带版本**（GameAssembly.dll.<sha8>.orig），
-        #    写死会指向一个盘上不存在的文件；有备份时报现场那一份的名字。
-        if self._st.has_backup:
-            tail = f"备份已经存在（{self._st.backup.name}），可以随时还原。"
-        else:
-            tail = (
-                "会先写一份几百字节的反向 Δ 备份（GameAssembly.dll.patchdelta），"
-                "只记被改的那几段原字节，不复制整包。"
-            )
-        self._note.setText(tail)
+        # 2026-11-26 用户口径「别那么多字」：不再先铺一段备份说明 ——
+        # 结果消息里本来就带反向 Δ 备份名；未知版本会走自动重定位（约 10 秒）。
         self._run(lambda: dllpatch.apply(self._root))
 
     def _on_restore(self) -> None:
@@ -232,7 +231,7 @@ class DllPatchDialog(QDialog):
             self._say_error(str(exc))
             return
         except OSError as exc:
-            self._say_error(f"读写游戏目录失败：{exc}")
+            self._say_error(self._oserror_text(exc))
             return
         if not self._refresh_quietly():
             return
