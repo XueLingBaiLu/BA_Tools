@@ -9,7 +9,6 @@ name = "ba-mod-maker"
 # 「装出来的包是 0.1.0、源码里是 0.2.0」而没人发现 —— tests/test_version.py 守着这条。
 dynamic = ["version"]
 description = "断箭（Broken Arrow）Mod 制作工具 · 数据表本体"
-readme = "README.md"
 requires-python = ">=3.12,<3.13"
 license = { text = "Proprietary" }
 dependencies = [
